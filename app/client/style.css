@@ -5,6 +5,25 @@
 :root {
   --matr-navbar-bg: #ECECEC;
   --matr-navbar-bg-rgb: 236, 236, 236;
+
+  .sign-in-page {
+    .card {
+      border-radius: 0;
+
+      .btn {
+        width: 492px;
+      }
+
+      .sign-in-register {
+        text-align: center;
+        margin-top: 2em;
+      }
+
+      h2 {
+        text-align: center;
+      }
+    }
+  }
 }
 
 /* Change bootstrap variable values.

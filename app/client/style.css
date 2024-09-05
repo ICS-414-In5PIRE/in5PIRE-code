@@ -6,15 +6,16 @@
   --matr-navbar-bg: #ECECEC;
   --matr-navbar-bg-rgb: 236, 236, 236;
 
-  .sign-in-page {
-    .card {
+  .sign-in-register {
+    .custom-card {
       border-radius: 0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
       .btn {
-        width: 492px;
+        width: 100%;
       }
 
-      .sign-in-register {
+      p {
         text-align: center;
         margin-top: 2em;
       }

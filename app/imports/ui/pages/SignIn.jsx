@@ -40,22 +40,22 @@ const SignIn = () => {
   }
   // Otherwise return the Login form.
   return (
-    <Container id={PAGE_IDS.SIGN_IN} className="py-3 sign-in-page">
+    <Container id={PAGE_IDS.SIGN_IN} className="py-3 sign-in-register">
       <Row className="justify-content-center">
         <Col xs={5}>
           <AutoForm schema={bridge} onSubmit={data => submit(data)}>
-            <Card>
+            <Card className="border-0 shadow-lg custom-card">
               <Card.Body>
                 <h2>Login</h2>
                 <Row>
-                  <TextField id={COMPONENT_IDS.SIGN_IN_FORM_EMAIL} name="email" placeholder="E-mail address" />
-                  <TextField id={COMPONENT_IDS.SIGN_IN_FORM_PASSWORD} name="password" placeholder="Password" type="password" />
+                  <TextField id={COMPONENT_IDS.SIGN_IN_FORM_EMAIL} name="email" />
+                  <TextField id={COMPONENT_IDS.SIGN_IN_FORM_PASSWORD} name="password" type="password" />
                   <ErrorsField />
                   <SubmitField id={COMPONENT_IDS.SIGN_IN_FORM_SUBMIT} />
                 </Row>
                 <Row>
                   <Col>
-                    <p className="sign-in-register">
+                    <p>
                       Don&apos;t have an account?
                       {' '}
                       <Link to="/signup">Sign up</Link>

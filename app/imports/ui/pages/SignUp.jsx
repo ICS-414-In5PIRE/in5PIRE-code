@@ -53,27 +53,29 @@ const SignUp = () => {
     return <Navigate to="/add" />;
   }
   return (
-    <Container id={PAGE_IDS.SIGN_UP} className="py-3">
+    <Container id={PAGE_IDS.SIGN_UP} className="py-3 sign-in-register">
       <Row className="justify-content-center">
         <Col xs={5}>
-          <Col className="text-center">
-            <h2>Register your account</h2>
-          </Col>
           <AutoForm schema={bridge} onSubmit={data => submit(data)}>
-            <Card>
+            <Card className="border-0 shadow-lg custom-card">
               <Card.Body>
-                <TextField id={COMPONENT_IDS.SIGN_UP_FORM_FIRST_NAME} name="firstName" placeholder="First name" />
-                <TextField id={COMPONENT_IDS.SIGN_UP_FORM_LAST_NAME} name="lastName" placeholder="Last name" />
-                <TextField id={COMPONENT_IDS.SIGN_UP_FORM_EMAIL} name="email" placeholder="E-mail address" />
-                <TextField id={COMPONENT_IDS.SIGN_UP_FORM_PASSWORD} name="password" placeholder="Password" type="password" />
+                <h2>Register</h2>
+                <TextField id={COMPONENT_IDS.SIGN_UP_FORM_FIRST_NAME} name="firstName" />
+                <TextField id={COMPONENT_IDS.SIGN_UP_FORM_LAST_NAME} name="lastName" />
+                <TextField id={COMPONENT_IDS.SIGN_UP_FORM_EMAIL} name="email" />
+                <TextField id={COMPONENT_IDS.SIGN_UP_FORM_PASSWORD} name="password" type="password" />
                 <ErrorsField />
                 <SubmitField id={COMPONENT_IDS.SIGN_UP_FORM_SUBMIT} />
+                <Row>
+                  <Col>
+                    <p className="sign-in-register">
+                      Already have an account? Login <Link to="/signin">here</Link>
+                    </p>
+                  </Col>
+                </Row>
               </Card.Body>
             </Card>
           </AutoForm>
-          <Alert variant="secondary">
-            Already have an account? Login <Link to="/signin">here</Link>
-          </Alert>
           {error === '' ? (
             ''
           ) : (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Col, Row } from 'react-bootstrap';
+import { Container, Col, Row, Image } from 'react-bootstrap';
 
 /** The Footer appears at the bottom of every page. Rendered by the App Layout component. */
 const Footer = () => {
@@ -39,17 +39,11 @@ const Footer = () => {
 
           {/* Logos Column */}
           <Col md={4} className="footer-logos text-center">
-            <img src="/images/spirellp.png" alt="Company 1 Logo" className="logo-img" />
+            <img src="/public/images/spirellp.png" alt="Company 1 Logo" className="logo-img" />
+            <Image src="app/public/images/spirellp.png" width="150px" />
             <img src="/images/icslogo.png" alt="Company 2 Logo" className="logo-img" />
             <img src="/images/uhmanoaimage.png" alt="Company 3 Logo" className="logo-img" />
           </Col>
-        </Row>
-        <Row className="copyright-section">
-          <Col className="text-center">
-            <div>© Spire Hawaii LLP 2023</div>
-            <a href="/privacy-policy" className="link">Privacy Policy</a>
-          </Col>
-
         </Row>
         <Row className="copyright-section">
           <Col className="text-center">

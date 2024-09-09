@@ -51,8 +51,9 @@ body {
 /* Footer container styling */
 footer {
   background-color: #f8f9fa; /* Light gray background */
-  padding: 20px 0;
+  padding: 10px 20px;
   border-top: 1px solid #eaeaea; /* Light border at the top */
+  margin: 0;
 }
 
 /* Container styling */
@@ -107,7 +108,7 @@ footer .container {
   color: #007bff;
 }
 
-.footer-contact address {
+.footer-contact {
   font-style: normal;
   color: #6c757d; /* Muted text */
   /*margin-top: 10px;*/
@@ -136,11 +137,14 @@ footer .container {
 /* Logo styling */
 .footer-logos .logo-img {
   max-width: 100px; /* Adjust size of logos */
-  margin: 10px;
+  margin: 5px;
+  max-height: 80px;
 }
 
 .footer-logos img {
-  display: inline-block;
-  width: auto;
+  display: block;
+  max-width: 100px;
+  margin: 0;
+  width: 100%;
   max-height: 100px;
 }

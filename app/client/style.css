@@ -32,6 +32,9 @@
  */
 body {
   --bs-light-rgb: var(--matr-navbar-bg-rgb);
+  background-color: rgb(0, 0, 0);
+  /* background: fixed center url("images/in5pire-bg.jpg"); */
+  background-size: cover;
 }
 
 /* Set the SignIn and SignUp alerts background. */

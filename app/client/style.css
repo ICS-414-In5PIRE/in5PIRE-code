@@ -32,8 +32,7 @@
  */
 body {
   --bs-light-rgb: var(--matr-navbar-bg-rgb);
-  background-color: rgb(0, 0, 0);
-  /* background: fixed center url("images/in5pire-bg.jpg"); */
+  background: fixed center linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://uploads-ssl.webflow.com/5fdaca5a4d51110c2f760a05/60e84fdf2c90eff59bf3a293_spire-hero-image.jpg");
   background-size: cover;
 }
 

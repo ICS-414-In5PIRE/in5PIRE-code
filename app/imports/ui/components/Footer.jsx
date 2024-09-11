@@ -8,10 +8,10 @@ const Footer = () => {
     <footer className="mt-auto bg-light">
       <Container style={divStyle}>
         <Col className="text-center">
-          Department of Information and Computer Sciences <br />
+          Created by Team in5pire <br />
           University of Hawaii<br />
           Honolulu, HI 96822 <br />
-          <a href="http://ics-software-engineering.github.io/meteor-application-template-production">Template Home Page</a>
+          <a href="https://www.spirehawaii.com/">Spire Hawaii Home Page</a>
         </Col>
       </Container>
     </footer>

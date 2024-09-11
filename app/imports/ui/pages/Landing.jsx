@@ -7,7 +7,7 @@ const Landing = () => (
   <Container id={PAGE_IDS.LANDING} className="py-3">
     <Row className="align-middle text-center py-4">
       <Col className="d-flex flex-column justify-content-center">
-        <h1 className="py-md-1" style={{ fontSize: '80px', color: 'white'}}>in5PIRE Tool</h1>
+        <h1 className="py-md-1" style={{ fontSize: '80px', color: 'white' }}>in5PIRE Tool</h1>
         <p className="py-md-1" style={{ fontSize: '24px', color: 'white' }}>
           This tool allows users to analyze spreadsheet data and be able
           to visualize the data you need.

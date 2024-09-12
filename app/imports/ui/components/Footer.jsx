@@ -38,8 +38,8 @@ const Footer = () => {
 
           {/* Logos Column */}
           <Col md={4} className="footer-logos">
-            <img src="/images/spirellp.png" alt="Spire LLP Logo" className="logo-img" />
-            <img src="/images/icslogo.png" alt="ICS Logo" className="logo-img" />
+            <img src="/images/in5pirelogo.png" alt="Spire LLP Logo" className="logo-img" />
+            <img src="/images/icslogo.png" alt="ICS Logo" className="logo-img mt-4" />
             <img src="/images/uhmanoaimage.png" alt="UH manoa logo Logo" className="logo-img" />
           </Col>
         </Row>

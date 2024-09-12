@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Grid, Message, Divider, Segment } from 'semantic-ui-react';
+import LongTermLiabilitiesForm from '../components/LongTermLiabilitiesForm';
 
 /**
  * BalanceSheetInput component for entering balance sheet data using Semantic UI React Form.
@@ -449,14 +450,107 @@ const BalanceSheetInput = () => {
             </Form.Group>
             <Divider />
             <h3>Liabilities</h3>
+            <Form.Group widths="equal">
+              <Form.Input
+                label="Accounts Payable and Accrued Liabilities"
+                onChange={handleChange}
+                type="number"
+              />
+              <Form.Input
+                label="Due to Fund"
+                onChange={handleChange}
+                type="number"
+              />
+              <Form.Input
+                label="Due to Other Funds"
+                onChange={handleChange}
+                type="number"
+                readOnly
+              />
+            </Form.Group>
+            <Segment>
+              <LongTermLiabilitiesForm
+                subtitle="Long-term Liabilities - due within one year:"
+                netWording="Long-term liabilities - due within one year"
+              />
+              <Divider />
+              <LongTermLiabilitiesForm
+                subtitle="Long-term Liabilities - due after one year:"
+                netWording="Long-term liabilities - due after one year"
+              />
+            </Segment>
+            <Form.Group widths={4} className="total-fields">
+              <Form.Input
+                className="dotted-input"
+                label="Total Liabilities"
+                type="number"
+                readOnly
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Input
+                width={6}
+                label="Deferred inflows of resources related to pensions"
+                onChange={handleChange}
+                type="number"
+              />
+              <Form.Input
+                width={6}
+                label="Deferred inflows of resources related to OPEB"
+                onChange={handleChange}
+                type="number"
+              />
+              <Form.Input
+                className="dotted-input"
+                label="Net liabilities & deferred inflows of resources"
+                type="number"
+                readOnly
+              />
+            </Form.Group>
+            <h2>COMMITMENTS AND CONTINGENCIES</h2>
+            <Form.Group widths="equal">
+              <Form.Input
+                label="Invested in capital assets, net of related debt"
+                onChange={handleChange}
+                type="number"
+              />
+              <Form.Input
+                label="Restricted - federal funds"
+                onChange={handleChange}
+                type="number"
+              />
+              <Form.Input
+                label="Unrestricted"
+                onChange={handleChange}
+                type="number"
+              />
+            </Form.Group>
+            <Form.Group widths="equal">
+              <Form.Input
+                className="dotted-input"
+                label="Total net position"
+                type="number"
+                readOnly
+              />
+              <Form.Input
+                className="dotted-input"
+                label="Total Liabilities, Deferred Inflows of Resources and  Net Position"
+                type="number"
+                readOnly
+              />
+            </Form.Group>
             {error && (
               <Message negative>
                 <Message.Header>Submission failed</Message.Header>
                 <p>{error}</p>
               </Message>
             )}
-            <Button primary type="submit">Submit</Button>
           </Form>
+        </Grid.Column>
+      </Grid>
+      <Grid className="py-3">
+        <Grid.Column textAlign="right">
+          <Button primary type="submit">Submit</Button>
         </Grid.Column>
       </Grid>
     </Container>

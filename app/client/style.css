@@ -150,3 +150,16 @@ footer .container {
   width: 100%;
   max-height: 100px;
 }
+
+/* Balance Sheet Styles */
+#balance-sheet-input {
+  .total-fields {
+    justify-content: end;
+  }
+
+  .dotted-input input {
+    border: 2px dashed rgba(34, 36, 38, 0.15);
+    border-radius: 4px;
+    box-shadow: none;
+  }
+}

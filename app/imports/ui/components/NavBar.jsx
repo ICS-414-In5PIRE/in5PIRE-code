@@ -15,6 +15,7 @@ const NavBar = () => {
   }), []);
   const menuStyle = { marginBottom: '10px' };
   return (
+
     <Navbar bg="light" expand="lg" style={menuStyle}>
       <Container>
         <Navbar.Brand id={COMPONENT_IDS.NAVBAR_LANDING_PAGE} as={NavLink} to="/"><Image src="images/in5pirelogo.png" style={{ width: 200, height: 60  }} /></Navbar.Brand>

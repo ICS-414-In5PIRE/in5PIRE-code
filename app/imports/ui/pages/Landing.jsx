@@ -4,28 +4,25 @@ import { PAGE_IDS } from '../utilities/PageIDs';
 
 /* A simple static component to render some text for the landing page. */
 const Landing = () => (
-  <Container id={PAGE_IDS.LANDING} className="py-3">
-    <Row className="align-middle text-center py-4">
-      <Col className="d-flex flex-column justify-content-center">
-        <h1 className="py-md-1" style={{ fontSize: '80px', color: 'black' }}>In5PIRE Tool</h1>
-        <p className="py-md-1" style={{ fontSize: '24px', color: 'black' }}>
-          This tool allows users to analyze spreadsheet data and be able
-          to visualize the data you need.
-        </p>
-        <p className="py-1" style={{ fontSize: '24px', color: 'white' }}>
-          All in one dashboard.
-        </p>
-      </Col>
-    </Row>
-    <Row className="align-middle text-center py-4">
-      <Col className="d-grid gap-2">
-        <Button variant="primary" size="lg" href="/signin">Login</Button>
-      </Col>
-      <Col className="d-grid gap-2">
-        <Button variant="secondary" size="lg" href="/about">About Us</Button>
-      </Col>
-    </Row>
-  </Container>
+
+
+
+  <section id = "hero" className="min-vh-100 d-flex align-items-center text-center text-white">
+    <div className="container">
+      <div className="row">
+        <div className="col-12">
+          <h1 className="text-uppercase display-1">In5PIRE Tool</h1>
+          <h5 className="mt-3 bm-4">This tool allows users to analyze spreadsheet data and be able
+            to visualize the data you need. </h5>
+          <div>
+            <a href="#" className="btn btn-brand ms-3"> Get Started</a>
+            <a href="/about" className="btn btn-light ms-3"> About us</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 );
 
 export default Landing;

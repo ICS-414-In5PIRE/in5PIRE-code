@@ -16,7 +16,8 @@ const NewNav = () => {
   const menuStyle = { marginBottom: '10px' };
   return (
     <>
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <nav className="navbar navbar-expand-lg bg-light">
+        <div className="container">
       <a className="navbar-brand" href="/"><Image src="images/in5pirelogo.png" style={{ width: 200, height: 60  }} /></a>
       <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
@@ -24,7 +25,7 @@ const NewNav = () => {
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav ms-auto">
           <li className="nav-item">
-            <a class="nav-link" href="/home">Home</a>
+            <a className="nav-link" href="/home">Home</a>
           </li>
           <li className="nav-item">
             <a className="nav-link" href="/home">UserGuide</a>
@@ -38,13 +39,13 @@ const NewNav = () => {
           <li className="nav-item">
             <a className="nav-link" href="/home">Contact Support</a>
           </li>
-          <li className="nav-item">
-            <a className="nav-link" href="/home">Login</a>
-          </li>
-
+          <a className="btn btn-brand" href="/home">Login</a>
         </ul>
+
       </div>
+        </div>
     </nav>
+
     </>
   );
 };

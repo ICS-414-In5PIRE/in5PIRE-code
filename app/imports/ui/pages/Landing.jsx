@@ -7,8 +7,8 @@ const Landing = () => (
 
 
 
-  <section id = "hero" className="min-vh-100 d-flex align-items-center text-center text-white">
-    <div className="container">
+  <section id = "hero" className="land-img min-vh-100 min-vw-100 d-flex align-items-center text-center text-white container-fluid">
+    <div className="container ">
       <div className="row">
         <div className="col-12">
           <h1 className="text-uppercase display-1">In5PIRE Tool</h1>

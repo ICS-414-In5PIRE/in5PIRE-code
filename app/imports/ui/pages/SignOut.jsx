@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import Col from 'react-bootstrap/Col';
+import { Col, Container } from 'react-bootstrap';
 import { PAGE_IDS } from '../utilities/PageIDs';
 
 /* After the user clicks the "SignOut" link in the NavBar, log them out and display this page. */

@@ -13,13 +13,12 @@ import EditStuff from '../pages/EditStuff';
 import NotFound from '../pages/NotFound';
 import SignUp from '../pages/SignUp';
 import SignOut from '../pages/SignOut';
-import NavBar from '../components/NavBar';
 import SignIn from '../pages/SignIn';
 import NotAuthorized from '../pages/NotAuthorized';
 import { ROLE } from '../../api/role/Role';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ManageDatabase from '../pages/ManageDatabase';
-import AboutUs  from '../pages/AboutUs'
+import AboutUs from '../pages/AboutUs';
 import NewNav from '../components/NewNav';
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {

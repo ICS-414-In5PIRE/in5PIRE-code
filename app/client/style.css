@@ -150,3 +150,14 @@ footer .container {
   width: 100%;
   max-height: 100px;
 }
+
+/* Financial Profile */
+.financial-profile-card{
+  width: 450px !important;
+  margin-left: 5px;
+  padding-right: 0px !important;
+}
+
+.Financial-Card {
+  width: 671px !important;
+}

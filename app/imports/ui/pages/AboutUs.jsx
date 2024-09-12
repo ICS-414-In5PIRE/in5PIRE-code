@@ -31,42 +31,42 @@ const AboutUs = () => (
       <h1 className="title">Our Team</h1>
       <div className="team-row">
         <div className="member">
-          <Image src="../../../public/images/Unknown_person.jpg" alt="Ben Smith" roundedCircle />
+          <Image src="../../../public/images/Unknown_person.jpg" alt="" roundedCircle />
           <h2>Bobby Roth</h2>
           <p>Placeholder</p>
         </div>
         <div className="member">
-          <Image src="https://images.unsplash.com/photo-1480455624313-e29b44bbfde1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80" alt="Jason" roundedCircle />
+          <Image src="../../../public/images/Unknown_person.jpg" alt="" roundedCircle />
           <h2>Brayden Danielson</h2>
           <p>Placeholder</p>
         </div>
         <div className="member">
-          <Image src="https://miro.medium.com/max/814/1*Ri024ZNn0dtXQDmswflYFw.jpeg" alt="Chris Jones" roundedCircle />
+          <Image src="../../../public/images/Unknown_person.jpg" alt=" " roundedCircle />
           <h2>Dao Mcgill</h2>
           <p>Placeholder</p>
         </div>
         <div className="member">
-          <Image src="https://miro.medium.com/max/814/1*Ri024ZNn0dtXQDmswflYFw.jpeg" alt="Chris Jones" roundedCircle />
+          <Image src=" " alt=" " roundedCircle />
           <h2>Emily Hsu</h2>
           <p>Placeholder</p>
         </div>
         <div className="member">
-          <Image src="https://miro.medium.com/max/814/1*Ri024ZNn0dtXQDmswflYFw.jpeg" alt="Chris Jones" roundedCircle />
+          <Image src="../../../public/images/Unknown_person.jpg" alt=" " roundedCircle />
           <h2>Zachary Stoddard</h2>
           <p>Placeholder</p>
         </div>
         <div className="member">
-          <Image src="https://miro.medium.com/max/814/1*Ri024ZNn0dtXQDmswflYFw.jpeg" alt="Chris Jones" roundedCircle />
+          <Image src="../../../public/images/Unknown_person.jpg" alt=" " roundedCircle />
           <h2>Shedrick Klifford Ulibas</h2>
           <p>Placeholder</p>
         </div>
         <div className="member">
-          <Image src="https://miro.medium.com/max/814/1*Ri024ZNn0dtXQDmswflYFw.jpeg" alt="Chris Jones" roundedCircle />
+          <Image src="../../../public/images/Unknown_person.jpg" alt=" " roundedCircle />
           <h2>Luke Pagtulingan</h2>
           <p>Placeholder</p>
         </div>
         <div className="member">
-          <Image src="https://miro.medium.com/max/814/1*Ri024ZNn0dtXQDmswflYFw.jpeg" alt="Chris Jones" roundedCircle />
+          <Image src="../../../public/images/Unknown_person.jpg" alt=" " roundedCircle />
           <h2>Sean Sunoo</h2>
           <p>Placeholder</p>
         </div>

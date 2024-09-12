@@ -119,6 +119,61 @@ a.nav-link:hover
   /* Set the SignIn and SignUp alerts background. */
 body{
   font-family: "Lato", sans-serif;
+  background-color: #eee;
+  font-family: "Century Gothic";
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.title{
+  text-align: center;
+  text-transform: capitalize;
+  color: black;
+  margin: 10px 0;
+  position: relative;
+}
+
+
+
+.team-row{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 40px 0;
+}
+
+.member{
+  flex: 1 1 250px;
+  margin: 20px;
+  text-align: center;
+  padding: 20px 10px;
+  cursor: pointer;
+  max-width: 300px;
+}
+
+
+
+.member img{
+  display: block;
+  width: 150px; height: 150px;
+  object-fit: cover;
+  border:4px solid black;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+.member h2{
+  text-transform: uppercase;
+  font-size: 24px;
+  color: black;
+  margin: 15px 0;
+}
+
+.member p{
+  font-size: 15px;
+  color: #838383;
+  line-height: 1.6;
 }
   #signin-page .alert-light, #signup-page .alert-light {
     --bs-alert-bg: var(--matr-navbar-bg);

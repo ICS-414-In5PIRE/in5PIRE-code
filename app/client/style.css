@@ -161,3 +161,10 @@ footer .container {
 .Financial-Card {
   width: 671px !important;
 }
+
+.profile-container {
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

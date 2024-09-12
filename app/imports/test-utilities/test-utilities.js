@@ -9,7 +9,6 @@ import { Stuffs } from '../api/stuff/StuffCollection';
 import { ROLE } from '../api/role/Role';
 import { AdminProfiles } from '../api/user/AdminProfileCollection';
 import { UserProfiles } from '../api/user/UserProfileCollection';
-import { StaticFinancials } from '../api/financial/StaticFinancialsCollection';
 
 export function withSubscriptions() {
   return new Promise((resolve => {
@@ -17,7 +16,6 @@ export function withSubscriptions() {
     const sub1 = AdminProfiles.subscribe();
     const sub2 = Stuffs.subscribeStuff();
     const sub3 = UserProfiles.subscribe();
-    const sub4 = StaticFinancials.subscribe()
     const poll = Meteor.setInterval(() => {
       const ready = sub1.ready() && sub2.ready() && sub3.ready();
       if (ready) {

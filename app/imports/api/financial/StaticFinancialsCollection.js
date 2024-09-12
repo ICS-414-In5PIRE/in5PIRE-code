@@ -7,26 +7,27 @@ import BaseCollection from '../base/BaseCollection';
 import { ROLE } from '../role/Role';
 
 export const staticFinancialsPublications = {
-  staticFinancials: 'StaticFinancials',
-  staticFinancialsAdmin: 'StaticFinancialsAdmin',
+  staticFinancials: 'StaticFinancials', // For regular users
+  staticFinancialsAdmin: 'StaticFinancialsAdmin', // For admin users
 };
 
 class StaticFinancialsCollection extends BaseCollection {
+  // Constructor to define the schema and collection name
   constructor() {
     super('StaticFinancials', new SimpleSchema({
-      customerName: String,
-      year: Number,
-      assets: Number,
-      liabilities: Number,
-      netPosition: Number,
-      cashOnHand: Number,
-      investment: Number,
-      liquidity: Number,
-      debt: Number,
-      revenues: Number,
-      opex: Number,
-      netIncome: Number,
-      cashFlow: {
+      customerName: String, // Name of customer
+      year: Number, // Fiscal year
+      assets: Number, // Total assets
+      liabilities: Number, // Total liabilities
+      netPosition: Number, // Net financial position (assets - liabilities)
+      cashOnHand: Number, // Available cash
+      investment: Number, // Investments
+      liquidity: Number, // liquidity of assets
+      debt: Number, // Total debts
+      revenues: Number, // Total revenues
+      opex: Number, // Operational expenses
+      netIncome: Number, // Income after expenses
+      cashFlow: { // cash flow extrapolation
         inflow: Number,
         outflow: Number,
         net: Number,
@@ -39,6 +40,24 @@ class StaticFinancialsCollection extends BaseCollection {
     }));
   }
 
+  /**
+   * Defines a new static financial record.
+   * @param customerName - Name of the customer.
+   * @param year - Fiscal year.
+   * @param assets - Total assets.
+   * @param liabilities - Total liabilities.
+   * @param netPosition - Net financial position.
+   * @param cashOnHand - Available cash.
+   * @param investment - Investments made.
+   * @param liquidity - Liquidity of assets.
+   * @param debt - Total debt.
+   * @param revenues - Total revenues.
+   * @param opex - Operational expenses.
+   * @param netIncome - Net income.
+   * @param cashFlow - Cash flow breakdown.
+   * @param incrementalFringeBenefits - Breakdown of fringe benefits.
+   * @returns {String} - The docID of the newly inserted record.
+   */
   define({
     customerName,
     year,
@@ -74,6 +93,24 @@ class StaticFinancialsCollection extends BaseCollection {
     return docID;
   }
 
+  /**
+   * Updates an existing static financial record.
+   * @param docID - The ID of the document to update.
+   * @param customerName - The updated customer name (optional).
+   * @param year - The updated year (optional).
+   * @param assets - The updated assets (optional).
+   * @param liabilities - The updated liabilities (optional).
+   * @param netPosition - The updated net position (optional).
+   * @param cashOnHand - The updated cash on hand (optional).
+   * @param investment - The updated investments (optional).
+   * @param liquidity - The updated liquidity (optional).
+   * @param debt - The updated debt (optional).
+   * @param revenues - The updated revenues (optional).
+   * @param opex - The updated operational expenses (optional).
+   * @param netIncome - The updated net income (optional).
+   * @param cashFlow - The updated cash flow (optional).
+   * @param incrementalFringeBenefits - The updated fringe benefits (optional).
+   */
   update(docID, {
     customerName,
     year,
@@ -109,6 +146,12 @@ class StaticFinancialsCollection extends BaseCollection {
     this._collection.update(docID, { $set: updateData });
   }
 
+  /**
+   * Removes a document by docID or customerName.
+   * @param docIDOrCustomer - The document ID or customer name.
+   * @returns true if removal is successful.
+   * @throws {Meteor.Error} if the document cannot be found.
+   */
   removeIt(docIDOrCustomer) {
     let doc;
     if (this.isValidID(docIDOrCustomer)) {
@@ -127,10 +170,13 @@ class StaticFinancialsCollection extends BaseCollection {
     return /^[0-9a-fA-F]{24}$/.test(id);
   }
 
+  /**
+   * Publishes static financial data, either for regular users or admins.
+   */
   publish() {
     if (Meteor.isServer) {
       const instance = this;
-
+      // Publish only the documents for the current user
       Meteor.publish(staticFinancialsPublications.staticFinancials, function publish() {
         if (this.userId) {
           const username = Meteor.users.findOne(this.userId).username;
@@ -138,7 +184,7 @@ class StaticFinancialsCollection extends BaseCollection {
         }
         return this.ready();
       });
-
+      // Publish all documents for admins
       Meteor.publish(staticFinancialsPublications.staticFinancialsAdmin, function publish() {
         if (this.userId && Roles.userIsInRole(this.userId, ROLE.ADMIN)) {
           return instance._collection.find();
@@ -148,6 +194,9 @@ class StaticFinancialsCollection extends BaseCollection {
     }
   }
 
+  /**
+   * Subscription method for static financial data for the current user.
+   */
   subscribeStaticFinancials() {
     if (Meteor.isClient) {
       return Meteor.subscribe(staticFinancialsPublications.staticFinancials);
@@ -155,6 +204,9 @@ class StaticFinancialsCollection extends BaseCollection {
     return null;
   }
 
+  /**
+   * Subscription method for admin users to access all static financials.
+   */
   subscribeStaticFinancialsAdmin() {
     if (Meteor.isClient) {
       return Meteor.subscribe(staticFinancialsPublications.staticFinancialsAdmin);
@@ -162,10 +214,20 @@ class StaticFinancialsCollection extends BaseCollection {
     return null;
   }
 
+  /**
+   * Ensures the user has a valid role (Admin or User) for certain actions.
+   * @param userId - The ID of the logged-in user.
+   * @throws {Meteor.Error} if the user does not have a valid role.
+   */
   assertValidRoleForMethod(userId) {
     this.assertRole(userId, [ROLE.ADMIN, ROLE.USER]);
   }
 
+  /**
+   * Dumps the document data in a format that can be used for restoration or export.
+   * @param docID - The ID of the document to dump.
+   * @returns {Object} An object representing the document's data.
+   */
   dumpOne(docID) {
     const doc = this.findDoc(docID);
     const {

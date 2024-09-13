@@ -3,7 +3,7 @@ import React from 'react';
 /* A simple static component to render some text for the landing page. */
 const Landing = () => (
 
-  <section id="hero" className="land-img min-vh-100 min-vw-100 d-flex align-items-center text-center text-white container-fluid">
+  <section id="landing-page" className="land-img min-vh-100 min-vw-100 d-flex align-items-center text-center text-white container-fluid">
     <div className="container ">
       <div className="row">
         <div className="col-12">

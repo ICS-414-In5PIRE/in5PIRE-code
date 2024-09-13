@@ -5,11 +5,10 @@ import { Container, Col, Row } from 'react-bootstrap';
 const Footer = () => {
   const divStyle = { paddingTop: '15px' };
   return (
-    <footer className="mt-auto bg-light">
+    <footer id="footer-component" className="mt-auto bg-light">
       <Container style={divStyle}>
         <Row>
           {/* Spire LLP Information */}
-
           <Col md={4} className="footer-col">
             <div className="footer-title"><a href="https://www.spirehawaii.com/firm/our-firm" className="link">Spire LLP</a></div>
             <div className="footer-list">
@@ -37,14 +36,24 @@ const Footer = () => {
           </Col>
 
           {/* Logos Column */}
-          <Col md={4} className="footer-logos">
-            <img src="/images/in5pirelogo.png" alt="Spire LLP Logo" className="logo-img" />
-            <img src="/images/icslogo.png" alt="ICS Logo" className="logo-img mt-4" />
-            <img src="/images/uhmanoaimage.png" alt="UH manoa logo Logo" className="logo-img" />
+          <Col md={4} className="footer-logos d-flex flex-column align-items-center justify-content-center">
+            <Row>
+              <Col>
+                <img src="/images/in5pirelogo.png" alt="Spire LLP Logo" className="pt-4" />
+              </Col>
+              <Col>
+                <img src="/images/icslogo.png" alt="ICS Logo" className="logo-img" />
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <img src="/images/uhmanoaimage.png" alt="UH Manoa Logo" className="logo-img pb-5" />
+              </Col>
+            </Row>
           </Col>
         </Row>
         <Row className="copyright-section">
-          <Col className="text-center">
+          <Col className="end-footer text-center">
             <div>© Spire Hawaii LLP 2023</div>
             <a href="https://www.spirehawaii.com/privacy-policy" className="link">Privacy Policy</a>
           </Col>

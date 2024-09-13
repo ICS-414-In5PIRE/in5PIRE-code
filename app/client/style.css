@@ -350,3 +350,20 @@ body{
     margin-left: auto;
     margin-right: auto;
   }
+
+/* Balance Sheet Styles */
+#balance-sheet-input {
+  h3, h2 {
+    text-align: start;
+  }
+
+  .total-fields {
+    justify-content: end;
+  }
+
+  .dotted-input input {
+    border: 2px dashed rgba(34, 36, 38, 0.15);
+    border-radius: 4px;
+    box-shadow: none;
+  }
+}

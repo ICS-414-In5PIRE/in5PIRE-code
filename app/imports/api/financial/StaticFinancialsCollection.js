@@ -27,7 +27,7 @@ class StaticFinancialsCollection extends BaseCollection {
       revenues: Number, // Total revenues
       opex: Number, // Operational expenses
       netIncome: Number, // Income after expenses
-      cashFlow: { // cash flow extrapolation
+      cashFlow: { // Cash flow extrapolation
         inflow: Number,
         outflow: Number,
         net: Number,

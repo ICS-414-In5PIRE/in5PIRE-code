@@ -38,8 +38,8 @@ const NewNav = () => {
             </NavDropdown>
           </Nav>
           {currentUser ? (
-            <Nav.Link as={NavLink} to="/">
-              <Button color="blue" size="medium">
+            <Nav.Link as={NavLink} to="/signout">
+              <Button color="gray" size="medium">
                 <Icon name="sign-out" /> Sign out
               </Button>
             </Nav.Link>

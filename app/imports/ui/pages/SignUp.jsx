@@ -11,25 +11,51 @@ import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 import { UserProfiles } from '../../api/user/UserProfileCollection';
 import { defineMethod } from '../../api/base/BaseCollection.methods';
 
-/**
- * SignUp component is similar to signin component, but we create a new user instead.
- */
+// Custom validation function
+const validateEmail = (email) => {
+  const emailWithTLDRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailWithTLDRegex.test(email);
+};
+
+// Define the schema
+const schema = new SimpleSchema({
+  firstName: {
+    type: String,
+  },
+  lastName: {
+    type: String,
+  },
+  email: {
+    type: String,
+    regEx: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    custom() {
+      if (!validateEmail(this.value)) {
+        return 'emailNotValid'; // Return custom error code
+      }
+      return null;
+    },
+  },
+  password: {
+    type: String,
+  },
+});
+
+const bridge = new SimpleSchema2Bridge(schema);
+
 const SignUp = () => {
   const [error, setError] = useState('');
   const [redirectToReferer, setRedirectToRef] = useState(false);
 
-  const schema = new SimpleSchema({
-    firstName: String,
-    lastName: String,
-    email: String,
-    password: String,
-  });
-  const bridge = new SimpleSchema2Bridge(schema);
-
-  /* Handle SignUp submission. Create user account and a profile entry, then redirect to the home page. */
   const submit = (doc) => {
     const collectionName = UserProfiles.getCollectionName();
     const definitionData = doc;
+
+    // Validate email manually if needed
+    if (!validateEmail(doc.email)) {
+      setError('Please enter a valid email address with a valid top-level domain.');
+      return;
+    }
+
     // create the new UserProfile
     defineMethod.callPromise({ collectionName, definitionData })
       .then(() => {
@@ -47,8 +73,6 @@ const SignUp = () => {
       .catch((err) => setError(err.reason));
   };
 
-  /* Display the signup form. Redirect to add page after successful registration and login. */
-  // if correct authentication, redirect to from: page instead of signup screen
   if (redirectToReferer) {
     return <Navigate to="/add" />;
   }

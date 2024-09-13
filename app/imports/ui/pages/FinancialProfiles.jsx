@@ -1,11 +1,10 @@
 import React from 'react';
 import { Container, Row, Col, Card, CardHeader } from 'react-bootstrap';
 
-const FinancialProfiles = () => {
-  return (
+const FinancialProfiles = () => (
     <>
       <Container className="profile-container">
-        <h1>User's Financial Profiles</h1>
+        <h1>User&apos;s Financial Profiles</h1>
       </Container>
 
       {/* Flexbox Container for Cards */}
@@ -88,7 +87,7 @@ const FinancialProfiles = () => {
           </Card>
         </Container>
 
-        {/*Create new profile*/}
+        {/* Create new profile */}
         <Container className="flex-card py-3 d-flex" style={{ flex: '0 1 30%', margin: '10px' }}>
           <Card id="Financial-Card" className="d-flex flex-column h-100">
             <CardHeader className="d-flex justify-content-center" id="browse-financial-card-name">
@@ -108,6 +107,5 @@ const FinancialProfiles = () => {
       </Container>
     </>
   );
-};
 
 export default FinancialProfiles;

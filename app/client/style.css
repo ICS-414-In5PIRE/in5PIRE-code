@@ -353,6 +353,10 @@ body{
 
 /* Balance Sheet Styles */
 #balance-sheet-input {
+  h3, h2 {
+    text-align: start;
+  }
+
   .total-fields {
     justify-content: end;
   }

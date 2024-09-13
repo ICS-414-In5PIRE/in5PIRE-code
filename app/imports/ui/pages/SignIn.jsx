@@ -40,7 +40,7 @@ const SignIn = () => {
   }
   // Otherwise return the Login form.
   return (
-    <Container id={PAGE_IDS.SIGN_IN} className="py-3 sign-in-register">
+    <Container id={PAGE_IDS.SIGN_IN} className="py-3 sign-in-register container container-fluid">
       <Row className="justify-content-center">
         <Col xs={5}>
           <AutoForm schema={bridge} onSubmit={data => submit(data)}>

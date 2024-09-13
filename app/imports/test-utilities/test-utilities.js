@@ -9,7 +9,6 @@ import { Stuffs } from '../api/stuff/StuffCollection';
 import { ROLE } from '../api/role/Role';
 import { AdminProfiles } from '../api/user/AdminProfileCollection';
 import { UserProfiles } from '../api/user/UserProfileCollection';
-import { StaticFinancials } from '../api/financial/StaticFinancialsCollection';
 
 export function withSubscriptions() {
   return new Promise((resolve => {

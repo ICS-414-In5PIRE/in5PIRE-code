@@ -1,22 +1,25 @@
 import React from 'react';
-import { Col, Container, Image, Row } from 'react-bootstrap';
-import { PAGE_IDS } from '../utilities/PageIDs';
 
 /* A simple static component to render some text for the landing page. */
 const Landing = () => (
-  <Container id={PAGE_IDS.LANDING} className="py-3">
-    <Row className="align-middle text-center">
-      <Col xs={4}>
-        <Image roundedCircle src="/images/meteor-logo.png" width="150px" />
-      </Col>
 
-      <Col xs={8} className="d-flex flex-column justify-content-center">
-        <h1>Welcome to this template</h1>
-        <p>Now get to work and modify this app!</p>
-      </Col>
+  <section id="hero" className="land-img min-vh-100 min-vw-100 d-flex align-items-center text-center text-white container-fluid">
+    <div className="container ">
+      <div className="row">
+        <div className="col-12">
+          <h1 className="text-uppercase display-1">In5PIRE Tool</h1>
+          <h5 className="mt-3 bm-4">This tool allows users to analyze spreadsheet data and be able
+            to visualize the data you need.
+          </h5>
+          <div>
+            <a href="/" className="btn btn-brand ms-3"> Get Started</a>
+            <a href="/about" className="btn btn-light ms-3"> About us</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    </Row>
-  </Container>
 );
 
 export default Landing;

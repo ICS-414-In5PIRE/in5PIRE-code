@@ -7,9 +7,8 @@ import React from 'react';
  * @returns {React.JSX.Element}
  * @constructor
  */
-const LongTermLiabilitiesForm = ({ subtitle, netWording }) => (
+const LongTermLiabilitiesForm = ({ netWording }) => (
   <>
-    <h5>{ subtitle }</h5>
     <Form.Group widths="equal">
       <Form.Input
         label="Accrued Vacation"
@@ -72,8 +71,7 @@ const LongTermLiabilitiesForm = ({ subtitle, netWording }) => (
 );
 
 LongTermLiabilitiesForm.propTypes = {
-  subtitle: String.isRequired,
-  netWording: String.isRequired,
+  netWording: String.isRequired
 };
 
 export default LongTermLiabilitiesForm;

@@ -1,8 +1,7 @@
 import React from 'react';
-import { Container, Row, Col, Card, CardHeader } from 'react-bootstrap';
-import PropTypes from 'prop-types'; // PropTypes for validation
+import PropTypes from 'prop-types';
+import { Card, CardHeader, Row, Col } from 'react-bootstrap';
 
-// FinancialProfileCard Component
 const FinancialProfileCard = ({
   title,
   imgSrc,
@@ -48,7 +47,7 @@ const FinancialProfileCard = ({
   </Card>
 );
 
-// PropTypes for validation
+// Add prop-types validation
 FinancialProfileCard.propTypes = {
   title: PropTypes.string.isRequired,
   imgSrc: PropTypes.string.isRequired,
@@ -66,48 +65,4 @@ FinancialProfileCard.defaultProps = {
   editedDate: 'Not available',
 };
 
-// FinancialProfiles Component
-const FinancialProfiles = () => (
-  <>
-    <Container className="profile-container">
-      <h1>User&apos;s Financial Profiles</h1>
-    </Container>
-
-    {/* Flexbox Container for Cards */}
-    <Container className="d-flex justify-content-around flex-wrap py-3">
-      {/* Card 1 */}
-      <Container className="flex-card py-3 d-flex" style={{ flex: '0 1 30%', margin: '10px' }}>
-        <FinancialProfileCard
-          title="My Personal Finances"
-          imgSrc="/images/GraphPlaceholder.png"
-          profileType="Personal"
-          description="This is my personal finance"
-          createdDate="January 1, 2024"
-          editedDate="January 5, 2024"
-        />
-      </Container>
-
-      {/* Card 2 */}
-      <Container className="flex-card py-3 d-flex" style={{ flex: '0 1 30%', margin: '10px' }}>
-        <FinancialProfileCard
-          title="MyfirstLLC"
-          imgSrc="/images/GraphPlaceholder.png"
-          profileType="Business"
-          description="This is my business finance"
-          createdDate="February 10, 2024"
-          editedDate="February 12, 2024"
-        />
-      </Container>
-
-      {/* Create new profile */}
-      <Container className="flex-card py-3 d-flex" style={{ flex: '0 1 30%', margin: '10px' }}>
-        <FinancialProfileCard
-          title="Create a new Financial Profile"
-          imgSrc="/images/GraphPlaceholder.png"
-        />
-      </Container>
-    </Container>
-  </>
-);
-
-export default FinancialProfiles;
+export default FinancialProfileCard;

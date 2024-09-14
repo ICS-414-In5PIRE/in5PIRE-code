@@ -21,6 +21,7 @@ import ManageDatabase from '../pages/ManageDatabase';
 import BalanceSheetInput from '../pages/BalanceSheetInput';
 import AboutUs from '../pages/AboutUs';
 import NewNav from '../components/NewNav';
+import FinancialProfiles from '../pages/FinancialProfiles';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
@@ -44,6 +45,7 @@ const App = () => {
           <Route path="/list" element={<ProtectedRoute><ListStuff /></ProtectedRoute>} />
           <Route path="/add" element={<ProtectedRoute><AddStuff /></ProtectedRoute>} />
           <Route path="/edit/:_id" element={<ProtectedRoute><EditStuff /></ProtectedRoute>} />
+          <Route path="/financial-profiles/" element={<ProtectedRoute><FinancialProfiles /></ProtectedRoute>} />
           <Route path="/admin" element={<AdminProtectedRoute ready={ready}><ListStuffAdmin /></AdminProtectedRoute>} />
           <Route path="/manage-database" element={<AdminProtectedRoute ready={ready}><ManageDatabase /></AdminProtectedRoute>} />
           <Route path="/notauthorized" element={<NotAuthorized />} />

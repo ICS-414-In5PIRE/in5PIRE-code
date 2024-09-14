@@ -10,6 +10,7 @@ import { ROLE } from '../api/role/Role';
 import { AdminProfiles } from '../api/user/AdminProfileCollection';
 import { UserProfiles } from '../api/user/UserProfileCollection';
 import { StaticFinancials } from '../api/financial/StaticFinancialsCollection';
+import { OtherFinancials } from '../api/financial/OtherFinancialsCollection';
 import { FinancialProfiles } from '../api/FinancialProfiles/FinancialProfilesCollection';
 
 export function withSubscriptions() {
@@ -18,10 +19,11 @@ export function withSubscriptions() {
     const sub1 = AdminProfiles.subscribe();
     const sub2 = Stuffs.subscribeStuff();
     const sub3 = UserProfiles.subscribe();
-    const sub4 = StaticFinancials.subscribe();
+    const sub4 = OtherFinancials.subscribe();
     const sub5 = FinancialProfiles.subscribe();
+    const sub6 = StaticFinancials.subscribe();
     const poll = Meteor.setInterval(() => {
-      const ready = sub1.ready() && sub2.ready() && sub3.ready() && sub4.ready() && sub5.ready();
+      const ready = sub1.ready() && sub2.ready() && sub3.ready() && sub4.ready() && sub5.ready() && sub6.ready();
       if (ready) {
         Meteor.clearInterval(poll);
         resolve();

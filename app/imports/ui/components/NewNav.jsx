@@ -26,6 +26,7 @@ const NewNav = () => {
             { currentUser && (
               <li>
                 <NavDropdown title="Data Input" id="navbarDropdown">
+                  <NavDropdown.Item as={NavLink} to="/financial-profiles">My Financial Profiles</NavDropdown.Item>
                   <NavDropdown.Item as={NavLink} to="/balance-sheet">Balance Input Form</NavDropdown.Item>
                   <NavDropdown.Item as={NavLink} to="/budget-form">Budget Form</NavDropdown.Item>
                   <NavDropdown.Item as={NavLink} to="/audited-fs">Audited Financial Statement</NavDropdown.Item>

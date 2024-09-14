@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Tab, Form, Segment, Container, Message, Grid, Button, Menu } from 'semantic-ui-react';
+import { Form, Segment, Container, Message, Grid, Button, Menu } from 'semantic-ui-react';
 import OtherAssets from '../components/BalanceSheetComponents/OtherAssets';
 import CashAndCashEquivalents from '../components/BalanceSheetComponents/CashAndCashEquivalents';
 import Liabilities from '../components/BalanceSheetComponents/Liabilities';

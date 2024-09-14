@@ -71,7 +71,7 @@ const LongTermLiabilitiesForm = ({ netWording }) => (
 );
 
 LongTermLiabilitiesForm.propTypes = {
-  netWording: String.isRequired
+  netWording: String.isRequired,
 };
 
 export default LongTermLiabilitiesForm;

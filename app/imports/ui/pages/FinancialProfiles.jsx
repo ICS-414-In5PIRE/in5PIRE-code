@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, CardHeader } from 'react-bootstrap';
 import PropTypes from 'prop-types'; // PropTypes for validation
 
@@ -66,48 +67,70 @@ FinancialProfileCard.defaultProps = {
   editedDate: 'Not available',
 };
 
-// FinancialProfiles Component
-const FinancialProfiles = () => (
-  <>
-    <Container className="profile-container">
-      <h1>User&apos;s Financial Profiles</h1>
-    </Container>
+// FinancialProfiles page
+const FinancialProfiles = () => {
+  const navigate = useNavigate();
 
-    {/* Flexbox Container for Cards */}
-    <Container className="d-flex justify-content-around flex-wrap py-3">
-      {/* Card 1 */}
-      <Container className="flex-card py-3 d-flex" style={{ flex: '0 1 30%', margin: '10px' }}>
-        <FinancialProfileCard
-          title="My Personal Finances"
-          imgSrc="/images/GraphPlaceholder.png"
-          profileType="Personal"
-          description="This is my personal finance"
-          createdDate="January 1, 2024"
-          editedDate="January 5, 2024"
-        />
+  // Handler to navigate to the "new profile" page
+  const handleAddNewProfile = () => {
+    navigate('/balance-sheet');
+  };
+
+  return (
+    <>
+      <Container className="profile-container">
+        <h1>User&apos;s Financial Profiles</h1>
       </Container>
 
-      {/* Card 2 */}
-      <Container className="flex-card py-3 d-flex" style={{ flex: '0 1 30%', margin: '10px' }}>
-        <FinancialProfileCard
-          title="MyfirstLLC"
-          imgSrc="/images/GraphPlaceholder.png"
-          profileType="Business"
-          description="This is my business finance"
-          createdDate="February 10, 2024"
-          editedDate="February 12, 2024"
-        />
-      </Container>
+      {/* Flexbox Container for Cards */}
+      <Container className="d-flex justify-content-around flex-wrap py-3">
+        {/* Card 1 */}
+        <Container className="flex-card py-3 d-flex" style={{ flex: '0 1 30%', margin: '10px' }}>
+          <FinancialProfileCard
+            title="My Personal Finances"
+            imgSrc="/images/GraphPlaceholder.png"
+            profileType="Personal"
+            description="This is my personal finance"
+            createdDate="January 1, 2024"
+            editedDate="January 5, 2024"
+          />
+        </Container>
 
-      {/* Create new profile */}
-      <Container className="flex-card py-3 d-flex" style={{ flex: '0 1 30%', margin: '10px' }}>
-        <FinancialProfileCard
-          title="Create a new Financial Profile"
-          imgSrc="/images/GraphPlaceholder.png"
-        />
+        {/* Card 2 */}
+        <Container className="flex-card py-3 d-flex" style={{ flex: '0 1 30%', margin: '10px' }}>
+          <FinancialProfileCard
+            title="MyfirstLLC"
+            imgSrc="/images/GraphPlaceholder.png"
+            profileType="Business"
+            description="This is my business finance"
+            createdDate="February 10, 2024"
+            editedDate="February 12, 2024"
+          />
+        </Container>
+
+        {/* Hard-Coded Add New Profile Card */}
+        <Container
+          className="flex-card py-3 d-flex"
+          style={{ flex: '0 1 30%', margin: '10px', cursor: 'pointer' }}
+          onClick={handleAddNewProfile} // Make the card clickable
+        >
+          <Card id="Financial-Card" className="d-flex flex-column h-100">
+            <CardHeader className="d-flex justify-content-center" id="browse-financial-card-name">
+              <h1>Create a New Financial Profile</h1>
+            </CardHeader>
+            <Row className="flex-grow-1 d-flex">
+              <img
+                src="/images/GraphPlaceholder.png"
+                alt="Add New Profile"
+                className="img-thumbnail m-4 p-4"
+                style={{ width: '80%', objectFit: 'contain' }}
+              />
+            </Row>
+          </Card>
+        </Container>
       </Container>
-    </Container>
-  </>
-);
+    </>
+  );
+};
 
 export default FinancialProfiles;

@@ -1,8 +1,8 @@
 import React from 'react';
+import CSVUploader from '../components/CSVUploader'; // Import the CSVUploader component
 
 /* A simple static component to render some text for the landing page. */
 const Landing = () => (
-
   <section id="landing-page" className="land-img min-vh-100 min-vw-100 d-flex align-items-center text-center text-white container-fluid">
     <div className="container ">
       <div className="row">
@@ -12,14 +12,20 @@ const Landing = () => (
             to visualize the data you need.
           </h5>
           <div>
-            <a href="/" className="btn btn-brand ms-3"> Get Started</a>
-            <a href="/about" className="btn btn-light ms-3"> About us</a>
+            <a href="/" className="btn btn-brand ms-3">Get Started</a>
+            <a href="/about" className="btn btn-light ms-3">About us</a>
           </div>
+
+          {/* Add CSVUploader component here to test file upload */}
+          <div className="mt-5">
+            <h4>Upload your CSV file below:</h4>
+            <CSVUploader />
+          </div>
+
         </div>
       </div>
     </div>
   </section>
-
 );
 
 export default Landing;

@@ -40,7 +40,7 @@ const NewNav = () => {
           </Nav>
           {currentUser ? (
             <Nav.Link as={NavLink} to="/signout">
-              <Button color="gray" size="medium">
+              <Button color="grey" size="medium">
                 <Icon name="sign-out" /> Sign out
               </Button>
             </Nav.Link>

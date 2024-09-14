@@ -1,7 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Card, CardHeader } from 'react-bootstrap';
-import PropTypes from 'prop-types'; // PropTypes for validation
+import { useTracker } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
+import { Container, Row, Col, Card, CardHeader, Spinner, Button } from 'react-bootstrap';
+import swal from 'sweetalert';
+import PropTypes from 'prop-types';
+import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection'; // Correct import
 
 // FinancialProfileCard Component
 const FinancialProfileCard = ({
@@ -11,6 +15,7 @@ const FinancialProfileCard = ({
   description,
   createdDate,
   editedDate,
+  onDelete,
 }) => (
   <Card id="Financial-Card" className="d-flex flex-column h-100">
     <CardHeader className="d-flex justify-content-center" id="browse-financial-card-name">
@@ -36,6 +41,10 @@ const FinancialProfileCard = ({
         <Row className="px-4">
           <h2>View Projections</h2>
         </Row>
+        {/* Delete Button */}
+        <Row className="px-4 pt-4">
+          <Button variant="danger" onClick={onDelete}>Delete Profile</Button>
+        </Row>
       </Col>
     </Row>
     <Row className="px-4">
@@ -57,6 +66,7 @@ FinancialProfileCard.propTypes = {
   description: PropTypes.string,
   createdDate: PropTypes.string,
   editedDate: PropTypes.string,
+  onDelete: PropTypes.func.isRequired,
 };
 
 // Default props for optional fields
@@ -68,13 +78,52 @@ FinancialProfileCard.defaultProps = {
 };
 
 // FinancialProfiles page
-const FinancialProfiles = () => {
+const FinancialProfilesPage = () => {
   const navigate = useNavigate();
+
+  // Subscribe to the financial profiles and fetch the current user's profiles
+  const { financialProfiles: profiles, loading: isLoading } = useTracker(() => {
+    const handler = Meteor.subscribe('FinancialProfiles'); // Subscription
+    const loading = !handler.ready();
+    const financialProfiles = FinancialProfiles.find({ owner: Meteor.user()?.username }).fetch(); // Fetching data
+    return { financialProfiles, loading };
+  }, []);
 
   // Handler to navigate to the "new profile" page
   const handleAddNewProfile = () => {
-    navigate('/balance-sheet');
+    navigate('/add-financial-profile');
   };
+
+  // Handler to delete a financial profile
+  const handleDeleteProfile = (profile) => {
+    swal({
+      title: `Really delete profile ${profile.title}?`,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        FinancialProfiles.removeIt(profile._id, (error) => {
+          if (error) {
+            swal('Error', error.message, 'error');
+          } else {
+            swal('Success', 'Profile deleted successfully', 'success');
+          }
+        });
+      }
+    });
+  };
+
+  if (isLoading) {
+    return (
+      <Container className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+        <div className="text-center">
+          <Spinner animation="border" role="status" />
+          <h2 style={{ marginTop: '1rem' }}>Loading your financial profiles...</h2>
+        </div>
+      </Container>
+    );
+  }
 
   return (
     <>
@@ -84,29 +133,23 @@ const FinancialProfiles = () => {
 
       {/* Flexbox Container for Cards */}
       <Container className="d-flex justify-content-around flex-wrap py-3">
-        {/* Card 1 */}
-        <Container className="flex-card py-3 d-flex" style={{ flex: '0 1 30%', margin: '10px' }}>
-          <FinancialProfileCard
-            title="My Personal Finances"
-            imgSrc="/images/GraphPlaceholder.png"
-            profileType="Personal"
-            description="This is my personal finance"
-            createdDate="January 1, 2024"
-            editedDate="January 5, 2024"
-          />
-        </Container>
-
-        {/* Card 2 */}
-        <Container className="flex-card py-3 d-flex" style={{ flex: '0 1 30%', margin: '10px' }}>
-          <FinancialProfileCard
-            title="MyfirstLLC"
-            imgSrc="/images/GraphPlaceholder.png"
-            profileType="Business"
-            description="This is my business finance"
-            createdDate="February 10, 2024"
-            editedDate="February 12, 2024"
-          />
-        </Container>
+        {profiles.length > 0 ? (
+          profiles.map((profile) => (
+            <Container key={profile._id} className="flex-card py-3 d-flex" style={{ flex: '0 1 30%', margin: '10px' }}>
+              <FinancialProfileCard
+                title={profile.title}
+                imgSrc={profile.image || '/images/GraphPlaceholder.png'}
+                profileType={profile.type}
+                description={profile.description || 'No description available.'}
+                createdDate={profile.createdAt?.toLocaleDateString() || 'Not available'}
+                editedDate={profile.lastEditedAt?.toLocaleDateString() || 'Not available'}
+                onDelete={() => handleDeleteProfile(profile)}
+              />
+            </Container>
+          ))
+        ) : (
+          <p>No financial profiles found.</p>
+        )}
 
         {/* Hard-Coded Add New Profile Card */}
         <Container
@@ -133,4 +176,4 @@ const FinancialProfiles = () => {
   );
 };
 
-export default FinancialProfiles;
+export default FinancialProfilesPage;

@@ -7,8 +7,8 @@ import BaseCollection from '../base/BaseCollection';
 import { ROLE } from '../role/Role';
 
 export const OtherFinancialsPublications = {
-  otherFinancials: 'StaticFinancials', // For regular users
-  otherFinancialsAdmin: 'StaticFinancialsAdmin', // For admin users
+  otherFinancials: 'OtherFinancials', // For regular users
+  otherFinancialsAdmin: 'OtherFinancialsAdmin', // For admin users
 };
 
 class OtherFinancialsCollection extends BaseCollection {

@@ -1,5 +1,5 @@
 import { Selector, t } from 'testcafe';
-import { navBar } from './navbar.component';
+import { navBar } from './newNavBar.component';
 import { PAGE_IDS } from '../imports/ui/utilities/PageIDs';
 import { COMPONENT_IDS } from '../imports/ui/utilities/ComponentIDs';
 
@@ -7,6 +7,12 @@ class SignInPage {
   constructor() {
     this.pageId = `#${PAGE_IDS.SIGN_IN}`;
     this.pageSelector = Selector(this.pageId);
+
+    this.emailInput = Selector(`#${COMPONENT_IDS.SIGN_IN_FORM_EMAIL}`);
+    this.passwordInput = Selector(`#${COMPONENT_IDS.SIGN_IN_FORM_PASSWORD}`);
+    this.submitButton = Selector(`#${COMPONENT_IDS.SIGN_IN_FORM_SUBMIT}`);
+    this.errorMessage = Selector('.alert-danger');
+    this.signUpLink = Selector('a').withText('Sign up');
   }
 
   /** Checks that this page is currently displayed. */
@@ -15,12 +21,27 @@ class SignInPage {
   }
 
   /** Fills out and submits the form to signin, then checks to see that login was successful. */
-  async signin(username, password) {
+  async fillForm(username, password) {
     await this.isDisplayed();
-    await t.typeText(`#${COMPONENT_IDS.SIGN_IN_FORM_EMAIL}`, username);
-    await t.typeText(`#${COMPONENT_IDS.SIGN_IN_FORM_PASSWORD}`, password);
-    await t.click(`#${COMPONENT_IDS.SIGN_IN_FORM_SUBMIT} input.btn.btn-primary`);
+    await t.typeText(this.emailInput, email)
+    await t.typeText(this.passwordInput, password)
+    await t.click(this.submitButton);
     await navBar.isLoggedIn(username);
+  }
+
+  /* Assert that the form shows an error */
+  async checkError() {
+    await t.expect(this.errorMessage.exists).ok();
+  }
+
+  /* Assert that the user is redirected to the home page */
+  async checkRedirect() {
+    await t.expect(Selector('h1').withText('Home').exists).ok();
+  }
+
+  /* Click the Sign Up link and check redirection */
+  async clickSignUpLink() {
+    await t.click(this.signUpLink);
   }
 }
 

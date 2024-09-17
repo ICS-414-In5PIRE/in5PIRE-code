@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Navigate } from 'react-router';
+import { Navigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Alert, Card, Col, Container, Row } from 'react-bootstrap';
 import { Meteor } from 'meteor/meteor';
@@ -74,7 +74,7 @@ const SignUp = () => {
   };
 
   if (redirectToReferer) {
-    return <Navigate to="/add" />;
+    return <Navigate to="/home" />;
   }
   return (
     <Container id={PAGE_IDS.SIGN_UP} className="py-3 sign-in-register">

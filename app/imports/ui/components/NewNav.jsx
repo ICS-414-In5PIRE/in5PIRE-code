@@ -13,7 +13,7 @@ const NewNav = () => {
   }), []);
 
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar id="new-nav" expand="lg" className="bg-body-tertiary">
       <Container id="navbar">
         <a className="navbar-brand" href="/" aria-label="Home page">
           <Image src="images/in5pirelogo.png" style={{ width: 200, height: 60 }} alt="In5pire Logo" />

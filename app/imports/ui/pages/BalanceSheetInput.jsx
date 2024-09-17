@@ -4,6 +4,7 @@ import OtherAssets from '../components/BalanceSheetComponents/OtherAssets';
 import CashAndCashEquivalents from '../components/BalanceSheetComponents/CashAndCashEquivalents';
 import Liabilities from '../components/BalanceSheetComponents/Liabilities';
 import CommitmentsAndContingencies from '../components/BalanceSheetComponents/CommitmentsAndContingencies';
+import { PAGE_IDS } from '../utilities/PageIDs';
 
 /**
  * BalanceSheetInput component for entering balance sheet data using Semantic UI React Form.
@@ -71,7 +72,7 @@ const BalanceSheetInput = () => {
   }
 
   return (
-    <Container id="balance-sheet-input">
+    <Container id={PAGE_IDS.BALANCE_SHEET_INPUT}>
       <Grid centered>
         <Grid.Column>
           <h2>Balance Sheet Input</h2>

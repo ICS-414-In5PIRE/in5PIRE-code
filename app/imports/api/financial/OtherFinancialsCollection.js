@@ -20,19 +20,49 @@ class OtherFinancialsCollection extends BaseCollection {
       budget: Number, // Budgeted amount
       actual: Number, // Actual amount
       encumbrance: Number, // Encumbered amount
-      NHTFReturns: {
-        actual: {
-          oneYear: Number, // Actual NHTF return at 1 year
-          threeYears: Number, // Actual NHTF return at 3 years
-          fiveYears: Number, // Actual NHTF return at 5 years
-          sevenYears: Number, // Actual NHTF return at 7 years
-        },
-        benchmark: {
-          oneYear: Number, // Benchmark NHTF return at 1 year
-          threeYears: Number, // Benchmark NHTF return at 3 years
-          fiveYears: Number, // Benchmark NHTF return at 5 years
-          sevenYears: Number, // Benchmark NHTF return at 7 years
-        },
+      NHTFReturns: { // Define NHTFReturns as an object
+        type: Object,
+        optional: true,
+      },
+      'NHTFReturns.actual': { // Define actual as an object
+        type: Object,
+        optional: true,
+      },
+      'NHTFReturns.actual.oneYear': { // Define actual returns with dot notation
+        type: Number,
+        optional: true,
+      },
+      'NHTFReturns.actual.threeYears': {
+        type: Number,
+        optional: true,
+      },
+      'NHTFReturns.actual.fiveYears': {
+        type: Number,
+        optional: true,
+      },
+      'NHTFReturns.actual.sevenYears': {
+        type: Number,
+        optional: true,
+      },
+      'NHTFReturns.benchmark': { // Define benchmark as an object
+        type: Object,
+        optional: true,
+      },
+      'NHTFReturns.benchmark.oneYear': { // Define benchmark returns with dot notation
+        type: Number,
+        optional: true,
+      },
+      'NHTFReturns.benchmark.threeYears': {
+        type: Number,
+        optional: true,
+      },
+      'NHTFReturns.benchmark.fiveYears': {
+        type: Number,
+        optional: true,
+      },
+      'NHTFReturns.benchmark.sevenYears': {
+        type: Number,
+        optional: true,
       },
     }));
   }

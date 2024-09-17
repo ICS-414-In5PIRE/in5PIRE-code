@@ -27,15 +27,37 @@ class StaticFinancialsCollection extends BaseCollection {
       revenues: Number, // Total revenues
       opex: Number, // Operational expenses
       netIncome: Number, // Income after expenses
-      cashFlow: { // Cash flow extrapolation
-        inflow: Number,
-        outflow: Number,
-        net: Number,
+      cashFlow: { // Define cashFlow as an object
+        type: Object,
+        optional: true, // Optional if it's not always required
       },
-      incrementalFringeBenefits: {
-        admin: Number,
-        mgmtStaff: Number,
-        mgmt: Number,
+      'cashFlow.inflow': { // Define inflow as a sub-field of cashFlow
+        type: Number,
+        optional: true,
+      },
+      'cashFlow.outflow': { // Define outflow as a sub-field of cashFlow
+        type: Number,
+        optional: true,
+      },
+      'cashFlow.net': { // Define net as a sub-field of cashFlow
+        type: Number,
+        optional: true,
+      },
+      incrementalFringeBenefits: { // Define incrementalFringeBenefits as an object
+        type: Object,
+        optional: true,
+      },
+      'incrementalFringeBenefits.admin': { // Define sub-fields using dot notation
+        type: Number,
+        optional: true,
+      },
+      'incrementalFringeBenefits.mgmtStaff': {
+        type: Number,
+        optional: true,
+      },
+      'incrementalFringeBenefits.mgmt': {
+        type: Number,
+        optional: true,
       },
     }));
   }

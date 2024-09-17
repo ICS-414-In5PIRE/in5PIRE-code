@@ -1,8 +1,4 @@
 {
-  "entry": [
-    "client/main.js",
-    "server/main.js"
-  ],
   "ignoreUnresolved": [
     "meteor/accounts-base",
     "meteor/alanning:roles",
@@ -15,6 +11,14 @@
     "meteor/udondan:zipzap",
     "meteor/underscore"
   ],
+  "ignoreUnimported": [
+    "imports/api/base/BaseUtilities.js",
+    "imports/api/financial/OtherFinancialsCollection.js",
+    "imports/api/financial/StaticFinancialsCollection.js",
+    "imports/api/utilities/test-helpers.js",
+    "imports/test-utilities/test-utilities.js",
+    "imports/ui/components/BalanceSheetComponents/FinancialprofileCard.jsx"
+  ],
   "ignoreUnused": [
     "@babel/runtime",
     "classnames",
@@ -22,6 +26,10 @@
     "graphql",
     "meteor-node-stubs",
     "uniforms"
+  ],
+  "entry": [
+    "client/main.js",
+    "server/main.js"
   ],
   "ignorePatterns": [
     "**/node_modules/**",
@@ -39,10 +47,5 @@
     "public/**",
     "private/**",
     "tests/**"
-  ],
-  "ignoreUnimported": [
-    "imports/api/base/BaseUtilities.js",
-    "imports/api/utilities/test-helpers.js",
-    "imports/test-utilities/test-utilities.js"
   ]
 }

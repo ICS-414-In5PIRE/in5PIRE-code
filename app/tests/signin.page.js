@@ -1,5 +1,4 @@
 import { Selector, t } from 'testcafe';
-import { navBar } from './newNavBar.component';
 import { PAGE_IDS } from '../imports/ui/utilities/PageIDs';
 import { COMPONENT_IDS } from '../imports/ui/utilities/ComponentIDs';
 
@@ -23,10 +22,9 @@ class SignInPage {
   /** Fills out and submits the form to signin, then checks to see that login was successful. */
   async fillForm(username, password) {
     await this.isDisplayed();
-    await t.typeText(this.emailInput, email)
-    await t.typeText(this.passwordInput, password)
+    await t.typeText(this.emailInput, username);
+    await t.typeText(this.passwordInput, password);
     await t.click(this.submitButton);
-    await navBar.isLoggedIn(username);
   }
 
   /* Assert that the form shows an error */

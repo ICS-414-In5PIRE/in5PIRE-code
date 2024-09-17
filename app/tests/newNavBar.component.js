@@ -3,7 +3,7 @@ import { Selector, t } from 'testcafe';
 class NewNavBar {
   constructor() {
     // Define the page ID and its selectors
-    this.pageId = `#new-nav`;
+    this.pageId = '#new-nav';
     this.pageSelector = Selector(this.pageId);
 
     this.homeLink = Selector('a').withText('Home');

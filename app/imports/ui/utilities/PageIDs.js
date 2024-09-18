@@ -13,5 +13,6 @@ export const PAGE_IDS = {
   SIGN_OUT: 'sign-out',
   SIGN_UP: 'sign-up',
   BALANCE_SHEET_INPUT: 'balance-sheet-input',
+  BUDGET_FORM: 'budget-form',
   FINANCIAL_PROFILES: 'financial-profiles',
 };

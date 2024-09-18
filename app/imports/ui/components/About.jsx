@@ -116,7 +116,7 @@ const AboutPage = () => (
         <Col>
           <h3>Ready to take control of your financial future?</h3>
           <p>Sign up today and start building better financial models.</p>
-          <Button variant="primary" size="lg">Get Started</Button>
+          <a href="/signin" className="btn btn-brand ms-3"> Get Started</a>
         </Col>
       </Row>
     </Container>

@@ -51,7 +51,11 @@ const SignIn = () => {
                   <TextField id={COMPONENT_IDS.SIGN_IN_FORM_EMAIL} name="email" />
                   <TextField id={COMPONENT_IDS.SIGN_IN_FORM_PASSWORD} name="password" type="password" />
                   <ErrorsField />
-                  <SubmitField id={COMPONENT_IDS.SIGN_IN_FORM_SUBMIT} />
+                </Row>
+                <Row className="justify-content-center mt-3">
+                  <Col xs="auto">
+                    <SubmitField id={COMPONENT_IDS.SIGN_IN_FORM_SUBMIT} />
+                  </Col>
                 </Row>
                 <Row>
                   <Col>

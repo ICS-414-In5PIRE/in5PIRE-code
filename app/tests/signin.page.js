@@ -6,7 +6,6 @@ class SignInPage {
   constructor() {
     this.pageId = `#${PAGE_IDS.SIGN_IN}`;
     this.pageSelector = Selector(this.pageId);
-
     this.emailInput = Selector(`#${COMPONENT_IDS.SIGN_IN_FORM_EMAIL}`);
     this.passwordInput = Selector(`#${COMPONENT_IDS.SIGN_IN_FORM_PASSWORD}`);
     this.submitButton = Selector(`#${COMPONENT_IDS.SIGN_IN_FORM_SUBMIT}`);
@@ -24,6 +23,7 @@ class SignInPage {
     await this.isDisplayed();
     await t.typeText(this.emailInput, username);
     await t.typeText(this.passwordInput, password);
+    await t.wait(1000);
     await t.click(this.submitButton);
   }
 

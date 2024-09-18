@@ -22,7 +22,7 @@ const NewNav = () => {
         <Navbar.Collapse className="justify-content-end">
           <Nav>
             <Nav.Link as={NavLink} to="/">Home</Nav.Link>
-            <Nav.Link as={NavLink} to="/user-guide">User Guide</Nav.Link>
+            <Nav.Link as={NavLink} to="/userguide">User Guide</Nav.Link>
             { currentUser && (
               <li>
                 <NavDropdown title="Data Input" id="navbarDropdown">
@@ -36,7 +36,7 @@ const NewNav = () => {
             <NavDropdown title="Support" id="navbarDropdown">
               <NavDropdown.Item as={NavLink} to="/aboutus">About Us</NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/Faq">FAQ</NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/ContactSupport">Contact Support</NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/Contactus">Contact Us</NavDropdown.Item>
             </NavDropdown>
           </Nav>
           {currentUser ? (

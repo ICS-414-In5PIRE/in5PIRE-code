@@ -319,6 +319,65 @@ body{
   }
 }
 
+/* Contact Us page */
+/* Scoped styles for the Contact Us page */
+#contact-us-page {
+/* Page title */
+h1.display-4 {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #007bff;
+}
+
+/* Muted lead text */
+p.lead {
+  font-size: 1.1rem;
+  color: #6c757d;
+}
+
+/* Card styling for contact options */
+.contact-card {
+  background-color: #f8f9fa;
+  border: none;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Enhanced shadow for a polished look */
+}
+
+/* Headings inside cards */
+.contact-card h5 {
+  font-weight: 600;
+  color: #007bff;
+}
+
+/* Center align text inside the contact cards */
+.contact-card p {
+  font-size: 1rem;
+  color: #343a40;
+}
+
+/* Button styles specific to this page */
+button {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  background-color: #fff;
+  border: 2px solid #007bff;
+  color: #007bff;
+}
+
+/* Button hover effect */
+button:hover {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+/* Larger button for a more prominent look */
+button {
+  padding: 10px 30px;
+  font-size: 1.1rem;
+}
+}
+
   /** Landing Page Styles */
   #landing-page {
     background-position: center;

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Image } from 'react-bootstrap';
+import { Container, Image } from 'react-bootstrap';
+import { PAGE_IDS } from '../utilities/PageIDs';
 
 const AboutUs = () => (
-  <>
+  <Container id={PAGE_IDS.ABOUT_US}>
     <section id="about" className="section-padding">
       <div className="container">
         <div className="row">
@@ -74,8 +75,7 @@ const AboutUs = () => (
       </div>
 
     </section>
-
-  </>
+  </Container>
 );
 
 export default AboutUs;

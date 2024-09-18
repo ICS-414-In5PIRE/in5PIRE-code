@@ -34,6 +34,7 @@ const NewNav = () => {
               </li>
             )}
             <NavDropdown title="Support" id="navbarDropdown">
+              <NavDropdown.Item as={NavLink} to="/aboutus">About Us</NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/Faq">FAQ</NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/ContactSupport">Contact Support</NavDropdown.Item>
             </NavDropdown>

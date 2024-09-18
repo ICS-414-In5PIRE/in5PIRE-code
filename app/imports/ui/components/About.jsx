@@ -1,11 +1,10 @@
 import React from 'react';
-import { Card, Col, Container, Image, Row } from 'react-bootstrap';
-import { Parallax } from 'react-parallax';
+import { Container, Row, Col, Card, Image } from 'react-bootstrap';
 import { Fade, Slide } from 'react-awesome-reveal';
+import { Parallax } from 'react-parallax';
 import { PAGE_IDS } from '../utilities/PageIDs';
 
-/* A simple static component to render some text for the landing page. */
-const Landing = () => (
+const AboutPage = () => (
   <div>
     {/* Parallax Header Section */}
     <Parallax
@@ -143,7 +142,6 @@ const Landing = () => (
       </Row>
     </Container>
   </div>
-
 );
 
-export default Landing;
+export default AboutPage;

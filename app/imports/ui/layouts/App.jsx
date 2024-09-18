@@ -25,6 +25,8 @@ import FinancialProfilesPage from '../pages/FinancialProfiles';
 import AddFinancialProfile from '../pages/AddFinancialProfile';
 import BudgetForm from '../pages/BudgetForm';
 import FAQ from '../pages/FAQ';
+import ContactUs from '../pages/ContactUs';
+import UserGuide from '../pages/UserGuide';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
@@ -44,6 +46,8 @@ const App = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signout" element={<SignOut />} />
           <Route path="/aboutus" element={<AboutUs />} />
+          <Route path="/contactus" element={<ContactUs />} />
+          <Route path="/userguide" element={<UserGuide />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/home" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
           <Route path="/list" element={<ProtectedRoute><ListStuff /></ProtectedRoute>} />

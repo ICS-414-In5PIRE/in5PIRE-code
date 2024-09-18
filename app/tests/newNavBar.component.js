@@ -67,7 +67,7 @@ class NewNavBar {
 
   /* Navigate to the Balance Sheet Input Form */
   async goToBalanceSheetPage() {
-    await this.openDataInputDropdown();
+    await this.openDataInputDropdown({ timeout: 5000 });
     await t.click(this.balanceSheetLink);
   }
 

@@ -1,19 +1,40 @@
 import React from 'react';
-import { Container, Row, Col, Card, Button, Image } from 'react-bootstrap';
+import { Container, Row, Col, Card, Image } from 'react-bootstrap';
 import { Fade, Slide } from 'react-awesome-reveal';
 import { Parallax } from 'react-parallax';
+import { PAGE_IDS } from '../utilities/PageIDs';
 
 const AboutPage = () => (
   <div>
     {/* Parallax Header Section */}
     <Parallax
-      bgImage="/images/GraphPlaceholder.png"
+      bgImage="https://uploads-ssl.webflow.com/5fdaca5a4d51110c2f760a05/60e84fdf2c90eff59bf3a293_spire-hero-image.jpg"
       strength={500}
+      bgImageStyle={{
+        backgroundAttachment: 'fixed',
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+      }}
       className="mb-5"
     >
-      <div style={{ height: '500px' }} className="d-flex justify-content-center align-items-center">
-        <h1 className="display-3 text-white">About Our App</h1>
-      </div>
+      <section id="landing-page {PAGE_IDS.LANDING}" className="min-vh-100 min-vw-100 d-flex align-items-center text-center text-white container-fluid overlay-gradient">
+        <Container id={PAGE_IDS.LANDING}>
+          <div className="container ">
+            <div className="row">
+              <div className="col-12">
+                <h1 className="text-uppercase display-1">In5PIRE Tool</h1>
+                <h5 className="mt-3 bm-4">This tool allows users to analyze spreadsheet data and be able
+                  to visualize the data you need.
+                </h5>
+                <div>
+                  <a href="/signin" className="btn btn-brand ms-3"> Get Started</a>
+                  <a href="/app/imports/ui/components/About" className="btn btn-light ms-3"> About us</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
     </Parallax>
 
     <Container className="py-5">

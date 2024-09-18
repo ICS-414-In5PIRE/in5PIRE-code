@@ -2,6 +2,7 @@ import { signInPage } from './signin.page';
 import { signUpPage } from './signup.page';
 import { balanceSheetInputPage } from './balanceSheetInput.test';
 import { newNavBar } from './newNavBar.component';
+import { landingPage } from './landing.page';
 
 /* global fixture:false, test:false */
 
@@ -11,11 +12,9 @@ const newCredentials = { username: 'jane@foo.com', password: 'changeme' };
 fixture('meteor-application-template-production localhost test with default db')
   .page('http://localhost:3000');
 
-/*
 test('Test that landing page shows up', async () => {
   await landingPage.isDisplayed();
 });
-*/
 
 /*
 test('Test that signin and signout work', async () => {

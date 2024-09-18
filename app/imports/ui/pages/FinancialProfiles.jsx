@@ -5,7 +5,8 @@ import { Meteor } from 'meteor/meteor';
 import { Container, Row, Col, Card, CardHeader, Spinner, Button } from 'react-bootstrap';
 import swal from 'sweetalert';
 import PropTypes from 'prop-types';
-import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection'; // Correct import
+import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection';
+import { PAGE_IDS } from '../utilities/PageIDs';
 
 // FinancialProfileCard Component
 const FinancialProfileCard = ({
@@ -126,7 +127,7 @@ const FinancialProfilesPage = () => {
   }
 
   return (
-    <>
+    <Container id={PAGE_IDS.FINANCIAL_PROFILES}>
       <Container className="profile-container">
         <h1>User&apos;s Financial Profiles</h1>
       </Container>
@@ -172,7 +173,7 @@ const FinancialProfilesPage = () => {
           </Card>
         </Container>
       </Container>
-    </>
+    </Container>
   );
 };
 

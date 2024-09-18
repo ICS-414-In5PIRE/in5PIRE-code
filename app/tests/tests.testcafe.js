@@ -3,11 +3,12 @@ import { signUpPage } from './signup.page';
 import { balanceSheetInputPage } from './balanceSheetInput.test';
 import { newNavBar } from './newNavBar.component';
 import { landingPage } from './landing.page';
+import { financialProfiles } from './financialProfiles.page';
 
 /* global fixture:false, test:false */
 
 /** Credentials for one of the sample users defined in settings.development.json. */
-const newCredentials = { username: 'jane@foo.com', password: 'changeme' };
+const newCredentials = { username: 'john@foo.com', password: 'changeme' };
 
 fixture('meteor-application-template-production localhost test with default db')
   .page('http://localhost:3000');
@@ -16,15 +17,13 @@ test('Test that landing page shows up', async () => {
   await landingPage.isDisplayed();
 });
 
-/*
-test('Test that signin and signout work', async () => {
-  await navBar.gotoSignInPage();
-  await signInPage.signin(credentials.username, credentials.password);
-  await navBar.isLoggedIn(credentials.username);
-  await navBar.logout();
-  await signOutPage.isDisplayed();
-});
-*/
+// test('Test that signin and signout work', async () => {
+//   await navBar.gotoSignInPage();
+//   await signInPage.signin(credentials.username, credentials.password);
+//   await navBar.isLoggedIn(credentials.username);
+//   await navBar.logout();
+//   await signOutPage.isDisplayed();
+// });
 
 /*
 test('Test that user pages show up', async () => {
@@ -85,4 +84,12 @@ test('BalanceSheetInput is displayed', async () => {
   await newNavBar.goToBalanceSheetPage();
   // Check if the BalanceSheetInput page is displayed
   await balanceSheetInputPage.isDisplayed();
+});
+
+test('Test the financial profiles page', async (testController) => {
+  await newNavBar.signIn();
+  await signInPage.isDisplayed();
+  await signInPage.fillForm(newCredentials.username, newCredentials.password);
+  await newNavBar.goToFinancialProfilesPage(testController);
+  await financialProfiles.isDisplayed();
 });

@@ -70,6 +70,16 @@ class NewNavBar {
     await this.openDataInputDropdown();
     await t.click(this.balanceSheetLink);
   }
+
+  async gotoSignInPage(testController) {
+    await this.ensureLogout(testController);
+    const visible = await Selector('#basic-navbar-nav').visible;
+    if (!visible) {
+      await testController.click('button.navbar-toggler');
+    }
+    await testController.click('#login-dropdown');
+    await testController.click('#login-dropdown-sign-in');
+  }
 }
 
 export const newNavBar = new NewNavBar();

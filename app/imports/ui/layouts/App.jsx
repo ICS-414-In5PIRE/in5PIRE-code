@@ -23,6 +23,7 @@ import AboutUs from '../pages/AboutUs';
 import NewNav from '../components/NewNav';
 import FinancialProfilesPage from '../pages/FinancialProfiles';
 import AddFinancialProfile from '../pages/AddFinancialProfile';
+import BudgetForm from '../pages/BudgetForm';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
@@ -53,6 +54,7 @@ const App = () => {
           <Route path="/notauthorized" element={<NotAuthorized />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/balance-sheet" element={<ProtectedRoute><BalanceSheetInput /></ProtectedRoute>} />
+          <Route path="/budget-form" element={<ProtectedRoute><BudgetForm /></ProtectedRoute>} />
         </Routes>
         <Footer />
       </div>

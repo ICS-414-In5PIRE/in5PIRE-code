@@ -340,7 +340,7 @@ body{
   }
 
 /* Balance Sheet Styles */
-#balance-sheet-input {
+#balance-sheet-input, #budget-form {
   h3, h2 {
     text-align: start;
   }

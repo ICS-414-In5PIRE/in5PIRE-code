@@ -17,6 +17,7 @@
     "imports/api/financial/StaticFinancialsCollection.js",
     "imports/api/utilities/test-helpers.js",
     "imports/test-utilities/test-utilities.js",
+    "imports/ui/components/About.jsx",
     "imports/ui/components/BalanceSheetComponents/FinancialprofileCard.jsx"
   ],
   "ignoreUnused": [

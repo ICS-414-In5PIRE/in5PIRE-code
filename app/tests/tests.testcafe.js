@@ -8,6 +8,7 @@ import { financialProfiles } from './financialProfiles.page';
 /* global fixture:false, test:false */
 
 /** Credentials for one of the sample users defined in settings.development.json. */
+const regCredentials = { username: 'bar@foo.com', password: 'changeme' };
 const newCredentials = { username: 'john@foo.com', password: 'changeme' };
 
 fixture('meteor-application-template-production localhost test with default db')
@@ -17,69 +18,25 @@ test('Test that landing page shows up', async () => {
   await landingPage.isDisplayed();
 });
 
-// test('Test that signin and signout work', async () => {
-//   await navBar.gotoSignInPage();
-//   await signInPage.signin(credentials.username, credentials.password);
-//   await navBar.isLoggedIn(credentials.username);
-//   await navBar.logout();
-//   await signOutPage.isDisplayed();
-// });
-
-/*
-test('Test that user pages show up', async () => {
-  await navBar.gotoSignInPage();
-  await signInPage.signin(credentials.username, credentials.password);
-  await navBar.isLoggedIn(credentials.username);
-  await navBar.gotoAddStuffPage();
-  await addStuffPage.isDisplayed();
-  await navBar.gotoListStuffPage();
-  await listStuffPage.isDisplayed();
-  // want to see if we can get to the editStuffPage
-  const editLinks = await Selector(`.${COMPONENT_IDS.LIST_STUFF_EDIT}`);
-  await t.click(editLinks.nth(0));
-  await editStuffPage.isDisplayed();
-  await navBar.logout();
-  await signOutPage.isDisplayed();
-});
-*/
-
-/*
-test('Test that sign up and sign out work', async () => {
-  await navBar.gotoSignUpPage();
-  await signUpPage.isDisplayed();
-  await signUpPage.signupUser(newCredentials.username, newCredentials.password);
-  await navBar.isLoggedIn(newCredentials.username);
-  await navBar.logout();
-  await signOutPage.isDisplayed();
-});
-*/
-
-/*
-test('Test that admin pages show up', async () => {
-  await navBar.gotoSignInPage();
-  await signInPage.signin(adminCredentials.username, adminCredentials.password);
-  await navBar.isLoggedIn(adminCredentials.username);
-  await navBar.gotoAddStuffPage();
-  await addStuffPage.isDisplayed();
-  await navBar.gotoListStuffPage();
-  await listStuffPage.isDisplayed();
-  // want to see if we can get to the editStuffPage
-  const editLinks = await Selector(`.${COMPONENT_IDS.LIST_STUFF_EDIT}`);
-  await t.click(editLinks.nth(0));
-  await editStuffPage.isDisplayed();
-  await navBar.gotoListStuffAdminPage();
-  await listStuffAdminPage.isDisplayed();
-  // await navBar.gotoManageDatabasePage();
-  // await manageDatabasePage.isDisplayed();
-});
-*/
-
-test('BalanceSheetInput is displayed', async () => {
-  // Go to the signup page and sign up a new user
+test('Test that signin works', async () => {
   await newNavBar.signIn();
   await signInPage.isDisplayed();
+  await signInPage.fillForm(newCredentials.username, newCredentials.password);
+  await landingPage.isDisplayed();
+});
+
+test('Test that signup works', async () => {
+  await newNavBar.signIn();
   await signInPage.clickSignUpLink();
-  await signUpPage.signupUser(newCredentials.username, newCredentials.password);
+  await signUpPage.isDisplayed();
+  await signUpPage.signupUser(regCredentials.username, regCredentials.password);
+  await landingPage.isDisplayed();
+});
+
+test('Test the Balance input page page', async () => {
+  // Go to the signup page and sign up a new user
+  await newNavBar.signIn();
+  await signInPage.fillForm(newCredentials.username, newCredentials.password);
   // Navigate to the BalanceSheetInput page
   await newNavBar.goToBalanceSheetPage();
   // Check if the BalanceSheetInput page is displayed
@@ -88,7 +45,6 @@ test('BalanceSheetInput is displayed', async () => {
 
 test('Test the financial profiles page', async (testController) => {
   await newNavBar.signIn();
-  await signInPage.isDisplayed();
   await signInPage.fillForm(newCredentials.username, newCredentials.password);
   await newNavBar.goToFinancialProfilesPage(testController);
   await financialProfiles.isDisplayed();

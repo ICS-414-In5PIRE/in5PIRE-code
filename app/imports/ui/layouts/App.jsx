@@ -27,7 +27,7 @@ import BudgetForm from '../pages/BudgetForm';
 import FAQ from '../pages/FAQ';
 import ContactUs from '../pages/ContactUs';
 import UserGuide from '../pages/UserGuide';
-import EditFinancialProfiles from '../pages/EditFinancialProfile';
+import EditFinancialProfile from '../pages/EditFinancialProfile';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
@@ -56,7 +56,7 @@ const App = () => {
           <Route path="/edit/:_id" element={<ProtectedRoute><EditStuff /></ProtectedRoute>} />
           <Route path="/financial-profiles/" element={<ProtectedRoute><FinancialProfilesPage /></ProtectedRoute>} />
           <Route path="/add-financial-profile/" element={<ProtectedRoute><AddFinancialProfile /></ProtectedRoute>} />
-          <Route path="/edit-financial-profile/" element={<ProtectedRoute><EditFinancialProfiles /></ProtectedRoute>} />
+          <Route path="/edit-financial-profile/:_id" element={<ProtectedRoute><EditFinancialProfile /></ProtectedRoute>} />
           <Route path="/admin" element={<AdminProtectedRoute ready={ready}><ListStuffAdmin /></AdminProtectedRoute>} />
           <Route path="/manage-database" element={<AdminProtectedRoute ready={ready}><ManageDatabase /></AdminProtectedRoute>} />
           <Route path="/notauthorized" element={<NotAuthorized />} />

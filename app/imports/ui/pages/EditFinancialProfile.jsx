@@ -13,13 +13,13 @@ import { PAGE_IDS } from '../utilities/PageIDs';
 const bridge = new SimpleSchema2Bridge(FinancialProfiles._schema);
 
 /* Renders the EditFinancialProfiles page for editing a single document. */
-const EditFinancialProfiles = () => {
+const EditFinancialProfile = () => {
   // Get the documentID from the URL field. See imports/ui/layouts/App.jsx for the route containing :_id.
   const { _id } = useParams();
   // useTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker
   const { doc, ready } = useTracker(() => {
     // Get access to FinancialProfiles.
-    const subscription = FinancialProfiles.subscribeFinancialProfiles();
+    const subscription = FinancialProfiles.subscribeProfiles();
     // Determine if the subscription is ready
     const rdy = subscription.ready();
     // Get the document
@@ -41,7 +41,7 @@ const EditFinancialProfiles = () => {
   };
 
   return ready ? (
-    <Container id={PAGE_IDS.EDIT_FINANCIAL_PROFILES} className="py-3">
+    <Container id={PAGE_IDS.EDIT_FINANCIAL_PROFILE} className="py-3">
       <Row className="justify-content-center">
         <Col xs={5}>
           <Col className="text-center"><h2>Edit Your Financial Profile</h2></Col>
@@ -64,4 +64,4 @@ const EditFinancialProfiles = () => {
   ) : <LoadingSpinner />;
 };
 
-export default EditFinancialProfiles;
+export default EditFinancialProfile;

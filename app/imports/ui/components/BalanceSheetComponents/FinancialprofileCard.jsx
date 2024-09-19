@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardHeader, Row, Col } from 'react-bootstrap';
+import { Card, CardHeader, Row, Col, Button, Container, Spinner, } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { useTracker } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
+import swal from 'sweetalert';
+import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection';
+import { PAGE_IDS } from '../utilities/PageIDs';
 
 const FinancialProfileCard = ({
   title,
@@ -39,6 +45,15 @@ const FinancialProfileCard = ({
     <Row className="px-4">
       <h2>Profile Description</h2>
       <p>{description}</p>
+    </Row>
+    {/* Delete and Edit Button */}
+    <Row className="px-4 pt-4">
+      <Col>
+        <Button href={`/edit-financial-profile/${profile._id}/`}>Edit this profile</Button>
+      </Col>
+      <Col>
+        <Button variant="danger" onClick={onDelete}>Delete Profile</Button>
+      </Col>
     </Row>
     <Row className="px-4">
       <p style={{ fontSize: '0.8em', color: 'gray', marginBottom: '2px' }}>Created: {createdDate}</p>

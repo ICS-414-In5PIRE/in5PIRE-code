@@ -48,7 +48,8 @@ const FinancialProfileCard = ({
     {/* Delete and Edit Button */}
     <Row className="px-4 pt-4">
       <Col>
-        <Button href={/edit-financial-profile/}>Edit this profile</Button>
+        <Button href={`/edit-financial-profile/`}>Edit this profile</Button>
+        {/*${profile._id}/*/}
       </Col>
       <Col>
         <Button variant="danger" onClick={onDelete}>Delete Profile</Button>
@@ -70,6 +71,7 @@ FinancialProfileCard.propTypes = {
   createdDate: PropTypes.string,
   editedDate: PropTypes.string,
   onDelete: PropTypes.func.isRequired,
+  _id: PropTypes.string,
 };
 
 // Default props for optional fields

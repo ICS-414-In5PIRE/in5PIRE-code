@@ -4,7 +4,7 @@ import { PAGE_IDS } from '../utilities/PageIDs';
 
 const AboutUs = () => (
   <Container id={PAGE_IDS.ABOUT_US}>
-    <section id="about" className="section-padding">
+    <section id="about-us" className="section-padding">
       <div className="container">
         <div className="row">
           <div className="col-12">

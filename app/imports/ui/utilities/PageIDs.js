@@ -1,5 +1,6 @@
 /** Define ids for each page. */
 export const PAGE_IDS = {
+  ABOUT_US: 'about-us',
   ADD_STUFF: 'add-stuff',
   EDIT_STUFF: 'edit-stuff',
   LANDING: 'landing',
@@ -16,6 +17,5 @@ export const PAGE_IDS = {
   BUDGET_FORM: 'budget-form',
   FINANCIAL_PROFILES: 'financial-profiles',
   CONTACT_US: 'contact-us',
-  ABOUT_US: 'about-us',
   USER_GUIDE: 'user-guide',
 };

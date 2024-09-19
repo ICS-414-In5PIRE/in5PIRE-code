@@ -8,7 +8,7 @@ class LandingPage {
 
     // Selectors for buttons
     this.getStartedButton = Selector('a').withText('Get Started');
-    this.aboutUsButton = Selector('a').withText('About us');
+    this.aboutUsButton = Selector('[data-test="about-us-link"]'); // Updated to select by data-test attribute
   }
 
   /* Asserts that this page is currently displayed. */

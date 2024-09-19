@@ -18,4 +18,5 @@ export const PAGE_IDS = {
   CONTACT_US: 'contact-us',
   ABOUT_US: 'about-us',
   USER_GUIDE: 'user-guide',
+  FAQ: 'faq',
 };

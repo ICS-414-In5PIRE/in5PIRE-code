@@ -1,8 +1,9 @@
 import React from 'react';
 import { Container, Row, Col, Accordion } from 'react-bootstrap';
+import { PAGE_IDS } from '../utilities/PageIDs';
 
 const FAQ = () => (
-  <Container className="py-5">
+  <Container className="py-5" id={PAGE_IDS.FAQ}>
     <Row className="mb-5 text-center">
       <Col>
         <h1 className="display-4">Frequently Asked Questions</h1>

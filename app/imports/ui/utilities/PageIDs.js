@@ -18,4 +18,5 @@ export const PAGE_IDS = {
   FINANCIAL_PROFILES: 'financial-profiles',
   CONTACT_US: 'contact-us',
   USER_GUIDE: 'user-guide',
+  FAQ: 'faq',
 };

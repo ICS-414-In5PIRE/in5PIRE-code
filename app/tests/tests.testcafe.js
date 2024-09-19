@@ -6,6 +6,9 @@ import { landingPage } from './landing.page';
 import { financialProfiles } from './financialProfiles.page';
 import { aboutUsPage } from './aboutUs.page';
 import { userGuide } from './userguide.page';
+import { aboutUs } from './aboutUs.page';
+import { contactUsPage } from './contactUs.page';
+import { faqPage } from './FAQ.page';
 
 /* global fixture:false, test:false */
 
@@ -39,6 +42,16 @@ test('Test that the user guide page shows up', async () => {
 test('Test that the about us page shows up', async () => {
   await newNavBar.goToAboutUsPage();
   await aboutUsPage.isDisplayed();
+});
+
+test('Test that the FAQ page shows up', async () => {
+  await newNavBar.goToFaqPage();
+  await faqPage.isDisplayed();
+});
+
+test('Test that the contact us page shows up', async () => {
+  await newNavBar.goToContactSupportPage();
+  await contactUsPage.isDisplayed();
 });
 
 test('Test that signin works', async () => {

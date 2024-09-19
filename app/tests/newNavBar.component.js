@@ -10,7 +10,7 @@ class NewNavBar {
     this.userGuideLink = Selector('a').withText('User Guide');
     this.faqLink = Selector('a').withText('FAQ');
     this.aboutUsLink = Selector('a').withText('About Us');
-    this.contactSupportLink = Selector('a').withText('Contact Support');
+    this.contactSupportLink = Selector('a').withText('Contact Us');
     this.signInButton = Selector('button').withText('Sign in');
     this.signOutButton = Selector('button').withText('Sign out');
     this.dataInputDropdown = Selector('a').withText('Data Input');

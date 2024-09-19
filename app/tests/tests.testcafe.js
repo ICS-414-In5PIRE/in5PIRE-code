@@ -4,6 +4,8 @@ import { balanceSheetInputPage } from './balanceSheetInput.test';
 import { newNavBar } from './newNavBar.component';
 import { landingPage } from './landing.page';
 import { financialProfiles } from './financialProfiles.page';
+import { userGuide } from './userguide.page';
+import { aboutUs } from './aboutUs.page';
 
 /* global fixture:false, test:false */
 
@@ -16,6 +18,16 @@ fixture('meteor-application-template-production localhost test with default db')
 
 test('Test that landing page shows up', async () => {
   await landingPage.isDisplayed();
+});
+
+test('Test that the user guide page shows up', async () => {
+  await newNavBar.goToUserGuidePage();
+  await userGuide.isDisplayed();
+});
+
+test('Test that the about us page shows up', async () => {
+  await newNavBar.goToAboutUsPage();
+  await aboutUs.isDisplayed();
 });
 
 test('Test that signin works', async () => {

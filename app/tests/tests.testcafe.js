@@ -5,6 +5,7 @@ import { newNavBar } from './newNavBar.component';
 import { landingPage } from './landing.page';
 import { financialProfiles } from './financialProfiles.page';
 import { aboutUsPage } from './aboutUs.page';
+import { userGuide } from './userguide.page';
 
 /* global fixture:false, test:false */
 
@@ -28,6 +29,16 @@ test('Test that about us shows up', async () => {
   // Verify that the About Us page is displayed
   await aboutUsPage.isDisplayed();
 
+});
+
+test('Test that the user guide page shows up', async () => {
+  await newNavBar.goToUserGuidePage();
+  await userGuide.isDisplayed();
+});
+
+test('Test that the about us page shows up', async () => {
+  await newNavBar.goToAboutUsPage();
+  await aboutUsPage.isDisplayed();
 });
 
 test('Test that signin works', async () => {

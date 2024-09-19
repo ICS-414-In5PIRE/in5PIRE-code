@@ -9,6 +9,7 @@ class NewNavBar {
     this.homeLink = Selector('a').withText('Home');
     this.userGuideLink = Selector('a').withText('User Guide');
     this.faqLink = Selector('a').withText('FAQ');
+    this.aboutUsLink = Selector('a').withText('About Us');
     this.contactSupportLink = Selector('a').withText('Contact Support');
     this.signInButton = Selector('button').withText('Sign in');
     this.signOutButton = Selector('button').withText('Sign out');
@@ -36,6 +37,11 @@ class NewNavBar {
   async goToFaqPage() {
     await t.click(Selector('#navbarDropdown').withText('Support'));
     await t.click(this.faqLink);
+  }
+
+  async goToAboutUsPage() {
+    await t.click(Selector('#navbarDropdown').withText('Support'));
+    await t.click(this.aboutUsLink);
   }
 
   /* Open the Support dropdown and navigate to Contact Support */

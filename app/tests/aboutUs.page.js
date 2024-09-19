@@ -3,16 +3,15 @@ import { PAGE_IDS } from '../imports/ui/utilities/PageIDs';
 
 class AboutUsPage {
   constructor() {
-    this.pageId = `#${PAGE_IDS.ABOUT_US}`;
+    // Ensure the correct page selector for the About Us page
+    this.pageId = `#${PAGE_IDS.ABOUT_US}`; // Assuming you have a correct PAGE_ID for About Us.
     this.pageSelector = Selector(this.pageId);
   }
 
-  /* Asserts that this page is currently displayed. */
+  // Asserts the About Us page is correctly displayed
   async isDisplayed() {
-    // From https://testcafe.io/documentation/402803/recipes/best-practices/create-helpers
-    // Note that this file imports t (the test controller) from the testcafe module. You don’t need to pass t to helper functions because TestCafe can resolve the current test context and provide the correct test controller instance.
     await t.expect(this.pageSelector.exists).ok();
   }
 }
 
-export const aboutUs = new AboutUsPage();
+export const aboutUsPage = new AboutUsPage();

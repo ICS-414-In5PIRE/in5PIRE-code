@@ -23,3 +23,4 @@ export const listStuffAdminPage = new SimplePage(PAGE_IDS.LIST_STUFF_ADMIN);
 export const manageDatabasePage = new SimplePage(PAGE_IDS.MANAGE_DATABASE);
 export const signOutPage = new SimplePage(PAGE_IDS.SIGN_OUT);
 export const addFinancialProfilePage = new SimplePage(PAGE_IDS.ADD_FINANCIAL_PROFILE);
+export const aboutUsPage = new SimplePage(PAGE_IDS.ABOUT_US);

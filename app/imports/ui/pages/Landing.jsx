@@ -29,7 +29,8 @@ const Landing = () => (
                 </h5>
                 <div>
                   <a href="/signin" className="btn btn-brand ms-3"> Get Started</a>
-                  <a href="/app/imports/ui/components/About" className="btn btn-light ms-3"> About us</a>
+                  <a href="/About" className="btn btn-light ms-3" data-test="about-us-link"> About us</a>
+
                 </div>
               </div>
             </div>

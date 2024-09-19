@@ -86,6 +86,7 @@ class NewNavBar {
     await testController.click('#login-dropdown');
     await testController.click('#login-dropdown-sign-in');
   }
+
 }
 
 export const newNavBar = new NewNavBar();

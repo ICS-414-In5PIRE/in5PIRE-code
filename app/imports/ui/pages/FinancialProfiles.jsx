@@ -37,20 +37,22 @@ const FinancialProfileCard = ({
           <p>{profileType}</p>
         </Row>
         <Row className="px-4">
-          <h2>Edit Profile</h2>
-        </Row>
-        <Row className="px-4">
           <h2>View Projections</h2>
-        </Row>
-        {/* Delete Button */}
-        <Row className="px-4 pt-4">
-          <Button variant="danger" onClick={onDelete}>Delete Profile</Button>
         </Row>
       </Col>
     </Row>
     <Row className="px-4">
       <h2>Profile Description</h2>
       <p>{description}</p>
+    </Row>
+    {/* Delete and Edit Button */}
+    <Row className="px-4 pt-4">
+      <Col>
+        <Button href={/edit-financial-profile/}>Edit this profile</Button>
+      </Col>
+      <Col>
+        <Button variant="danger" onClick={onDelete}>Delete Profile</Button>
+      </Col>
     </Row>
     <Row className="px-4">
       <p style={{ fontSize: '0.8em', color: 'gray', marginBottom: '2px' }}>Created: {createdDate}</p>
@@ -98,7 +100,7 @@ const FinancialProfilesPage = () => {
   // Handler to delete a financial profile
   const handleDeleteProfile = (profile) => {
     swal({
-      title: `Really delete profile ${profile.title}?`,
+      title: `Are you sure you want to delete profile ${profile.title}?`,
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -129,7 +131,7 @@ const FinancialProfilesPage = () => {
   return (
     <Container id={PAGE_IDS.FINANCIAL_PROFILES}>
       <Container className="profile-container">
-        <h1>User&apos;s Financial Profiles</h1>
+        <h1>Your Financial Profiles</h1>
       </Container>
 
       {/* Flexbox Container for Cards */}

@@ -59,6 +59,7 @@ class StaticFinancialsCollection extends BaseCollection {
         type: Number,
         optional: true,
       },
+      owner: String, // Owner field to associate with user
     }));
   }
 
@@ -78,6 +79,7 @@ class StaticFinancialsCollection extends BaseCollection {
    * @param netIncome - Net income.
    * @param cashFlow - Cash flow breakdown.
    * @param incrementalFringeBenefits - Breakdown of fringe benefits.
+   * @param owner - Owner of the record.
    * @returns {String} - The docID of the newly inserted record.
    */
   define({
@@ -95,6 +97,7 @@ class StaticFinancialsCollection extends BaseCollection {
     netIncome,
     cashFlow,
     incrementalFringeBenefits,
+    owner,
   }) {
     const docID = this._collection.insert({
       customerName,
@@ -111,6 +114,7 @@ class StaticFinancialsCollection extends BaseCollection {
       netIncome,
       cashFlow,
       incrementalFringeBenefits,
+      owner,
     });
     return docID;
   }
@@ -255,6 +259,7 @@ class StaticFinancialsCollection extends BaseCollection {
     const {
       customerName, year, assets, liabilities, netPosition, cashOnHand,
       investment, liquidity, debt, revenues, opex, netIncome, cashFlow, incrementalFringeBenefits,
+      owner,
     } = doc;
 
     return {
@@ -272,6 +277,7 @@ class StaticFinancialsCollection extends BaseCollection {
       netIncome,
       cashFlow,
       incrementalFringeBenefits,
+      owner,
     };
   }
 }

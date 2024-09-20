@@ -33,6 +33,11 @@ const NewNav = () => {
                 </NavDropdown>
               </li>
             )}
+            { currentUser && (
+              <li>
+                <Nav.Link as={NavLink} to="/dashboard">Dashboard</Nav.Link>
+              </li>
+            )}
             <NavDropdown title="Support" id="navbarDropdown">
               <NavDropdown.Item as={NavLink} to="/aboutus">About Us</NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/Faq">FAQ</NavDropdown.Item>

@@ -24,6 +24,7 @@ import NewNav from '../components/NewNav';
 import FinancialProfilesPage from '../pages/FinancialProfiles';
 import AddFinancialProfile from '../pages/AddFinancialProfile';
 import BudgetForm from '../pages/BudgetForm';
+import Dashboard from '../pages/Dashboard';
 import FAQ from '../pages/FAQ';
 import ContactUs from '../pages/ContactUs';
 import UserGuide from '../pages/UserGuide';
@@ -61,6 +62,7 @@ const App = () => {
           <Route path="/notauthorized" element={<NotAuthorized />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/balance-sheet" element={<ProtectedRoute><BalanceSheetInput /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/budget-form" element={<ProtectedRoute><BudgetForm /></ProtectedRoute>} />
         </Routes>
         <Footer />

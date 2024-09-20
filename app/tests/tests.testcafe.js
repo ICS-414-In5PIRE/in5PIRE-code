@@ -6,7 +6,7 @@ import { landingPage } from './landing.page';
 import { financialProfiles } from './financialProfiles.page';
 import { aboutUsPage } from './aboutUs.page';
 import { userGuide } from './userguide.page';
-import { aboutUs } from './aboutUs.page';
+// import { aboutUs } from './aboutUs.page';
 import { contactUsPage } from './contactUs.page';
 import { faqPage } from './FAQ.page';
 

@@ -16,6 +16,7 @@ export const PAGE_IDS = {
   BALANCE_SHEET_INPUT: 'balance-sheet-input',
   BUDGET_FORM: 'budget-form',
   FINANCIAL_PROFILES: 'financial-profiles',
+  DASHBOARD: 'dashboard',
   CONTACT_US: 'contact-us',
   USER_GUIDE: 'user-guide',
   FAQ: 'faq',

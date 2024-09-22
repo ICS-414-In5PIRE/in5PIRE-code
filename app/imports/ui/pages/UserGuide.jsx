@@ -28,37 +28,41 @@ const UserGuide = () => (
         </Col>
       </Row>
       <Row>
-        <Col md={6}>
-          <Card className="shadow-sm mb-4">
+        <Col className="d-flex justify-content-center">
+          <Card className="shadow-sm mb-4" style={{ width: '1000px' }}>
             <Card.Body>
-              <h5 className="text-primary">Step 1: Navigate to the Input Page</h5>
-              <p className="text-muted">In the app, go to the &quot;Balance Sheet Input&quot; section located in the main navigation under the Data Input dropdown. Here, you&#39;ll be able to manually enter your financial data.</p>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={6}>
-          <Card className="shadow-sm mb-4">
-            <Card.Body>
-              <h5 className="text-primary">Step 2: Enter Financial Indicators</h5>
-              <p className="text-muted">Enter data such as total revenue, operating costs, liabilities, assets, and any other key financial indicators.</p>
+              <h5 className="text-primary text-start">Step 1: Navigate to the Input Page</h5>
+              <p className="text-muted text-start">In the app, go to the &quot;Balance Sheet Input&quot; section located in the main navigation under the Data Input dropdown. Here, you&#39;ll be able to manually enter your financial data.</p>
             </Card.Body>
           </Card>
         </Col>
       </Row>
       <Row>
-        <Col md={6}>
-          <Card className="shadow-sm mb-4">
+        <Col className="d-flex justify-content-center">
+          <Card className="shadow-sm mb-4" style={{ width: '1000px' }}>
             <Card.Body>
-              <h5 className="text-primary">Step 3: Save Your Data</h5>
-              <p className="text-muted">Once all relevant data is entered, click the &quot;Submit&quot; button to store your financial information securely.</p>
+              <h5 className="text-primary">Step 2: Enter Financial Indicators</h5>
+              <p className="text-muted text-start">Enter data such as total revenue, operating costs, liabilities, assets, and any other key financial indicators.</p>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={6}>
-          <Card className="shadow-sm mb-4">
+      </Row>
+      <Row>
+        <Col className="d-flex justify-content-center">
+          <Card className="shadow-sm mb-4" style={{ width: '1000px' }}>
+            <Card.Body>
+              <h5 className="text-primary">Step 3: Save Your Data</h5>
+              <p className="text-muted text-start">Once all relevant data is entered, click the &quot;Submit&quot; button to store your financial information securely.</p>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+      <Row>
+        <Col className="d-flex justify-content-center">
+          <Card className="shadow-sm mb-4" style={{ width: '1000px' }}>
             <Card.Body>
               <h5 className="text-primary">Step 4: Review Data</h5>
-              <p className="text-muted">After saving, you&#39;ll be able to review your inputted data and ensure everything is correct before moving on to generating projections.</p>
+              <p className="text-muted text-start">After saving, you&#39;ll be able to review your inputted data and ensure everything is correct before moving on to generating projections.</p>
             </Card.Body>
           </Card>
         </Col>
@@ -76,19 +80,21 @@ const UserGuide = () => (
         </Col>
       </Row>
       <Row>
-        <Col md={6}>
-          <Card className="shadow-sm mb-4">
+        <Col className="d-flex justify-content-center">
+          <Card className="shadow-sm mb-4" style={{ width: '1000px' }}>
             <Card.Body>
               <h5 className="text-primary">Step 1: Generate Projections</h5>
-              <p className="text-muted">Click the &quot;Generate Projections&quot; button after reviewing your data. The app will calculate projections based on your inputted financial data.</p>
+              <p className="text-muted text-start">Click the &quot;Generate Projections&quot; button after reviewing your data. The app will calculate projections based on your inputted financial data.</p>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={6}>
-          <Card className="shadow-sm mb-4">
+      </Row>
+      <Row>
+        <Col className="d-flex justify-content-center">
+          <Card className="shadow-sm mb-4" style={{ width: '1000px' }}>
             <Card.Body>
               <h5 className="text-primary">Step 2: View Graphs</h5>
-              <p className="text-muted">You can view interactive graphs showing your organization&#39;s financial health, solvency, and viability over time based on current data.</p>
+              <p className="text-muted text-start">You can view interactive graphs showing your organization&#39;s financial health, solvency, and viability over time based on current data.</p>
             </Card.Body>
           </Card>
         </Col>
@@ -106,29 +112,31 @@ const UserGuide = () => (
         </Col>
       </Row>
       <Row>
-        <Col md={6}>
-          <Card className="shadow-sm mb-4">
+        <Col className="d-flex justify-content-center">
+          <Card className="shadow-sm mb-4" style={{ width: '1000px' }}>
             <Card.Body>
               <h5 className="text-primary">Step 1: Prepare Your CSV</h5>
-              <p className="text-muted">Ensure your CSV file follows the required format: columns for revenue, expenses, liabilities, assets, etc.</p>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={6}>
-          <Card className="shadow-sm mb-4">
-            <Card.Body>
-              <h5 className="text-primary">Step 2: Upload the File</h5>
-              <p className="text-muted">Navigate to the &quot;Upload CSV&quot; section, and click the &quot;Upload&quot; button. Select your CSV file and wait for the app to process the data.</p>
+              <p className="text-muted text-start">Ensure your CSV file follows the required format: columns for revenue, expenses, liabilities, assets, etc.</p>
             </Card.Body>
           </Card>
         </Col>
       </Row>
       <Row>
-        <Col md={6}>
-          <Card className="shadow-sm mb-4">
+        <Col className="d-flex justify-content-center">
+          <Card className="shadow-sm mb-4" style={{ width: '1000px' }}>
+            <Card.Body>
+              <h5 className="text-primary">Step 2: Upload the File</h5>
+              <p className="text-muted text-start">Navigate to the &quot;Upload CSV&quot; section, and click the &quot;Upload&quot; button. Select your CSV file and wait for the app to process the data.</p>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+      <Row>
+        <Col className="d-flex justify-content-center">
+          <Card className="shadow-sm mb-4" style={{ width: '1000px' }}>
             <Card.Body>
               <h5 className="text-primary">Step 3: Review Extracted Data</h5>
-              <p className="text-muted">After the upload is complete, review the extracted data to ensure accuracy before proceeding to generate projections.</p>
+              <p className="text-muted text-start">After the upload is complete, review the extracted data to ensure accuracy before proceeding to generate projections.</p>
             </Card.Body>
           </Card>
         </Col>

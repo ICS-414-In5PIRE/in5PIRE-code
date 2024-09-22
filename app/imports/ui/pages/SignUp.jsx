@@ -90,7 +90,7 @@ const SignUp = () => {
                 <ErrorsField />
                 <SubmitField id={COMPONENT_IDS.SIGN_UP_FORM_SUBMIT} />
                 <Row>
-                  <Col>
+                  <Col className="pt-3">
                     <p className="sign-in-register">
                       Already have an account? Login <Link to="/signin">here</Link>
                     </p>

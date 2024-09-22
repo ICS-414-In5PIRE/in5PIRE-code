@@ -18,7 +18,7 @@ const Landing = () => (
       }}
       className="mb-5"
     >
-      <section id="landing-page {PAGE_IDS.LANDING}" className="min-vh-100 min-vw-100 d-flex align-items-center text-center text-white container-fluid overlay-gradient">
+      <section id={PAGE_IDS.LANDING} className="min-vh-100 min-vw-100 d-flex align-items-center text-center text-white container-fluid overlay-gradient">
         <Container id={PAGE_IDS.LANDING}>
           <div className="container ">
             <div className="row">
@@ -28,7 +28,7 @@ const Landing = () => (
                   to visualize the data you need.
                 </h5>
                 <div>
-                  <a href="/signin" className="btn btn-brand ms-3"> Get Started</a>
+                  <a href="/userguide" className="btn btn-brand ms-3"> Get Started</a>
                   <a href="/About" className="btn btn-light ms-3" data-test="about-us-link"> About us</a>
 
                 </div>

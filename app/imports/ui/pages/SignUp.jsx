@@ -10,32 +10,54 @@ import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 import { UserProfiles } from '../../api/user/UserProfileCollection';
 import { defineMethod } from '../../api/base/BaseCollection.methods';
 
-// Custom validation function
 const validateEmail = (email) => {
-  const emailWithTLDRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  return emailWithTLDRegex.test(email);
+  const emailRegex = /^[a-zA-Z0-9._]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,3}$/;
+  return emailRegex.test(email.toLowerCase());
 };
 
-// Define the schema
 const schema = new SimpleSchema({
   firstName: {
     type: String,
+    min: 1,
   },
   lastName: {
     type: String,
+    min: 1,
   },
   email: {
     type: String,
-    regEx: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     custom() {
       if (!validateEmail(this.value)) {
-        return 'emailNotValid'; // Return custom error code
+        return 'Email is not valid'; // If email is not valid
       }
-      return null;
+      if (Meteor.isClient && this.isSet) {
+        Meteor.call('userProfiles.isEmailUnique', this.value.toLowerCase(), (error, result) => {
+          if (!result) {
+            this.validationContext.addValidationErrors([{ name: 'email', type: 'notUnique' }]);
+          }
+        });
+      }
+      return null; // Ensures a return value in all cases
     },
   },
   password: {
     type: String,
+    custom() {
+      if (this.value.includes(' ')) {
+        return 'noSpacesAllowed'; // If password includes spaces
+      }
+      return null; // Ensures a return value in all cases
+    },
+  },
+  confirmPassword: {
+    type: String,
+    custom() {
+      const password = this.field('password').value;
+      if (this.value !== password) {
+        return 'passwordMismatch'; // If passwords do not match
+      }
+      return null; // Ensures a return value in all cases
+    },
   },
 });
 
@@ -46,19 +68,17 @@ const SignUp = () => {
   const [redirectToReferer, setRedirectToRef] = useState(false);
 
   const submit = (doc) => {
-    const collectionName = UserProfiles.getCollectionName();
-    const definitionData = doc;
-
-    // Validate email manually if needed
-    if (!validateEmail(doc.email)) {
-      setError('Please enter a valid email address with a valid top-level domain.');
+    // Check if passwords match before submitting
+    if (doc.password !== doc.confirmPassword) {
+      setError('Passwords do not match.');
       return;
     }
 
-    // create the new UserProfile
+    const collectionName = UserProfiles.getCollectionName();
+    const definitionData = { ...doc, email: doc.email.toLowerCase() };
+
     defineMethod.callPromise({ collectionName, definitionData })
       .then(() => {
-        // log the new user in.
         const { email, password } = doc;
         Meteor.loginWithPassword(email, password, (err) => {
           if (err) {
@@ -75,11 +95,12 @@ const SignUp = () => {
   if (redirectToReferer) {
     return <Navigate to="/home" />;
   }
+
   return (
     <Container id={PAGE_IDS.SIGN_UP} className="py-3 sign-in-register">
       <Row className="justify-content-center">
-        <Col xs={5}>
-          <AutoForm schema={bridge} onSubmit={data => submit(data)}>
+        <Col xs={12} md={6} lg={5}>
+          <AutoForm schema={bridge} onSubmit={submit} model={{}}>
             <Card className="border-0 shadow-lg custom-card">
               <Card.Body>
                 <h2>Register</h2>
@@ -87,6 +108,11 @@ const SignUp = () => {
                 <TextField id={COMPONENT_IDS.SIGN_UP_FORM_LAST_NAME} name="lastName" />
                 <TextField id={COMPONENT_IDS.SIGN_UP_FORM_EMAIL} name="email" />
                 <TextField id={COMPONENT_IDS.SIGN_UP_FORM_PASSWORD} name="password" type="password" />
+                <TextField
+                  id={COMPONENT_IDS.SIGN_UP_FORM_CONFIRM_PASSWORD}
+                  name="confirmPassword"
+                  type="password"
+                />
                 <ErrorsField />
                 <SubmitField id={COMPONENT_IDS.SIGN_UP_FORM_SUBMIT} />
                 <Row>
@@ -99,12 +125,10 @@ const SignUp = () => {
               </Card.Body>
             </Card>
           </AutoForm>
-          {error === '' ? (
-            ''
-          ) : (
+          {error && (
             <Alert variant="danger">
               <Alert.Heading>Registration was not successful</Alert.Heading>
-              {error}
+              <p>{error}</p>
             </Alert>
           )}
         </Col>

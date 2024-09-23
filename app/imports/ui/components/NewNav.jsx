@@ -21,8 +21,8 @@ const NewNav = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse className="justify-content-end">
           <Nav>
-            <Nav.Link as={NavLink} to="/">Home</Nav.Link>
-            <Nav.Link as={NavLink} to="/userguide">User Guide</Nav.Link>
+            <li><Nav.Link as={NavLink} to="/">Home</Nav.Link></li>
+            <li><Nav.Link as={NavLink} to="/userguide">User Guide</Nav.Link></li>
             { currentUser && (
               <li>
                 <NavDropdown title="Data Input" id="navbarDropdown">

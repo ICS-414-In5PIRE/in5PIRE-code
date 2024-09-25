@@ -29,7 +29,7 @@ const DataChart = () => {
               pointRadius: 1,
               pointHitRadius: 10,
               fill: true,
-            }
+            },
           ],
         });
       })

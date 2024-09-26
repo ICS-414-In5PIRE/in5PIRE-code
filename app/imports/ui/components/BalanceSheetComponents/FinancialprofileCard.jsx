@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardHeader, Row, Col } from 'react-bootstrap';
+import { Card, CardHeader, Row, Col, Button } from 'react-bootstrap';
 
+// FinancialProfileCard Component
 const FinancialProfileCard = ({
   title,
   imgSrc,
@@ -9,6 +10,7 @@ const FinancialProfileCard = ({
   description,
   createdDate,
   editedDate,
+  onDelete,
 }) => (
   <Card id="Financial-Card" className="d-flex flex-column h-100">
     <CardHeader className="d-flex justify-content-center" id="browse-financial-card-name">
@@ -34,6 +36,10 @@ const FinancialProfileCard = ({
         <Row className="px-4">
           <h2>View Projections</h2>
         </Row>
+        {/* Delete Button */}
+        <Row className="px-4 pt-4">
+          <Button variant="danger" onClick={onDelete}>Delete Profile</Button>
+        </Row>
       </Col>
     </Row>
     <Row className="px-4">
@@ -47,7 +53,7 @@ const FinancialProfileCard = ({
   </Card>
 );
 
-// Add prop-types validation
+// PropTypes for validation
 FinancialProfileCard.propTypes = {
   title: PropTypes.string.isRequired,
   imgSrc: PropTypes.string.isRequired,
@@ -55,6 +61,7 @@ FinancialProfileCard.propTypes = {
   description: PropTypes.string,
   createdDate: PropTypes.string,
   editedDate: PropTypes.string,
+  onDelete: PropTypes.func.isRequired,
 };
 
 // Default props for optional fields

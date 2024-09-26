@@ -3,14 +3,14 @@ import { createChartConfig } from './CreateChartConfig';
 const netPosition4yrDatasets = [
   {
     label: 'Assets',
-    data: [640866388, 672865961, 689525419, 698716700],
+    data: [369418004, 403370308, 422605819, 432669418],
     borderColor: 'blue',
     backgroundColor: 'rgba(0, 0, 255, 0.2)',
     yAxisID: 'y-axis-left',
   },
   {
     label: 'Liabilities',
-    data: [107674223, 111343930, 141198657, 117607300],
+    data: [72700000, 69700000, 66193142, 41686285],
     borderColor: 'red',
     backgroundColor: 'rgba(255, 0, 0, 0.2)',
     yAxisID: 'y-axis-right',
@@ -20,14 +20,14 @@ const netPosition4yrDatasets = [
 const yearsOfSolvency4yrDatasets = [
   {
     label: 'Liquidity',
-    data: [500000, 600000, 700000, 800000],
+    data: [369418004, 403370308, 422605819, 432669418],
     borderColor: 'blue',
     backgroundColor: 'rgba(0, 0, 255, 0.2)',
     yAxisID: 'y-axis-left',
   },
   {
     label: 'Opex (exclude lands)',
-    data: [200000, 250000, 300000, 350000],
+    data: [35860814.66, 34998258.59, 35603263, 36014771],
     borderColor: 'red',
     backgroundColor: 'rgba(255, 0, 0, 0.2)',
     yAxisID: 'y-axis-right',
@@ -37,7 +37,7 @@ const yearsOfSolvency4yrDatasets = [
 const demandForCapital4yrDatasets = [
   {
     label: 'Liquidity',
-    data: [500000, 600000, 700000, 800000],
+    data: [369418004, 403370308, 422605819, 432669418],
     borderColor: 'blue',
     backgroundColor: 'rgba(0, 0, 255, 0.2)',
     yAxisID: 'y-axis-left',
@@ -47,30 +47,31 @@ const demandForCapital4yrDatasets = [
 const financing4yrDatasets = [
   {
     label: 'Cash on Hand',
-    data: [500000, 600000, 700000, 800000],
+    data: [369418004, 403370308, 422605819, 432669418],
     borderColor: 'blue',
     backgroundColor: 'rgba(0, 0, 255, 0.2)',
     yAxisID: 'y-axis-left',
   },
   {
     label: 'Debt',
-    data: [200000, 250000, 300000, 350000],
+    data: [72700000, 69700000, 66193142, 41686285],
     borderColor: 'red',
     backgroundColor: 'rgba(255, 0, 0, 0.2)',
     yAxisID: 'y-axis-right',
   },
 ];
+
 const yearsOfSolvencyBasedOnCashFlow4yrDatasets = [
   {
     label: 'Cash In-flow',
-    data: [500000, 600000, 700000, 800000],
+    data: [36140210, 36587523, 35693705, 35567019],
     borderColor: 'blue',
     backgroundColor: 'rgba(0, 0, 255, 0.2)',
     yAxisID: 'y-axis-left',
   },
   {
     label: 'Cash Out-flow',
-    data: [200000, 250000, 300000, 350000],
+    data: [35860814.66, 34998258.59, 35603263, 36014771],
     borderColor: 'red',
     backgroundColor: 'rgba(255, 0, 0, 0.2)',
     yAxisID: 'y-axis-right',
@@ -80,14 +81,14 @@ const yearsOfSolvencyBasedOnCashFlow4yrDatasets = [
 const budget4yrDatasets = [
   {
     label: 'Budget',
-    data: [500000, 600000, 700000, 800000],
+    data: [36140210, 36587523, 35693705, 35567019],
     borderColor: 'blue',
     backgroundColor: 'rgba(0, 0, 255, 0.2)',
     yAxisID: 'y-axis-left',
   },
   {
     label: 'Actual vs Encumberance',
-    data: [200000, 250000, 300000, 350000],
+    data: [35860814.66, 34998258.59, 35603263, 36014771],
     borderColor: 'red',
     backgroundColor: 'rgba(255, 0, 0, 0.2)',
     yAxisID: 'y-axis-right',

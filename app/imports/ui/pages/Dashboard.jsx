@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Segment, Container, Grid, Menu, Header } from 'semantic-ui-react';
+import { Segment, Container, Grid, Menu, Header, Card } from 'semantic-ui-react';
 import { Line } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { PAGE_IDS } from '../utilities/PageIDs';
@@ -12,13 +12,25 @@ import { yearsOfSolvency12yrConfig, netPosition12yrConfig, demandForCapital12yrC
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const Dashboard = () => {
-  // State to manage the active tab
   const [activeTab, setActiveTab] = useState('Snapshot');
 
-  // Handle tab change
   const handleTabChange = (e, { name }) => setActiveTab(name);
 
-  // Mock data for the Snapshot component
+  const renderCharts = (configs) => (
+    <Grid stackable columns={2}>
+      {configs.map((config, index) => (
+        <Grid.Column key={index}>
+          <Card fluid>
+            <Card.Content>
+              <Header as="h5" textAlign="center">{config.title}</Header>
+              <Line data={config.data} options={config.options} />
+            </Card.Content>
+          </Card>
+        </Grid.Column>
+      ))}
+    </Grid>
+  );
+
   const mockData = [
     { name: 'Assets', value: '$' },
     { name: 'Liabilities', value: '$' },
@@ -32,6 +44,32 @@ const Dashboard = () => {
     { name: 'Net Income', value: '$' },
     { name: 'Cash Inflow', value: '$' },
   ];
+  const chartConfigs4Year = [
+    { title: 'Net Position (4 Years)', data: netPosition4yrConfig.data, options: netPosition4yrConfig.options },
+    { title: 'Years of Solvency (4 Years)', data: yearsOfSolvency4yrConfig.data, options: yearsOfSolvency4yrConfig.options },
+    { title: 'Demand for Capital (4 Years)', data: demandForCapital4yrConfig.data, options: demandForCapital4yrConfig.options },
+    { title: 'Financing (4 Years)', data: financing4yrConfig.data, options: financing4yrConfig.options },
+    { title: 'Years of Solvency Based on Cash Flow (4 Years)', data: yearsOfSolvencyBasedOnCashFlow4yrConfig.data, options: yearsOfSolvencyBasedOnCashFlow4yrConfig.options },
+    { title: 'Budget (4 Years)', data: budget4yrConfig.data, options: budget4yrConfig.options },
+  ];
+
+  const chartConfigs8Year = [
+    { title: 'Net Position (8 Years)', data: netPosition8yrConfig.data, options: netPosition8yrConfig.options },
+    { title: 'Years of Solvency (8 Years)', data: yearsOfSolvency8yrConfig.data, options: yearsOfSolvency8yrConfig.options },
+    { title: 'Demand for Capital (8 Years)', data: demandForCapital8yrConfig.data, options: demandForCapital8yrConfig.options },
+    { title: 'Financing (8 Years)', data: financing8yrConfig.data, options: financing8yrConfig.options },
+    { title: 'Years of Solvency Based on Cash Flow (8 Years)', data: yearsOfSolvencyBasedOnCashFlow8yrConfig.data, options: yearsOfSolvencyBasedOnCashFlow8yrConfig.options },
+    { title: 'Budget (8 Years)', data: budget8yrConfig.data, options: budget8yrConfig.options },
+  ];
+
+  const chartConfigs12Year = [
+    { title: 'Net Position (12 Years)', data: netPosition12yrConfig.data, options: netPosition12yrConfig.options },
+    { title: 'Years of Solvency (12 Years)', data: yearsOfSolvency12yrConfig.data, options: yearsOfSolvency12yrConfig.options },
+    { title: 'Demand for Capital (12 Years)', data: demandForCapital12yrConfig.data, options: demandForCapital12yrConfig.options },
+    { title: 'Financing (12 Years)', data: financing12yrConfig.data, options: financing12yrConfig.options },
+    { title: 'Years of Solvency Based on Cash Flow (12 Years)', data: yearsOfSolvencyBasedOnCashFlow12yrConfig.data, options: yearsOfSolvencyBasedOnCashFlow12yrConfig.options },
+    { title: 'Budget (12 Years)', data: budget12yrConfig.data, options: budget12yrConfig.options },
+  ];
 
   return (
     <Container id={PAGE_IDS.DASHBOARD} style={{ marginTop: '2em' }}>
@@ -40,7 +78,6 @@ const Dashboard = () => {
           <Header as="h2" textAlign="center">
             Dashboard
           </Header>
-          {/* Tab Navigation */}
           <Menu pointing secondary>
             <Menu.Item
               name="Snapshot"
@@ -64,44 +101,11 @@ const Dashboard = () => {
             />
           </Menu>
 
-          {/* Tab Content */}
           <Segment>
             {activeTab === 'Snapshot' && <Snapshot data={mockData} />}
-            {activeTab === 'Dashboard 4 Year' && (
-              <div>
-                <Header as="h4">Dashboard 4 Year</Header>
-                <Line data={netPosition4yrConfig.data} options={netPosition4yrConfig.options} />
-                <Line data={yearsOfSolvency4yrConfig.data} options={yearsOfSolvency4yrConfig.options} />
-                <Line data={demandForCapital4yrConfig.data} options={demandForCapital4yrConfig.options} />
-                <Line data={financing4yrConfig.data} options={financing4yrConfig.options} />
-                <Line data={yearsOfSolvencyBasedOnCashFlow4yrConfig.data} options={yearsOfSolvencyBasedOnCashFlow4yrConfig.options} />
-                <Line data={budget4yrConfig.data} options={budget4yrConfig.options} />
-              </div>
-            )}
-            {activeTab === 'Dashboard 8 Year' && (
-              <div>
-                <Header as="h4">Dashboard 8 Year</Header>
-                <Line data={netPosition8yrConfig.data} options={netPosition8yrConfig.options} />
-                <Line data={yearsOfSolvency8yrConfig.data} options={yearsOfSolvency8yrConfig.options} />
-                <Line data={demandForCapital8yrConfig.data} options={demandForCapital8yrConfig.options} />
-                <Line data={financing8yrConfig.data} options={financing8yrConfig.options} />
-                <Line data={yearsOfSolvencyBasedOnCashFlow8yrConfig.data} options={yearsOfSolvencyBasedOnCashFlow8yrConfig.options} />
-                <Line data={budget8yrConfig.data} options={budget8yrConfig.options} />
-
-              </div>
-            )}
-            {activeTab === 'Dashboard 12 Year' && (
-              <div>
-                <Header as="h4">Dashboard 12 Year</Header>
-                <Line data={netPosition12yrConfig.data} options={netPosition12yrConfig.options} />
-                <Line data={yearsOfSolvency12yrConfig.data} options={yearsOfSolvency12yrConfig.options} />
-                <Line data={demandForCapital12yrConfig.data} options={demandForCapital12yrConfig.options} />
-                <Line data={financing12yrConfig.data} options={financing12yrConfig.options} />
-                <Line data={yearsOfSolvencyBasedOnCashFlow12yrConfig.data} options={yearsOfSolvencyBasedOnCashFlow12yrConfig.options} />
-                <Line data={budget12yrConfig.data} options={budget12yrConfig.options} />
-
-              </div>
-            )}
+            {activeTab === 'Dashboard 4 Year' && renderCharts(chartConfigs4Year)}
+            {activeTab === 'Dashboard 8 Year' && renderCharts(chartConfigs8Year)}
+            {activeTab === 'Dashboard 12 Year' && renderCharts(chartConfigs12Year)}
           </Segment>
         </Grid.Column>
       </Grid>

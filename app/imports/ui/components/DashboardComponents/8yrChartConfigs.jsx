@@ -93,6 +93,7 @@ const budget8yrDatasets = [
     borderColor: 'red',
     backgroundColor: 'rgba(255, 0, 0, 0.2)',
     yAxisID: 'y-axis-right',
+    borderDash: [5, 5],
   },
 ];
 
@@ -116,7 +117,7 @@ export const demandForCapital8yrConfig = createChartConfig(
   ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5', 'Year 6', 'Year 7', 'Year 8'], // Labels
   demandForCapital8yrDatasets, // Datasets
   'Liquidity', // Left y-axis title
-  'Years of Solvency (8 Years)', // Right y-axis title
+  '', // Right y-axis title
   'Demand for Capital (8 Years)', // Chart title
 );
 

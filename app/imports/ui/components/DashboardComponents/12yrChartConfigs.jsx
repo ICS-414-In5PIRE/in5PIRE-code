@@ -92,6 +92,7 @@ export const budget12yrDatasets = [
     borderColor: 'red',
     backgroundColor: 'rgba(255, 0, 0, 0.2)',
     yAxisID: 'y-axis-right',
+    borderDash: [5, 5],
   },
 ];
 export const netPosition12yrConfig = createChartConfig(
@@ -114,7 +115,7 @@ export const demandForCapital12yrConfig = createChartConfig(
   ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5', 'Year 6', 'Year 7', 'Year 8', 'Year 9', 'Year 10', 'Year 11', 'Year 12'], // Labels
   demandForCapital12yrDatasets, // Datasets
   'Liquidity', // Left y-axis title
-  'Opex (excluding lands)', // Right y-axis title
+  '', // Right y-axis title
   'Demand for Capital (12 Years)', // Chart title
 );
 

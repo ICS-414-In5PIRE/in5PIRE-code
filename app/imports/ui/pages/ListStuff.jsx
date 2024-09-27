@@ -1,4 +1,4 @@
- import React from 'react';
+import React from 'react';
 import { Col, Container, Row, Table } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Stuffs } from '../../api/stuff/StuffCollection';

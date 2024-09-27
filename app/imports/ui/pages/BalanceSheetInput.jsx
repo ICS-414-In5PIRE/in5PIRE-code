@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Segment, Container, Message, Grid, Button, Menu, Dropdown, Input } from 'semantic-ui-react';
+import { Form, Segment, Container, Message, Grid, Button, Menu, Dropdown } from 'semantic-ui-react';
 import { Tracker } from 'meteor/tracker';
 import { Meteor } from 'meteor/meteor';
 import OtherAssets from '../components/BalanceSheetComponents/OtherAssets';

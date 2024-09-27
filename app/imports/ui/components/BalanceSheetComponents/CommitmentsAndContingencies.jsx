@@ -11,14 +11,14 @@ const CommitmentsAndContingencies = ({ formData, handleChange }) => (
       <Form.Input
         label="Invested in capital assets, net of related debt"
         name="investedInCapitalAssets"
-        value={formData.investedInCapitalAssets}
+        value={formData.investedInCapitalAssets ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Restricted - federal funds"
         name="restrictedFederalFunds"
-        value={formData.restrictedFederalFunds}
+        value={formData.restrictedFederalFunds ?? ''}
         onChange={handleChange}
         type="number"
       />
@@ -35,7 +35,7 @@ const CommitmentsAndContingencies = ({ formData, handleChange }) => (
         className="dotted-input"
         label="Total net position"
         name="totalNetPosition"
-        value={formData.totalNetPosition}
+        value={formData.totalNetPosition ?? ''}
         onChange={handleChange}
         type="number"
         readOnly
@@ -44,7 +44,7 @@ const CommitmentsAndContingencies = ({ formData, handleChange }) => (
         className="dotted-input"
         label="Total Liabilities, Deferred Inflows of Resources and Net Position"
         name="totalLiabilitiesDeferredNetPosition"
-        value={formData.totalLiabilitiesDeferredNetPosition}
+        value={formData.totalLiabilitiesDeferredNetPosition ?? ''}
         onChange={handleChange}
         type="number"
         readOnly

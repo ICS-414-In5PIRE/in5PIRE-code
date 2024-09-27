@@ -11,21 +11,21 @@ const CashAndCashEquivalents = ({ formData, handleChange }) => (
       <Form.Input
         label="Petty Cash"
         name="pettyCash"
-        value={formData.pettyCash}
+        value={formData.pettyCash ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Cash"
         name="cash"
-        value={formData.cash}
+        value={formData.cash ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Cash in Banks"
         name="cashInBanks"
-        value={formData.cashInBanks}
+        value={formData.cashInBanks ?? ''}
         onChange={handleChange}
         type="number"
       />
@@ -33,7 +33,7 @@ const CashAndCashEquivalents = ({ formData, handleChange }) => (
         className="dotted-input"
         label="Total Cash and Cash Equivalents"
         name="totalCashAndCashEquivalents"
-        value={formData.totalCashAndCashEquivalents}
+        value={formData.totalCashAndCashEquivalents ?? ''}
         onChange={handleChange}
         type="number"
         readOnly

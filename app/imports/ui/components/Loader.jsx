@@ -1,5 +1,6 @@
 import { Container, Spinner } from 'react-bootstrap';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Loader = ({ text }) => (
   <Container className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
@@ -9,5 +10,9 @@ const Loader = ({ text }) => (
     </div>
   </Container>
 );
+
+Loader.propTypes = {
+  text: PropTypes.string.isRequired,
+};
 
 export default Loader;

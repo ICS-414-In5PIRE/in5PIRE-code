@@ -4,6 +4,7 @@ import { AdminProfiles } from '../user/AdminProfileCollection';
 import { UserProfiles } from '../user/UserProfileCollection';
 import { FinancialProfiles } from '../FinancialProfiles/FinancialProfilesCollection';
 import { BalanceSheetInputs } from '../BalanceSheetInput/BalanceSheetInputsCollection';
+import { StaticFinancials } from '../financial/StaticFinancialsCollection';
 
 class MATPClass {
   collections;
@@ -20,6 +21,7 @@ class MATPClass {
       UserProfiles,
       FinancialProfiles,
       BalanceSheetInputs,
+      StaticFinancials,
     ];
     /*
      * A list of collection class instances in the order required for them to be sequentially loaded from a file.
@@ -30,6 +32,7 @@ class MATPClass {
       Stuffs,
       FinancialProfiles,
       BalanceSheetInputs,
+      StaticFinancials,
     ];
 
     /*

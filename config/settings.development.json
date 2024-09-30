@@ -11,6 +11,44 @@
     { "name": "Banana", "quantity": 2, "owner": "admin@foo.com", "condition": "good" },
     { "name": "Boogie Board", "quantity": 2, "owner": "admin@foo.com", "condition": "excellent" }
   ],
+
+  "defaultFinancialData": [
+    {
+      "customerName": "Admin DefaultData",
+      "year": 2023,
+      "assets": 1000000,
+      "liabilities": 400000,
+      "netPosition": 600000,
+      "cashOnHand": 150000,
+      "investment": 250000,
+      "liquidity": 75000,
+      "debt": 200000,
+      "revenues": 500000,
+      "opex": 300000,
+      "netIncome": 200000,
+      "cashFlow": { "inflow": 500000, "outflow": 300000, "net": 200000 },
+      "incrementalFringeBenefits": { "admin": 10000, "mgmtStaff": 15000, "mgmt": 20000 },
+      "owner": "admin@foo.com"
+    },
+    {
+      "customerName": "User DefaultData",
+      "year": 2024,
+      "assets": 2000000,
+      "liabilities": 900000,
+      "netPosition": 1100000,
+      "cashOnHand": 300000,
+      "investment": 450000,
+      "liquidity": 125000,
+      "debt": 400000,
+      "revenues": 900000,
+      "opex": 600000,
+      "netIncome": 300000,
+      "cashFlow": { "inflow": 900000, "outflow": 600000, "net": 300000 },
+      "incrementalFringeBenefits": { "admin": 20000, "mgmtStaff": 30000, "mgmt": 40000 },
+      "owner": "john@foo.com"
+    }
+  ],
+
   "public": {
     "development": true
   }

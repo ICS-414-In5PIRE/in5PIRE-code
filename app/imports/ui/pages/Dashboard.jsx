@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { Meteor } from 'meteor/meteor';
 import { Segment, Container, Grid, Menu, Header, Card } from 'semantic-ui-react';
 import { Line } from 'react-chartjs-2';
+import { useTracker } from 'meteor/react-meteor-data';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import { PAGE_IDS } from '../utilities/PageIDs';
+import { StaticFinancials } from '../../api/financial/StaticFinancialsCollection';
 import Snapshot from '../components/DashboardComponents/Snapshot';
+import { PAGE_IDS } from '../utilities/PageIDs';
 import { yearsOfSolvency4yrConfig, netPosition4yrConfig, demandForCapital4yrConfig, financing4yrConfig, yearsOfSolvencyBasedOnCashFlow4yrConfig, budget4yrConfig } from '../components/DashboardComponents/4yrChartConfigs';
 import { yearsOfSolvency8yrConfig, netPosition8yrConfig, demandForCapital8yrConfig, financing8yrConfig, yearsOfSolvencyBasedOnCashFlow8yrConfig, budget8yrConfig } from '../components/DashboardComponents/8yrChartConfigs';
 import { yearsOfSolvency12yrConfig, netPosition12yrConfig, demandForCapital12yrConfig, financing12yrConfig, yearsOfSolvencyBasedOnCashFlow12yrConfig, budget12yrConfig } from '../components/DashboardComponents/12yrChartConfigs';
@@ -15,6 +18,17 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('Snapshot');
 
   const handleTabChange = (e, { name }) => setActiveTab(name);
+
+  // Use useTracker to subscribe to 'staticFinancials' and fetch data from the StaticFinancials collection
+  const { financialData, isLoading } = useTracker(() => {
+    const subscription = Meteor.subscribe('staticFinancials'); // Subscribe to the publication
+    const loading = !subscription.ready();
+    const data = StaticFinancials.find().fetch(); // Fetch the data once the subscription is ready
+    return {
+      financialData: data,
+      isLoading: loading,
+    };
+  });
 
   const renderCharts = (configs) => (
     <Grid stackable columns={2}>
@@ -31,19 +45,34 @@ const Dashboard = () => {
     </Grid>
   );
 
-  const mockData = [
-    { name: 'Assets', value: '$' },
-    { name: 'Liabilities', value: '$' },
-    { name: 'Net Position', value: '$' },
-    { name: 'Cash on Hand', value: '$' },
-    { name: 'Investment', value: '$' },
-    { name: 'Liquidity', value: '$' },
-    { name: 'Debt', value: '$' },
-    { name: 'Revenues', value: '$' },
-    { name: 'Opex', value: '$' },
-    { name: 'Net Income', value: '$' },
-    { name: 'Cash Inflow', value: '$' },
+  if (isLoading) {
+    return <div>Loading...</div>; // Show a loading message while the data is being fetched
+  }
+
+  // Helper function to format financial data for Snapshot
+  const formatFinancialData = (financial) => [
+    { name: 'Customer Name', value: financial.customerName },
+    { name: 'Year', value: financial.year.toString() },
+    { name: 'Assets', value: `$${financial.assets.toLocaleString()}` },
+    { name: 'Liabilities', value: `$${financial.liabilities.toLocaleString()}` },
+    { name: 'Net Position', value: `$${financial.netPosition.toLocaleString()}` },
+    { name: 'Cash On Hand', value: `$${financial.cashOnHand.toLocaleString()}` },
+    { name: 'Investment', value: `$${financial.investment.toLocaleString()}` },
+    { name: 'Liquidity', value: `$${financial.liquidity.toLocaleString()}` },
+    { name: 'Debt', value: `$${financial.debt.toLocaleString()}` },
+    { name: 'Revenues', value: `$${financial.revenues.toLocaleString()}` },
+    { name: 'Opex', value: `$${financial.opex.toLocaleString()}` },
+    { name: 'Net Income', value: `$${financial.netIncome.toLocaleString()}` },
+    { name: 'Cash Flow Inflow', value: `$${financial.cashFlow.inflow.toLocaleString()}` },
+    { name: 'Cash Flow Outflow', value: `$${financial.cashFlow.outflow.toLocaleString()}` },
+    { name: 'Cash Flow Net', value: `$${financial.cashFlow.net.toLocaleString()}` },
+    { name: 'Fringe Benefits Admin', value: `$${financial.incrementalFringeBenefits.admin.toLocaleString()}` },
+    { name: 'Fringe Benefits Mgmt Staff', value: `$${financial.incrementalFringeBenefits.mgmtStaff.toLocaleString()}` },
+    { name: 'Fringe Benefits Mgmt', value: `$${financial.incrementalFringeBenefits.mgmt.toLocaleString()}` },
   ];
+
+  const snapshotData = financialData.length > 0 ? formatFinancialData(financialData[0]) : [];
+
   const chartConfigs4Year = [
     { title: 'Net Position (4 Years)', data: netPosition4yrConfig.data, options: netPosition4yrConfig.options },
     { title: 'Years of Solvency (4 Years)', data: yearsOfSolvency4yrConfig.data, options: yearsOfSolvency4yrConfig.options },
@@ -102,7 +131,7 @@ const Dashboard = () => {
           </Menu>
 
           <Segment>
-            {activeTab === 'Snapshot' && <Snapshot data={mockData} />}
+            {activeTab === 'Snapshot' && <Snapshot data={snapshotData} />} {/* Use the real financial data */}
             {activeTab === 'Dashboard 4 Year' && renderCharts(chartConfigs4Year)}
             {activeTab === 'Dashboard 8 Year' && renderCharts(chartConfigs8Year)}
             {activeTab === 'Dashboard 12 Year' && renderCharts(chartConfigs12Year)}

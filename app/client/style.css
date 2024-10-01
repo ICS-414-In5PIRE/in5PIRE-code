@@ -413,12 +413,7 @@ button {
   }
 }
 
-/* Sign In Page Styles */
-.noborder{
-  border-top:none!important;
-  border-right: none!important;
-  border-left: none!important;
-}
+
 .sign-in-register {
   /* No need for min-height or flex alignment here since it's handled in the Row */
 
@@ -492,6 +487,7 @@ button {
     margin-top: 20px;
   }
 }
+
 /* Custom class to remove borders from input fields */
 .input-no-border {
   border-top: none !important;

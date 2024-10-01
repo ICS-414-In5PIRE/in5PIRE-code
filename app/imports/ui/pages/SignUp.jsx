@@ -4,7 +4,8 @@ import { Alert, Card, Col, Container, Row } from 'react-bootstrap';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
-import { AutoForm, ErrorsField, SubmitField, TextField } from 'uniforms-bootstrap5';
+import { AutoForm, ErrorsField, TextField, SubmitField } from 'uniforms-bootstrap5';
+import { FaUserPlus } from 'react-icons/fa'; // Import an icon for the avatar
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 import { UserProfiles } from '../../api/user/UserProfileCollection';
@@ -28,7 +29,7 @@ const schema = new SimpleSchema({
     type: String,
     custom() {
       if (!validateEmail(this.value)) {
-        return 'Email is not valid'; // If email is not valid
+        return 'Email is not valid';
       }
       if (Meteor.isClient && this.isSet) {
         Meteor.call('userProfiles.isEmailUnique', this.value.toLowerCase(), (error, result) => {
@@ -37,16 +38,16 @@ const schema = new SimpleSchema({
           }
         });
       }
-      return null; // Ensures a return value in all cases
+      return null;
     },
   },
   password: {
     type: String,
     custom() {
       if (this.value.includes(' ')) {
-        return 'noSpacesAllowed'; // If password includes spaces
+        return 'noSpacesAllowed';
       }
-      return null; // Ensures a return value in all cases
+      return null;
     },
   },
   confirmPassword: {
@@ -54,9 +55,9 @@ const schema = new SimpleSchema({
     custom() {
       const password = this.field('password').value;
       if (this.value !== password) {
-        return 'passwordMismatch'; // If passwords do not match
+        return 'passwordMismatch';
       }
-      return null; // Ensures a return value in all cases
+      return null;
     },
   },
 });
@@ -68,7 +69,6 @@ const SignUp = () => {
   const [redirectToReferer, setRedirectToRef] = useState(false);
 
   const submit = (doc) => {
-    // Check if passwords match before submitting
     if (doc.password !== doc.confirmPassword) {
       setError('Passwords do not match.');
       return;
@@ -97,36 +97,85 @@ const SignUp = () => {
   }
 
   return (
-    <Container id={PAGE_IDS.SIGN_UP} className="py-3 sign-in-register">
-      <Row className="justify-content-center">
-        <Col xs={12} md={6} lg={5}>
-          <AutoForm schema={bridge} onSubmit={submit} model={{}}>
-            <Card className="border-0 shadow-lg custom-card">
-              <Card.Body>
-                <h2>Register</h2>
-                <TextField id={COMPONENT_IDS.SIGN_UP_FORM_FIRST_NAME} name="firstName" />
-                <TextField id={COMPONENT_IDS.SIGN_UP_FORM_LAST_NAME} name="lastName" />
-                <TextField id={COMPONENT_IDS.SIGN_UP_FORM_EMAIL} name="email" />
-                <TextField id={COMPONENT_IDS.SIGN_UP_FORM_PASSWORD} name="password" type="password" />
+    <Container id={PAGE_IDS.SIGN_UP} fluid className="sign-in-register">
+      <Row className="justify-content-center align-items-center min-vh-100">
+        <Col xs={12} sm={8} md={6} lg={5}>
+          <Card
+            className="p-4 shadow-lg"
+            style={{ margin: '20px auto', width: '350px', maxWidth: '100%' }}
+          >
+            <Card.Body>
+              {/* Centered Avatar Icon */}
+              <div className="text-center mb-4">
+                <div
+                  className="avatar bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center"
+                  style={{ width: '45px', height: '45px', margin: '0 auto' }}
+                >
+                  <FaUserPlus size={30} />
+                </div>
+                <h2 className="mt-3">Register</h2>
+              </div>
+
+              {/* Sign-up Form */}
+              <AutoForm schema={bridge} onSubmit={submit}>
+                <TextField
+                  id={COMPONENT_IDS.SIGN_UP_FORM_FIRST_NAME}
+                  name="firstName"
+                  placeholder="First Name"
+                  className="mb-3"
+                  inputClassName="input-no-border"
+                />
+                <TextField
+                  id={COMPONENT_IDS.SIGN_UP_FORM_LAST_NAME}
+                  name="lastName"
+                  placeholder="Last Name"
+                  className="mb-3"
+                  inputClassName="input-no-border"
+                />
+                <TextField
+                  id={COMPONENT_IDS.SIGN_UP_FORM_EMAIL}
+                  name="email"
+                  placeholder="Email"
+                  className="mb-3"
+                  inputClassName="input-no-border"
+                />
+                <TextField
+                  id={COMPONENT_IDS.SIGN_UP_FORM_PASSWORD}
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  className="mb-3"
+                  inputClassName="input-no-border"
+                />
                 <TextField
                   id={COMPONENT_IDS.SIGN_UP_FORM_CONFIRM_PASSWORD}
                   name="confirmPassword"
                   type="password"
+                  placeholder="Confirm Password"
+                  className="mb-3"
+                  inputClassName="input-no-border"
+
                 />
                 <ErrorsField />
-                <SubmitField id={COMPONENT_IDS.SIGN_UP_FORM_SUBMIT} />
-                <Row>
-                  <Col className="pt-3">
-                    <p className="sign-in-register">
-                      Already have an account? Login <Link to="/signin">here</Link>
-                    </p>
-                  </Col>
-                </Row>
-              </Card.Body>
-            </Card>
-          </AutoForm>
+                {/* Sign Up Button */}
+                <SubmitField
+                  id={COMPONENT_IDS.SIGN_UP_FORM_SUBMIT}
+                  value="Register"
+                />
+              </AutoForm>
+
+              {/* Sign In Link */}
+              <div className="text-center mt-3">
+                <p>
+                  Already have an account? <Link to="/signin">Sign In</Link>
+                </p>
+              </div>
+            </Card.Body>
+          </Card>
+
+          {/* Error Alert */}
           {error && (
-            <Alert variant="danger">
+            <Alert variant="danger" className="mt-3">
               <Alert.Heading>Registration was not successful</Alert.Heading>
               <p>{error}</p>
             </Alert>

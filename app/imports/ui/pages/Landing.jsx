@@ -50,7 +50,7 @@ const Landing = () => (
         <Col md={4} className="mb-4">
           <Fade>
             <Card className="shadow-sm h-100">
-              <Card.Img variant="top" src="/images/GraphPlaceholder.png" />
+              <Card.Img variant="top" src="/images/landing4.jpg" />
               <Card.Body>
                 <Card.Title>Financial Modeling</Card.Title>
                 <Card.Text>
@@ -63,7 +63,7 @@ const Landing = () => (
         <Col md={4} className="mb-4">
           <Slide direction="left">
             <Card className="shadow-sm h-100">
-              <Card.Img variant="top" src="/images/GraphPlaceholder.png" />
+              <Card.Img variant="top" src="/images/landing1.jpg" />
               <Card.Body>
                 <Card.Title>Comprehensive Reports</Card.Title>
                 <Card.Text>
@@ -76,7 +76,7 @@ const Landing = () => (
         <Col md={4} className="mb-4">
           <Fade>
             <Card className="shadow-sm h-100">
-              <Card.Img variant="top" src="/images/GraphPlaceholder.png" />
+              <Card.Img variant="top" src="/images/landing2.jpg" />
               <Card.Body>
                 <Card.Title>Advanced Forecasting</Card.Title>
                 <Card.Text>
@@ -97,7 +97,7 @@ const Landing = () => (
       <Row className="align-items-center mb-5">
         <Col md={6} className="mb-4">
           <Slide direction="right">
-            <Image src="/images/GraphPlaceholder.png" fluid rounded />
+            <Image src="/images/landing3.jpg" fluid rounded />
           </Slide>
         </Col>
         <Col md={6} className="mb-4">
@@ -117,7 +117,7 @@ const Landing = () => (
       <Row className="align-items-center mb-5">
         <Col md={6} className="mb-4 order-md-2">
           <Slide direction="left">
-            <Image src="/images/GraphPlaceholder.png" fluid rounded />
+            <Image src="/images/landing5.jpg" fluid rounded />
           </Slide>
         </Col>
         <Col md={6} className="mb-4 order-md-1">

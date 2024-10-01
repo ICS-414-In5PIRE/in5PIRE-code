@@ -1,7 +1,12 @@
-import React, { useState } from "react";
-import * as XLSX from "xlsx";
+import React, { useState } from 'react';
+import * as XLSX from 'xlsx';
+import { Table, Header, Container, Button, Icon } from 'semantic-ui-react';
 import { PAGE_IDS } from '../utilities/PageIDs';
-import { Table, Header, Container, Button, Icon } from "semantic-ui-react";
+
+/**
+ * UploadsFile: Allows the user to upload a .xlsx/xlsl or .csv file
+ * and import the data into a table.
+ */
 
 const UploadFile = () => {
   const [tableData, setTableData] = useState([]);
@@ -15,7 +20,7 @@ const UploadFile = () => {
 
       reader.onload = (event) => {
         const data = new Uint8Array(event.target.result);
-        const workbook = XLSX.read(data, { type: "array" });
+        const workbook = XLSX.read(data, { type: 'array' });
 
         // Assuming we're just reading the first sheet
         const firstSheetName = workbook.SheetNames[0];
@@ -31,8 +36,7 @@ const UploadFile = () => {
   };
 
   // Render table from the tableData array using Semantic UI
-  const renderTable = () => {
-    return (
+  const renderTable = () => (
       <Table celled striped>
         <Table.Header>
           <Table.Row>
@@ -51,11 +55,10 @@ const UploadFile = () => {
           ))}
         </Table.Body>
       </Table>
-    );
-  };
+  );
 
   return (
-    <Container id={PAGE_IDS.UPLOAD_FILE} style={{ marginTop: "20px" }}>
+    <Container id={PAGE_IDS.UPLOAD_FILE} style={{ marginTop: '20px' }}>
       <Header as="h2" icon textAlign="center">
         <Icon name="file excel outline" circular />
         <Header.Content>Excel to HTML Table Converter</Header.Content>
@@ -67,11 +70,11 @@ const UploadFile = () => {
         type="file"
         accept=".xlsx, .xls"
         onChange={handleFileUpload}
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
       />
 
       {tableData.length > 0 && (
-        <div style={{ marginTop: "20px" }}>
+        <div style={{ marginTop: '20px' }}>
           <Header as="h3">Data from the Excel File:</Header>
           {renderTable()}
         </div>

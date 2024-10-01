@@ -34,9 +34,9 @@ const FinancialProfilesPage = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        Meteor.call('FinancialProfiles.remove', profile._id, (error) => {
+        FinancialProfiles.removeIt(profile._id, (error) => {
           if (error) {
-            swal('Error', error.reason || 'An error occurred.', 'error');
+            swal('Error', error.message, 'error');
           } else {
             swal('Success', 'Profile deleted successfully', 'success');
           }

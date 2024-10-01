@@ -234,12 +234,12 @@ body{
   .copyright-section {
     margin-top: 30px;
 
-    & a {
+    a {
       color: #6c757d;
       text-decoration: none;
     }
 
-    & a:hover {
+    a:hover {
       color: #007bff;
     }
 
@@ -258,7 +258,7 @@ body{
       max-height: 80px;
     }
 
-    & img {
+    img {
       display: block;
       max-width: 100px;
       margin: 0;
@@ -271,12 +271,12 @@ body{
     font-style: normal;
     color: #6c757d;
 
-    & a {
+    a {
       text-decoration: none;
       color: #000;
     }
 
-    & a:hover {
+    a:hover {
       color: #007bff;
     }
   }
@@ -285,16 +285,16 @@ body{
     list-style: none;
     padding-left: 0;
 
-    & ul {
+    ul {
       margin-bottom: 10px;
     }
 
-    & a {
+    a {
       text-decoration: none;
       color: #6c757d;
     }
 
-    & a:hover {
+    a:hover {
       color: #007bff;
     }
   }
@@ -304,12 +304,12 @@ body{
     font-weight: bold;
     margin-bottom: 15px;
 
-    & a {
+    a {
       text-decoration: none;
       color: #000;
     }
 
-    & a:hover {
+    a:hover {
       color: #007bff;
     }
   }
@@ -319,14 +319,14 @@ body{
 /* Scoped styles for the Contact Us page */
 #contact-us-page {
 /* Page title */
-& h1.display-4 {
+h1.display-4 {
   font-weight: bold;
   margin-bottom: 10px;
   color: #007bff;
 }
 
 /* Muted lead text */
-  & p.lead {
+p.lead {
   font-size: 1.1rem;
   color: #6c757d;
 }
@@ -353,7 +353,7 @@ body{
 }
 
 /* Button styles specific to this page */
-  & button {
+button {
   transition: background-color 0.3s ease, border-color 0.3s ease;
   background-color: #fff;
   border: 2px solid #007bff;
@@ -361,14 +361,14 @@ body{
 }
 
 /* Button hover effect */
-  & button:hover {
+button:hover {
   background-color: #007bff;
   color: white;
   border-color: #007bff;
 }
 
 /* Larger button for a more prominent look */
-  & button {
+button {
   padding: 10px 30px;
   font-size: 1.1rem;
 }
@@ -388,7 +388,7 @@ body{
         margin: 16px auto 24px auto;
       }
 
-      & p {
+      p {
         max-width: 500px;
         margin-left: auto;
         margin-right: auto;
@@ -398,7 +398,7 @@ body{
 
 /* Balance Sheet Styles */
 #balance-sheet-input, #budget-form {
-  & h3, & h2 {
+  h3, h2 {
     text-align: start;
   }
 
@@ -412,95 +412,3 @@ body{
     box-shadow: none;
   }
 }
-
-
-.sign-in-register {
-  /* No need for min-height or flex alignment here since it's handled in the Row */
-
-  .card {
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-    .card-body {
-      .avatar {
-        background-color: #1bbd7e; /* Matches the Material-UI avatar color */
-        width: 60px;
-        height: 60px;
-        color: #fff;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto; /* Center the avatar horizontally */
-
-        /* Icon inside the avatar */
-        & svg {
-          width: 30px;
-          height: 30px;
-        }
-      }
-
-      & h2 {
-        text-align: center;
-        margin-top: 20px;
-      }
-
-      /* Remember me checkbox */
-      .form-check {
-        display: flex;
-        align-items: center;
-        justify-content: center; /* Center the items horizontally */
-
-        .form-check-input {
-          margin-right: 5px; /* Space between checkbox and label */
-        }
-
-        .form-check-label {
-          margin-bottom: 0; /* Remove bottom margin to prevent wrapping */
-        }
-      }
-
-      /* Sign In button */
-      .btn-primary {
-        width: 100%;
-        margin-top: 10px;
-      }
-
-      /* Links */
-      .text-center {
-        margin-top: 15px;
-
-        & a {
-          color: #007bff;
-          text-decoration: none;
-        }
-
-        & p {
-          margin-top: 10px;
-        }
-      }
-    }
-  }
-
-  /* Error Alert */
-  .alert {
-    margin-top: 20px;
-  }
-}
-
-/* Custom class to remove borders from input fields */
-.input-no-border {
-  border-top: none !important;
-  border-left: none !important;
-  border-right: none !important;
-  border-bottom: 1px solid #ccc !important; /* Adjust color as needed */
-  border-radius: 0 !important;
-  box-shadow: none !important;
-}
-
-/* Optional: Change border color on focus */
-.input-no-border:focus {
-  border-bottom-color: #66afe9 !important; /* Adjust focus color */
-  box-shadow: none !important;
-}
-

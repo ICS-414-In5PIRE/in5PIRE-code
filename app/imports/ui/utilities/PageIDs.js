@@ -19,6 +19,5 @@ export const PAGE_IDS = {
   DASHBOARD: 'dashboard',
   CONTACT_US: 'contact-us',
   USER_GUIDE: 'user-guide',
-  UPLOAD_FILE: 'upload-file',
   FAQ: 'faq',
 };

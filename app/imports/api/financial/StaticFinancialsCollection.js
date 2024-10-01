@@ -99,7 +99,6 @@ class StaticFinancialsCollection extends BaseCollection {
     incrementalFringeBenefits,
     owner,
   }) {
-    console.log('Defining financial data:', customerName);
     const docID = this._collection.insert({
       customerName,
       year,

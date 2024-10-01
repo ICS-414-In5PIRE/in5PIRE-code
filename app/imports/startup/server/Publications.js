@@ -1,7 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { Roles } from 'meteor/alanning:roles';
 import { MATPCollections } from '../../api/matp/MATPCollections';
-import { StaticFinancials } from '../../api/financial/StaticFinancialsCollection';
 
 // Call publish for all the collections.
 MATPCollections.collections.forEach(c => c.publish());
@@ -14,21 +12,4 @@ Meteor.publish(null, function () {
     return Meteor.roleAssignment.find({ 'user._id': this.userId });
   }
   this.ready();
-});
-
-// Publish StaticFinancials for regular users
-Meteor.publish('staticFinancials', function publishStaticFinancials() {
-  if (this.userId) {
-    const username = Meteor.users.findOne(this.userId).username;
-    return StaticFinancials._collection.find({ owner: username });
-  }
-  return this.ready();
-});
-
-// Publish StaticFinancials for admin users
-Meteor.publish('staticFinancialsAdmin', function publishStaticFinancialsAdmin() {
-  if (this.userId && Roles.userIsInRole(this.userId, 'ADMIN')) {
-    return StaticFinancials._collection.find();
-  }
-  return this.ready();
 });

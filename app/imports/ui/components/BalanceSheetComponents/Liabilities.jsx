@@ -13,8 +13,6 @@ const Liabilities = ({ formData, handleChange }) => {
       render: () => (
         <Tab.Pane>
           <LongTermLiabilitiesForm
-            formData={formData}
-            handleChange={handleChange}
             netWording="Long-term liabilities - due within one year"
           />
         </Tab.Pane>
@@ -25,8 +23,6 @@ const Liabilities = ({ formData, handleChange }) => {
       render: () => (
         <Tab.Pane>
           <LongTermLiabilitiesForm
-            formData={formData}
-            handleChange={handleChange}
             netWording="Long-term liabilities - due after one year"
           />
         </Tab.Pane>
@@ -40,21 +36,21 @@ const Liabilities = ({ formData, handleChange }) => {
         <Form.Input
           label="Accounts Payable and Accrued Liabilities"
           name="accountsPayable"
-          value={formData.accountsPayable ?? ''}
+          value={formData.accountsPayable}
           onChange={handleChange}
           type="number"
         />
         <Form.Input
           label="Due to Fund"
           name="dueToFund"
-          value={formData.dueToFund ?? ''}
+          value={formData.dueToFund}
           onChange={handleChange}
           type="number"
         />
         <Form.Input
           label="Due to Other Funds"
           name="dueToOtherFunds"
-          value={formData.dueToOtherFunds ?? ''}
+          value={formData.dueToOtherFunds}
           onChange={handleChange}
           type="number"
         />
@@ -69,7 +65,7 @@ const Liabilities = ({ formData, handleChange }) => {
           className="dotted-input"
           label="Total Liabilities"
           name="totalLiabilities"
-          value={formData.totalLiabilities ?? ''}
+          value={formData.totalLiabilities}
           onChange={handleChange}
           type="number"
           readOnly
@@ -80,14 +76,14 @@ const Liabilities = ({ formData, handleChange }) => {
         <Form.Input
           label="Deferred inflows of resources related to pensions"
           name="deferredInflowsPensions"
-          value={formData.deferredInflowsPensions ?? ''}
+          value={formData.deferredInflowsPensions}
           onChange={handleChange}
           type="number"
         />
         <Form.Input
           label="Deferred inflows of resources related to OPEB"
           name="deferredInflowsOPEB"
-          value={formData.deferredInflowsOPEB ?? ''}
+          value={formData.deferredInflowsOPEB}
           onChange={handleChange}
           type="number"
         />
@@ -95,7 +91,7 @@ const Liabilities = ({ formData, handleChange }) => {
           className="dotted-input"
           label="Net liabilities & deferred inflows of resources"
           name="netLiabilitiesDeferredInflows"
-          value={formData.netLiabilitiesDeferredInflows ?? ''}
+          value={formData.netLiabilitiesDeferredInflows}
           onChange={handleChange}
           type="number"
           readOnly

@@ -30,7 +30,6 @@ const NewNav = () => {
                   <NavDropdown.Item as={NavLink} to="/balance-sheet">Balance Input Form</NavDropdown.Item>
                   <NavDropdown.Item as={NavLink} to="/budget-form">Budget Form</NavDropdown.Item>
                   <NavDropdown.Item as={NavLink} to="/audited-fs">Audited Financial Statement</NavDropdown.Item>
-                  <NavDropdown.Item as={NavLink} to="/upload-file">Upload Files</NavDropdown.Item>
                 </NavDropdown>
               </li>
             )}

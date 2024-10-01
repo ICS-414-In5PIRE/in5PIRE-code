@@ -65,7 +65,7 @@ const App = () => {
           <Route path="/balance-sheet" element={<ProtectedRoute><BalanceSheetInput /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/budget-form" element={<ProtectedRoute><BudgetForm /></ProtectedRoute>} />
-          <Route path="upload-file" element={<ProtectedRoute><UploadFile /></ProtectedRoute> }/>
+          <Route path="upload-file" element={<ProtectedRoute><UploadFile /></ProtectedRoute>} />
         </Routes>
         <Footer />
       </div>

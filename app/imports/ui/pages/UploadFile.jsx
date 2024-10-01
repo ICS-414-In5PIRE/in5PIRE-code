@@ -37,24 +37,24 @@ const UploadFile = () => {
 
   // Render table from the tableData array using Semantic UI
   const renderTable = () => (
-      <Table celled striped>
-        <Table.Header>
-          <Table.Row>
-            {tableData[0]?.map((colHeader, index) => (
-              <Table.HeaderCell key={index}>{colHeader}</Table.HeaderCell>
+    <Table celled striped>
+      <Table.Header>
+        <Table.Row>
+          {tableData[0]?.map((colHeader, index) => (
+            <Table.HeaderCell key={index}>{colHeader}</Table.HeaderCell>
+          ))}
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {tableData.slice(1).map((row, rowIndex) => (
+          <Table.Row key={rowIndex}>
+            {row.map((cell, cellIndex) => (
+              <Table.Cell key={cellIndex}>{cell}</Table.Cell>
             ))}
           </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {tableData.slice(1).map((row, rowIndex) => (
-            <Table.Row key={rowIndex}>
-              {row.map((cell, cellIndex) => (
-                <Table.Cell key={cellIndex}>{cell}</Table.Cell>
-              ))}
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+        ))}
+      </Table.Body>
+    </Table>
   );
 
   return (

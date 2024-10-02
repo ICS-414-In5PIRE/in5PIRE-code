@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Segment, Container, Message, Grid, Button, Menu, Dropdown } from 'semantic-ui-react';
+import { Form, Segment, Container, Grid, Button, Menu, Dropdown } from 'semantic-ui-react';
 import { Tracker } from 'meteor/tracker';
 import { Meteor } from 'meteor/meteor';
 import OtherAssets from '../components/BalanceSheetComponents/OtherAssets';
@@ -10,6 +10,7 @@ import { PAGE_IDS } from '../utilities/PageIDs';
 import Loader from '../components/Loader';
 import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputsCollection';
 import { defineMethod } from '../../api/base/BaseCollection.methods';
+import InputSheetMessage from '../components/InputSheetMessage';
 
 /**
  * yearOptions is an array of years for the dropdown menu.
@@ -26,7 +27,11 @@ class BalanceSheetInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: '',
+      snackBar: {
+        isOpen: false,
+        message: '',
+        isError: false,
+      },
       activeItem: 'Cash And Equivalents',
       isLoading: true,
       selectedYear: 2024,
@@ -54,7 +59,6 @@ class BalanceSheetInput extends React.Component {
     if (prevState.selectedYear !== selectedYear) {
       const username = Meteor.user()?.username;
       const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
-      console.log(balanceSheetData.length > 0 ? balanceSheetData[0] : {});
       this.setState({ record: balanceSheetData.length > 0 ? balanceSheetData[0] : {} });
     }
   }
@@ -71,7 +75,6 @@ class BalanceSheetInput extends React.Component {
     const { record } = this.state;
 
     const updatedFormData = { ...record, [name]: value };
-
     this.setState({ record: updatedFormData }, () => {
     });
   };
@@ -85,27 +88,32 @@ class BalanceSheetInput extends React.Component {
   handleSubmit = () => {
     const { record, selectedYear } = this.state;
     const collectionName = BalanceSheetInputs.getCollectionName();
-    if ((!('owner' in record) && !('year' in record))) {
-      const owner = Meteor.user()?.username;
-      const data = { ...record, owner: owner, year: selectedYear };
-      defineMethod.callPromise({ collectionName: collectionName, definitionData: data })
-        .then(() => {
-          this.setState(({ record: data }));
-        })
-        .catch((error) => {
-          if (error) {
-            this.setState({ error: error.message });
-          }
-        });
-    }
+    const owner = Meteor.user()?.username;
+    const data = { ...record, owner: owner, year: selectedYear };
+    defineMethod.callPromise({ collectionName: collectionName, definitionData: data })
+      .then((response) => {
+        const isError = response.status <= 0;
+        const errorMessage = isError ? response.errorMessage : 'Record has been inserted successfully!';
+        this.handleSnackBar(true, errorMessage, isError);
+      })
+      .catch((error) => {
+        if (error) {
+          this.handleSnackBar(true, 'Something went wrong!', true);
+        }
+      });
   };
 
   // Handle year change
   handleYearChange = (e, { value }) => this.setState({ selectedYear: value });
 
+  // Handle snackbar
+  handleSnackBar = (isOpen, message, isError) => {
+    this.setState({ snackBar: { isOpen: isOpen, message: message, isError: isError } });
+  };
+
   // Render the component
   render() {
-    const { error, isLoading, activeItem, selectedYear, record } = this.state;
+    const { isLoading, activeItem, selectedYear, record, snackBar } = this.state;
 
     if (isLoading) {
       return (
@@ -168,12 +176,7 @@ class BalanceSheetInput extends React.Component {
                   )}
                 </Segment>
               </div>
-              {error && (
-                <Message negative>
-                  <Message.Header>Submission failed</Message.Header>
-                  <p>{error}</p>
-                </Message>
-              )}
+              <InputSheetMessage snackBar={snackBar} handleSnackBar={this.handleSnackBar} />
               <Grid className="py-3">
                 <Grid.Column textAlign="right">
                   <Button primary type="submit">

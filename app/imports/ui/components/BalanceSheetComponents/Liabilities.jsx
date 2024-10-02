@@ -107,13 +107,13 @@ const Liabilities = ({ formData, handleChange }) => {
 
 Liabilities.propTypes = {
   formData: PropTypes.shape({
-    accountsPayable: PropTypes.number,
-    dueToFund: PropTypes.number,
-    dueToOtherFunds: PropTypes.number,
-    totalLiabilities: PropTypes.number,
-    deferredInflowsPensions: PropTypes.number,
-    deferredInflowsOPEB: PropTypes.number,
-    netLiabilitiesDeferredInflows: PropTypes.number,
+    accountsPayable: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    dueToFund: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    dueToOtherFunds: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    totalLiabilities: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    deferredInflowsPensions: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    deferredInflowsOPEB: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    netLiabilitiesDeferredInflows: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }),
   handleChange: PropTypes.func,
 };

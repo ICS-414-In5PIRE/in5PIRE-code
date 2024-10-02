@@ -69,6 +69,7 @@ const CashAndCashEquivalents = ({ formData, handleChange }) => (
 
       {/* Read-only Total with Auto-Calculation */}
       <Form.Input
+        className="dotted-input"
         label="Total Cash and Cash Equivalents"
         name="totalCashAndCashEquivalents"
         value={formData.totalCashAndCashEquivalents ?? ''}
@@ -79,16 +80,6 @@ const CashAndCashEquivalents = ({ formData, handleChange }) => (
         placeholder="Auto-calculated"
       />
     </Form.Group>
-
-    {/* Warning Message for Missing or Negative Values */}
-    {(formData.cash < 0 || formData.pettyCash < 0 || formData.cashInBanks < 0) && (
-      <Message negative>
-        <Message.Header>Invalid input detected</Message.Header>
-        <p>All cash values should be positive. Please correct any negative inputs.</p>
-      </Message>
-    )}
-
-    <Divider />
   </>
 );
 

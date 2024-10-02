@@ -25,7 +25,7 @@ const CommitmentsAndContingencies = ({ formData, handleChange }) => (
       <Form.Input
         label="Unrestricted"
         name="unrestricted"
-        value={formData.unrestricted}
+        value={formData.unrestricted ?? ''}
         onChange={handleChange}
         type="number"
       />
@@ -55,11 +55,11 @@ const CommitmentsAndContingencies = ({ formData, handleChange }) => (
 
 CommitmentsAndContingencies.propTypes = {
   formData: PropTypes.shape({
-    investedInCapitalAssets: PropTypes.number,
-    restrictedFederalFunds: PropTypes.number,
-    unrestricted: PropTypes.number,
-    totalNetPosition: PropTypes.number,
-    totalLiabilitiesDeferredNetPosition: PropTypes.number,
+    investedInCapitalAssets: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    restrictedFederalFunds: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    unrestricted: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    totalNetPosition: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    totalLiabilitiesDeferredNetPosition: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }),
   handleChange: PropTypes.func,
 };

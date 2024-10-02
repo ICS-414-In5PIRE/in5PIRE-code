@@ -37,23 +37,47 @@ class BalanceSheetInputsCollection extends BaseCollection {
     notesPayableBuildingA, netPensionLiability, netOPEBLiability, lineOfCreditBuildingA, lineOfCreditBuildingB,
     debtService, netLiabilities,
   }) {
-    const docID = this._collection.insert({
-      pettyCash, cash, cashInBanks, totalCashAndCashEquivalents, accountsReceivables, dueFromOtherFunds,
-      interestAndDividendsReceivable, otherAssets, notesReceivableBeforeOneYear, notesReceivableAfterOneYear,
-      securityDeposits, cashByInvestmentManager, mutualFunds, commingledFunds, hedgeFunds, privateEquityFunds,
-      commonTrustFunds, commonAndPreferredStocks, privateDebt, otherInvestments, subtotalInvestments, usTreasuries,
-      usAgencies, subtotalLoanFund, totalInvestments, buildings, leaseholdImprovements, furnitureFixturesEquipment,
-      accumulatedDepreciation, netCapitalAssets, landA, landB, constructionInProgress, subtotalCapitalAssetsNet,
-      llcBuildings, llcLeaseholdImprovements, llcFurnitureFixturesEquipment, vehicles, llcAccumulatedDepreciation,
-      llcNet, llcLand, llcAssetsNet, totalCapitalAssetsNet, restrictedCash, totalOtherAssets, deferredOutflowsPensions,
-      deferredOutflowsOPEB, netAssetsDeferredOutflows, accountsPayable, dueToFund, dueToOtherFunds, totalLiabilities,
-      deferredInflowsPensions, deferredInflowsOPEB, netLiabilitiesDeferredInflows, investedInCapitalAssets,
-      restrictedFederalFunds, unrestricted, totalNetPosition, totalLiabilitiesDeferredNetPosition, owner, year,
-      accruedVacation, workersCompensation, accruedRetirementPlan, accruedLeaseGuaranty, capitalLeaseObligations,
-      notesPayableBuildingA, netPensionLiability, netOPEBLiability, lineOfCreditBuildingA, lineOfCreditBuildingB,
-      debtService, netLiabilities,
-    });
-    return docID;
+    try {
+      const existingDocument = this._collection.findOne({ owner, year });
+
+      if (existingDocument) {
+        return {
+          status: 0,
+          errorMessage: 'A BalanceSheetInput already exists for this user and year.',
+          docId: existingDocument._id,
+        };
+      }
+
+      // Insert a new document
+      const docID = this._collection.insert({
+        pettyCash, cash, cashInBanks, totalCashAndCashEquivalents, accountsReceivables, dueFromOtherFunds,
+        interestAndDividendsReceivable, otherAssets, notesReceivableBeforeOneYear, notesReceivableAfterOneYear,
+        securityDeposits, cashByInvestmentManager, mutualFunds, commingledFunds, hedgeFunds, privateEquityFunds,
+        commonTrustFunds, commonAndPreferredStocks, privateDebt, otherInvestments, subtotalInvestments, usTreasuries,
+        usAgencies, subtotalLoanFund, totalInvestments, buildings, leaseholdImprovements, furnitureFixturesEquipment,
+        accumulatedDepreciation, netCapitalAssets, landA, landB, constructionInProgress, subtotalCapitalAssetsNet,
+        llcBuildings, llcLeaseholdImprovements, llcFurnitureFixturesEquipment, vehicles, llcAccumulatedDepreciation,
+        llcNet, llcLand, llcAssetsNet, totalCapitalAssetsNet, restrictedCash, totalOtherAssets, deferredOutflowsPensions,
+        deferredOutflowsOPEB, netAssetsDeferredOutflows, accountsPayable, dueToFund, dueToOtherFunds, totalLiabilities,
+        deferredInflowsPensions, deferredInflowsOPEB, netLiabilitiesDeferredInflows, investedInCapitalAssets,
+        restrictedFederalFunds, unrestricted, totalNetPosition, totalLiabilitiesDeferredNetPosition, owner, year,
+        accruedVacation, workersCompensation, accruedRetirementPlan, accruedLeaseGuaranty, capitalLeaseObligations,
+        notesPayableBuildingA, netPensionLiability, netOPEBLiability, lineOfCreditBuildingA, lineOfCreditBuildingB,
+        debtService, netLiabilities,
+      });
+
+      return {
+        status: 1,
+        errorMessage: '',
+        docId: docID,
+      };
+    } catch (error) {
+      return {
+        status: 0,
+        errorMessage: `An error occurred: ${error.message}`,
+        docId: '',
+      };
+    }
   }
 
   /**

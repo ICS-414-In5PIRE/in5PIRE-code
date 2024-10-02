@@ -21,4 +21,5 @@ export const PAGE_IDS = {
   USER_GUIDE: 'user-guide',
   UPLOAD_FILE: 'upload-file',
   FAQ: 'faq',
+  AUDITED_FS: 'audited-fs',
 };

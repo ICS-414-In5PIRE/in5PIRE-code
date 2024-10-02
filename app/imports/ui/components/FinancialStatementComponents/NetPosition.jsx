@@ -4,6 +4,7 @@ import CashAndCashEquivalents from './CashAndCashEquivalentsFS';
 import OtherAssets from './OtherAssetsFS';
 import Liabilities from './LiabilitiesFS';
 import NetAssets from './NetAssets';
+import PropTypes from 'prop-types';
 
 const NetPosition = ({ formData, handleChange }) => {
   const panes = [
@@ -43,6 +44,11 @@ const NetPosition = ({ formData, handleChange }) => {
   return (
     <Tab panes={panes} />
   );
+};
+
+NetPosition.defaultProps = {
+  formData: [],
+  handleChange: PropTypes.func,
 };
 
 export default NetPosition;

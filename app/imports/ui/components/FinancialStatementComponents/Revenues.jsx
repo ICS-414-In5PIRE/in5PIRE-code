@@ -1,9 +1,11 @@
 import React from 'react';
-import { Tab, Segment } from 'semantic-ui-react';
+import { Tab } from 'semantic-ui-react';
 import ProgramRevenues from './ProgramRevenues';
 import GeneralRevenues from './GeneralRevenues';
 import Expenditures from './Expenditures';
 import FundBalances from './FundBalances';
+import PropTypes from 'prop-types';
+import NetPosition from './NetPosition';
 
 const Revenues = ({ formData, handleChange }) => {
   const panes = [
@@ -43,6 +45,11 @@ const Revenues = ({ formData, handleChange }) => {
   return (
     <Tab panes={panes} />
   );
+};
+
+Revenues.defaultProps = {
+  formData: [],
+  handleChange: PropTypes.func,
 };
 
 export default Revenues;

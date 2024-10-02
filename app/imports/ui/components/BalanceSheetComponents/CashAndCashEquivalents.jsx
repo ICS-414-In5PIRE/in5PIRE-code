@@ -1,12 +1,11 @@
 import React from 'react';
-import { Form, Divider, Icon, Popup, Message } from 'semantic-ui-react';
+import { Form, Icon, Popup } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 /**
  * Component for Cash and Cash Equivalents form for Balance Input Sheet
  */
 const CashAndCashEquivalents = ({ formData, handleChange }) => (
-  <>
     <Form.Group widths="equal">
       {/* Petty Cash Input with Tooltip */}
       <Form.Input
@@ -80,7 +79,6 @@ const CashAndCashEquivalents = ({ formData, handleChange }) => (
         placeholder="Auto-calculated"
       />
     </Form.Group>
-  </>
 );
 
 CashAndCashEquivalents.propTypes = {

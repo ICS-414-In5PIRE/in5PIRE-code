@@ -46,8 +46,8 @@ const Landing = () => (
           <h2 className="mb-4">Key Features</h2>
         </Col>
       </Row>
-      <Row className="mb-5">
-        <Col md={4} className="mb-4">
+      <Row className="mb-5 justify-content-between">
+        <Col md={3} className="mb-4">
           <Fade>
             <Card className="shadow-sm h-100">
               <Card.Img variant="top" src="/images/landing4.jpg" />
@@ -60,7 +60,7 @@ const Landing = () => (
             </Card>
           </Fade>
         </Col>
-        <Col md={4} className="mb-4">
+        <Col md={3} className="mb-4">
           <Slide direction="left">
             <Card className="shadow-sm h-100">
               <Card.Img variant="top" src="/images/landing1.jpg" />
@@ -73,7 +73,7 @@ const Landing = () => (
             </Card>
           </Slide>
         </Col>
-        <Col md={4} className="mb-4">
+        <Col md={3} className="mb-4">
           <Fade>
             <Card className="shadow-sm h-100">
               <Card.Img variant="top" src="/images/landing2.jpg" />

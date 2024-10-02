@@ -28,6 +28,7 @@ import Dashboard from '../pages/Dashboard';
 import FAQ from '../pages/FAQ';
 import ContactUs from '../pages/ContactUs';
 import UserGuide from '../pages/UserGuide';
+import UploadFile from '../pages/UploadFile';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
@@ -64,6 +65,7 @@ const App = () => {
           <Route path="/balance-sheet" element={<ProtectedRoute><BalanceSheetInput /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/budget-form" element={<ProtectedRoute><BudgetForm /></ProtectedRoute>} />
+          <Route path="upload-file" element={<ProtectedRoute><UploadFile /></ProtectedRoute>} />
         </Routes>
         <Footer />
       </div>

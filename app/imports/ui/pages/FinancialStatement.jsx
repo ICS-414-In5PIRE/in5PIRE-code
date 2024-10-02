@@ -7,7 +7,7 @@ import NetPosition from '../components/FinancialStatementComponents/NetPosition'
 const FinancialStatement = () => {
   const [formData, setFormData] = useState({
   });
-  const [error, setErr] = useState('');
+  const [error, setError] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [activeItem, setActiveItem] = useState('Net Position');
 
@@ -15,15 +15,15 @@ const FinancialStatement = () => {
     setFormData({ ...formData, [name]: value });
   };
   const handleSubmit = () => {
-    if (activeItem === 3) {
-      try {
-        setSubmitted(true);
-        setErr('');
-      } catch (err) {
-        setErr('Submission failed. Please try again.');
-      }
+    try {
+      console.log('Form submitted:', formData);
+      setSubmitted(true);
+      setError('');
+    } catch (err) {
+      setError('Submission failed. Please try again.');
     }
   };
+
   const handleItemClick = (e, { name }) => setActiveItem(name);
 
   if (submitted) {

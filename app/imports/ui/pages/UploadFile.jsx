@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
-import { Table, Header, Container, Button, Icon } from 'semantic-ui-react';
+import { Table, Header, Container, Button, Icon, Grid } from 'semantic-ui-react';
 import { PAGE_IDS } from '../utilities/PageIDs';
 
 /**
- * UploadsFile: Allows the user to upload a .xlsx/xlsl or .csv file
+ * UploadsFile: Allows the user to upload a spreadsheet or .csv file
  * and import the data into a table.
  */
 
@@ -23,10 +23,10 @@ const UploadFile = () => {
         const workbook = XLSX.read(data, { type: 'array' });
 
         // Assuming we're just reading the first sheet
-        const firstSheetName = workbook.SheetNames[0];
+        const firstSheetName = workbook.SheetNames[4];
         const worksheet = workbook.Sheets[firstSheetName];
 
-        // Convert the sheet to HTML
+        // Convert the sheet to JSON to display on table
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
         setTableData(jsonData);
       };
@@ -60,18 +60,25 @@ const UploadFile = () => {
   return (
     <Container id={PAGE_IDS.UPLOAD_FILE} style={{ marginTop: '20px' }}>
       <Header as="h2" icon textAlign="center">
-        <Icon name="file excel outline" circular />
-        <Header.Content>Excel to HTML Table Converter</Header.Content>
+        <Icon name="file excel outline" />
+        <Header.Content>Upload Files</Header.Content>
       </Header>
 
-      <Button as="label" htmlFor="fileInput" primary icon="upload" content="Upload Excel File" />
-      <input
-        id="fileInput"
-        type="file"
-        accept=".xlsx, .xls"
-        onChange={handleFileUpload}
-        style={{ display: 'none' }}
-      />
+      <h3>Import your data from your excel spreadsheets or CSV files by uploading them here. The data will show on a table below.</h3>
+      <p>Current accepted formats: .xlsl, .xlsx, .xlsm</p>
+
+      <Grid>
+        <Grid.Column textAlign="center">
+          <Button as="label" htmlFor="fileInput" primary icon="upload" content="Upload File" />
+          <input
+            id="fileInput"
+            type="file"
+            accept=".xlsx, .xls, .xlsm"
+            onChange={handleFileUpload}
+            style={{ display: 'none' }}
+          />
+        </Grid.Column>
+      </Grid>
 
       {tableData.length > 0 && (
         <div style={{ marginTop: '20px' }}>

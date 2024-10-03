@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Col, Container, Row } from 'react-bootstrap';
-import { AutoForm, ErrorsField, SubmitField, TextField, SelectField } from 'uniforms-bootstrap5';
+import { AutoForm, ErrorsField, SubmitField, TextField, SelectField, ListField, ListItemField } from 'uniforms-bootstrap5';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
@@ -26,6 +26,22 @@ const formSchema = new SimpleSchema({
     type: String,
     optional: true,
   },
+  members: {
+    type: Array,
+    optional: true,
+  },
+  'members.$': {
+    type: Object,
+  },
+  'members.$.username': {
+    type: String,
+    label: 'Invite User by Username',
+  },
+  'members.$.role': {
+    type: String,
+    allowedValues: ['admin', 'viewer'],
+    defaultValue: 'viewer',
+  },
 });
 
 const bridge = new SimpleSchema2Bridge(formSchema);
@@ -33,12 +49,22 @@ const bridge = new SimpleSchema2Bridge(formSchema);
 /* Renders the AddFinancialProfile page for adding a new financial profile. */
 const AddFinancialProfile = () => {
   const navigate = useNavigate();
+
   // On submit, insert the data.
   const submit = (data, formRef) => {
-    const { title, type, description, image } = data;
+    const { title, type, description, image, members = [] } = data;
     const owner = Meteor.user().username;
+    const ownerId = Meteor.userId(); // Get the owner's ID
+
+    // Automatically assign the profile creator as an admin
+    const fullMembers = [{ userId: ownerId, role: 'admin' }, ...members.map((member) => {
+      const user = Meteor.users.findOne({ username: member.username });
+      return { userId: user._id, role: member.role };
+    })];
+
     const collectionName = FinancialProfiles.getCollectionName();
-    const definitionData = { title, type, description, image, owner };
+    const definitionData = { title, type, description, image, owner, members: fullMembers };
+
     defineMethod.callPromise({ collectionName, definitionData })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => {

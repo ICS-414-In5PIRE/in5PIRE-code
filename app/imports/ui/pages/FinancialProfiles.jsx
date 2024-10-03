@@ -84,7 +84,7 @@ const FinancialProfilesPage = () => {
                   createdDate={profile.createdAt?.toLocaleDateString() || 'Not available'}
                   editedDate={profile.lastEditedAt?.toLocaleDateString() || 'Not available'}
                   onDelete={isOwner ? () => handleDeleteProfile(profile) : null}
-                  userRole={userRole} // Passing the role
+                  userRole={userRole}
                 />
               </Container>
             );

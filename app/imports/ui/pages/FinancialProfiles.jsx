@@ -16,7 +16,12 @@ const FinancialProfilesPage = () => {
   const { financialProfiles: profiles, loading: isLoading } = useTracker(() => {
     const handler = Meteor.subscribe('FinancialProfiles'); // Subscription
     const loading = !handler.ready();
-    const financialProfiles = FinancialProfiles.find({ owner: Meteor.user()?.username }).fetch(); // Fetching data
+    const financialProfiles = FinancialProfiles.find({
+      $or: [
+        { owner: Meteor.user()?.username }, // Owner
+        { 'members.userId': Meteor.userId() }, // Members
+      ],
+    }).fetch(); // Fetching data
     return { financialProfiles, loading };
   }, []);
 
@@ -65,19 +70,25 @@ const FinancialProfilesPage = () => {
       {/* Flexbox Container for Cards */}
       <Container className="d-flex justify-content-around flex-wrap py-3">
         {profiles.length > 0 ? (
-          profiles.map((profile) => (
-            <Container key={profile._id} className="flex-card py-3 d-flex" style={{ flex: '0 1 30%', margin: '10px' }}>
-              <FinancialProfileCard
-                title={profile.title}
-                imgSrc={profile.image || '/images/GraphPlaceholder.png'}
-                profileType={profile.type}
-                description={profile.description || 'No description available.'}
-                createdDate={profile.createdAt?.toLocaleDateString() || 'Not available'}
-                editedDate={profile.lastEditedAt?.toLocaleDateString() || 'Not available'}
-                onDelete={() => handleDeleteProfile(profile)}
-              />
-            </Container>
-          ))
+          profiles.map((profile) => {
+            const isOwner = profile.owner === Meteor.user()?.username;
+            const userRole = profile.members?.find(member => member.userId === Meteor.userId())?.role || (isOwner ? 'admin' : 'viewer');
+
+            return (
+              <Container key={profile._id} className="flex-card py-3 d-flex" style={{ flex: '0 1 30%', margin: '10px' }}>
+                <FinancialProfileCard
+                  title={profile.title}
+                  imgSrc={profile.image || '/images/GraphPlaceholder.png'}
+                  profileType={profile.type}
+                  description={profile.description || 'No description available.'}
+                  createdDate={profile.createdAt?.toLocaleDateString() || 'Not available'}
+                  editedDate={profile.lastEditedAt?.toLocaleDateString() || 'Not available'}
+                  onDelete={isOwner ? () => handleDeleteProfile(profile) : null}
+                  userRole={userRole} // Passing the role
+                />
+              </Container>
+            );
+          })
         ) : (
           <p>No financial profiles found.</p>
         )}

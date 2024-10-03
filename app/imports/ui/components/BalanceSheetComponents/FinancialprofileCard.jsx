@@ -11,6 +11,7 @@ const FinancialProfileCard = ({
   createdDate,
   editedDate,
   onDelete,
+  userRole,
 }) => (
   <Card id="Financial-Card" className="d-flex flex-column h-100">
     <CardHeader className="d-flex justify-content-center" id="browse-financial-card-name">
@@ -30,16 +31,23 @@ const FinancialProfileCard = ({
           <h2>Profile Type</h2>
           <p>{profileType}</p>
         </Row>
-        <Row className="px-4">
-          <h2>Edit Profile</h2>
-        </Row>
-        <Row className="px-4">
-          <h2>View Projections</h2>
-        </Row>
-        {/* Delete Button */}
-        <Row className="px-4 pt-4">
-          <Button variant="danger" onClick={onDelete}>Delete Profile</Button>
-        </Row>
+
+        {userRole === 'admin' && (
+          <>
+            <Row className="px-4">
+              <Button variant="primary">Edit Profile</Button>
+            </Row>
+            <Row className="px-4">
+              <Button variant="secondary">Invite Users</Button>
+            </Row>
+          </>
+        )}
+
+        {userRole !== 'viewer' && (
+          <Row className="px-4 pt-4">
+            <Button variant="danger" onClick={onDelete}>Delete Profile</Button>
+          </Row>
+        )}
       </Col>
     </Row>
     <Row className="px-4">
@@ -62,6 +70,7 @@ FinancialProfileCard.propTypes = {
   createdDate: PropTypes.string,
   editedDate: PropTypes.string,
   onDelete: PropTypes.func.isRequired,
+  userRole: PropTypes.string.isRequired,
 };
 
 // Default props for optional fields

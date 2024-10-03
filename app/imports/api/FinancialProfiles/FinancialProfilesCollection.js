@@ -40,6 +40,18 @@ class FinancialProfilesCollection extends BaseCollection {
         type: String,
         optional: true,
       },
+      members: {
+        type: Array,
+        optional: true,
+      },
+      'members.$': {
+        type: Object,
+      },
+      'members.$.userId': String,
+      'members.$.role': {
+        type: String,
+        allowedValues: ['admin', 'viewer'],
+      },
     }));
   }
 

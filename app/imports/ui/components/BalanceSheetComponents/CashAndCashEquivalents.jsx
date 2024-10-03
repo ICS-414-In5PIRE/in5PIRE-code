@@ -1,12 +1,11 @@
 import React from 'react';
-import { Form, Divider, Icon, Popup, Message } from 'semantic-ui-react';
+import { Form, Icon, Popup } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 /**
  * Component for Cash and Cash Equivalents form for Balance Input Sheet
  */
 const CashAndCashEquivalents = ({ formData, handleChange }) => (
-  <>
     <Form.Group widths="equal">
       {/* Petty Cash Input with Tooltip */}
       <Form.Input
@@ -23,7 +22,7 @@ const CashAndCashEquivalents = ({ formData, handleChange }) => (
           )
         }
         name="pettyCash"
-        value={formData.pettyCash}
+        value={formData.pettyCash ?? ''}
         onChange={handleChange}
         type="number"
       />
@@ -42,7 +41,7 @@ const CashAndCashEquivalents = ({ formData, handleChange }) => (
           )
         }
         name="cash"
-        value={formData.cash}
+        value={formData.cash ?? ''}
         onChange={handleChange}
         type="number"
       />
@@ -62,16 +61,17 @@ const CashAndCashEquivalents = ({ formData, handleChange }) => (
           )
         }
         name="cashInBanks"
-        value={formData.cashInBanks}
+        value={formData.cashInBanks ?? ''}
         onChange={handleChange}
         type="number"
       />
 
       {/* Read-only Total with Auto-Calculation */}
       <Form.Input
+        className="dotted-input"
         label="Total Cash and Cash Equivalents"
         name="totalCashAndCashEquivalents"
-        value={formData.totalCashAndCashEquivalents}
+        value={formData.totalCashAndCashEquivalents ?? ''}
         onChange={handleChange}
         type="number"
         readOnly
@@ -79,17 +79,6 @@ const CashAndCashEquivalents = ({ formData, handleChange }) => (
         placeholder="Auto-calculated"
       />
     </Form.Group>
-
-    {/* Warning Message for Missing or Negative Values */}
-    {(formData.cash < 0 || formData.pettyCash < 0 || formData.cashInBanks < 0) && (
-      <Message negative>
-        <Message.Header>Invalid input detected</Message.Header>
-        <p>All cash values should be positive. Please correct any negative inputs.</p>
-      </Message>
-    )}
-
-    <Divider />
-  </>
 );
 
 CashAndCashEquivalents.propTypes = {

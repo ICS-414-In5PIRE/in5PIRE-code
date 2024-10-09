@@ -156,7 +156,7 @@ class BalanceSheetInput extends React.Component {
 
   // Render the component
   render() {
-    const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions} = this.state;
+    const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions } = this.state;
     const username = Meteor.user()?.username;
     const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
 

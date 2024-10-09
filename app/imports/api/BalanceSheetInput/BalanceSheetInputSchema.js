@@ -1,6 +1,10 @@
 import SimpleSchema from 'simpl-schema';
 
 export const BalanceSheetInputSchema = new SimpleSchema({
+  profileId: {
+    type: String,
+    optional: false,
+  },
   year: {
     type: Number,
     optional: false,

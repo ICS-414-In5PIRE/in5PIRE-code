@@ -4,7 +4,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Container, Row, Card, CardHeader, Spinner } from 'react-bootstrap';
 import swal from 'sweetalert';
-import FinancialProfileCard from '../components/BalanceSheetComponents/FinancialprofileCard';
+import FinancialProfileCard from '../components/BalanceSheetComponents/FinancialProfileCard';
 import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection';
 import { PAGE_IDS } from '../utilities/PageIDs';
 
@@ -68,6 +68,7 @@ const FinancialProfilesPage = () => {
           profiles.map((profile) => (
             <Container key={profile._id} className="flex-card py-3 d-flex" style={{ flex: '0 1 30%', margin: '10px' }}>
               <FinancialProfileCard
+                profileId={profile._id} // Pass profileId to the card
                 title={profile.title}
                 imgSrc={profile.image || '/images/GraphPlaceholder.png'}
                 profileType={profile.type}

@@ -32,18 +32,18 @@ class BalanceSheetInputsCollection extends BaseCollection {
     llcNet, llcLand, llcAssetsNet, totalCapitalAssetsNet, restrictedCash, totalOtherAssets, deferredOutflowsPensions,
     deferredOutflowsOPEB, netAssetsDeferredOutflows, accountsPayable, dueToFund, dueToOtherFunds, totalLiabilities,
     deferredInflowsPensions, deferredInflowsOPEB, netLiabilitiesDeferredInflows, investedInCapitalAssets,
-    restrictedFederalFunds, unrestricted, totalNetPosition, totalLiabilitiesDeferredNetPosition, owner, year,
+    restrictedFederalFunds, unrestricted, totalNetPosition, totalLiabilitiesDeferredNetPosition, owner, year, profileId,
     accruedVacation, workersCompensation, accruedRetirementPlan, accruedLeaseGuaranty, capitalLeaseObligations,
     notesPayableBuildingA, netPensionLiability, netOPEBLiability, lineOfCreditBuildingA, lineOfCreditBuildingB,
     debtService, netLiabilities,
   }) {
     try {
-      const existingDocument = this._collection.findOne({ owner, year });
+      const existingDocument = this._collection.findOne({ owner, year, profileId });
 
       if (existingDocument) {
         return {
           status: 0,
-          errorMessage: 'A BalanceSheetInput already exists for this user and year.',
+          errorMessage: 'A BalanceSheetInput already exists for this user, year and profile.',
           docId: existingDocument._id,
         };
       }
@@ -60,7 +60,7 @@ class BalanceSheetInputsCollection extends BaseCollection {
         llcNet, llcLand, llcAssetsNet, totalCapitalAssetsNet, restrictedCash, totalOtherAssets, deferredOutflowsPensions,
         deferredOutflowsOPEB, netAssetsDeferredOutflows, accountsPayable, dueToFund, dueToOtherFunds, totalLiabilities,
         deferredInflowsPensions, deferredInflowsOPEB, netLiabilitiesDeferredInflows, investedInCapitalAssets,
-        restrictedFederalFunds, unrestricted, totalNetPosition, totalLiabilitiesDeferredNetPosition, owner, year,
+        restrictedFederalFunds, unrestricted, totalNetPosition, totalLiabilitiesDeferredNetPosition, owner, year, profileId,
         accruedVacation, workersCompensation, accruedRetirementPlan, accruedLeaseGuaranty, capitalLeaseObligations,
         notesPayableBuildingA, netPensionLiability, netOPEBLiability, lineOfCreditBuildingA, lineOfCreditBuildingB,
         debtService, netLiabilities,

@@ -1,7 +1,10 @@
 import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Segment, Container, Grid, Button, Menu, Dropdown } from 'semantic-ui-react';
 import { Tracker } from 'meteor/tracker';
 import { Meteor } from 'meteor/meteor';
+import PropTypes from 'prop-types';
+import { defineMethod } from '../../api/base/BaseCollection.methods';
 import OtherAssets from '../components/BalanceSheetComponents/OtherAssets';
 import CashAndCashEquivalents from '../components/BalanceSheetComponents/CashAndCashEquivalents';
 import Liabilities from '../components/BalanceSheetComponents/Liabilities';
@@ -9,7 +12,6 @@ import CommitmentsAndContingencies from '../components/BalanceSheetComponents/Co
 import { PAGE_IDS } from '../utilities/PageIDs';
 import Loader from '../components/Loader';
 import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputsCollection';
-import { defineMethod } from '../../api/base/BaseCollection.methods';
 import InputSheetMessage from '../components/InputSheetMessage';
 
 /**
@@ -36,29 +38,44 @@ class BalanceSheetInput extends React.Component {
       isLoading: true,
       selectedYear: 2024,
       record: {},
+      profileId: '',
     };
     this.tracker = null;
   }
 
   // Fires when the component mounts
   componentDidMount() {
-    this.tracker = Tracker.autorun(() => {
-      const { selectedYear } = this.state;
-      const subscription = BalanceSheetInputs.subscribeBalanceSheet();
-      const rdy = subscription.ready();
-      const username = Meteor.user()?.username;
-      const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
+    const { params } = this.props;
+    const { profileId } = params; // Get profileId from URL params
+    this.setState({ profileId }, () => {
+      this.tracker = Tracker.autorun(() => {
+        const { selectedYear } = this.state;
+        const { profileId: profileIdFromState } = this.state; // Avoid shadowing
+        const subscription = BalanceSheetInputs.subscribeBalanceSheet();
+        const rdy = subscription.ready();
+        const username = Meteor.user()?.username;
+        const balanceSheetData = BalanceSheetInputs.find({
+          owner: username,
+          year: selectedYear,
+          profileId: profileIdFromState, // Use profileId from state
+        }).fetch();
 
-      this.setState({ isLoading: !rdy, record: balanceSheetData[0] });
+        this.setState({ isLoading: !rdy, record: balanceSheetData[0] || {} });
+      });
     });
   }
 
   // Fires when the component updates
   componentDidUpdate(prevProps, prevState) {
     const { selectedYear } = this.state;
+    const { profileId: profileIdFromState } = this.state; // Avoid shadowing
     if (prevState.selectedYear !== selectedYear) {
       const username = Meteor.user()?.username;
-      const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
+      const balanceSheetData = BalanceSheetInputs.find({
+        owner: username,
+        year: selectedYear,
+        profileId: profileIdFromState, // Use profileId from state
+      }).fetch();
       this.setState({ record: balanceSheetData.length > 0 ? balanceSheetData[0] : {} });
     }
   }
@@ -73,10 +90,8 @@ class BalanceSheetInput extends React.Component {
   // Handle input changes
   handleChange = (e, { name, value }) => {
     const { record } = this.state;
-
     const updatedFormData = { ...record, [name]: value };
-    this.setState({ record: updatedFormData }, () => {
-    });
+    this.setState({ record: updatedFormData });
   };
 
   // Handles menu item change
@@ -86,20 +101,18 @@ class BalanceSheetInput extends React.Component {
 
   // Handle form submission
   handleSubmit = () => {
-    const { record, selectedYear } = this.state;
+    const { record, selectedYear, profileId } = this.state;
     const collectionName = BalanceSheetInputs.getCollectionName();
     const owner = Meteor.user()?.username;
-    const data = { ...record, owner: owner, year: selectedYear };
-    defineMethod.callPromise({ collectionName: collectionName, definitionData: data })
+    const data = { ...record, owner, year: selectedYear, profileId };
+    defineMethod.callPromise({ collectionName, definitionData: data })
       .then((response) => {
         const isError = response.status <= 0;
         const errorMessage = isError ? response.errorMessage : 'Record has been inserted successfully!';
         this.handleSnackBar(true, errorMessage, isError);
       })
-      .catch((error) => {
-        if (error) {
-          this.handleSnackBar(true, 'Something went wrong!', true);
-        }
+      .catch(() => {
+        this.handleSnackBar(true, 'Something went wrong!', true);
       });
   };
 
@@ -108,7 +121,7 @@ class BalanceSheetInput extends React.Component {
 
   // Handle snackbar
   handleSnackBar = (isOpen, message, isError) => {
-    this.setState({ snackBar: { isOpen: isOpen, message: message, isError: isError } });
+    this.setState({ snackBar: { isOpen, message, isError } });
   };
 
   // Render the component
@@ -116,9 +129,7 @@ class BalanceSheetInput extends React.Component {
     const { isLoading, activeItem, selectedYear, record, snackBar } = this.state;
 
     if (isLoading) {
-      return (
-        <Loader text="Loading balance sheet input..." />
-      );
+      return <Loader text="Loading balance sheet input..." />;
     }
 
     return (
@@ -192,4 +203,16 @@ class BalanceSheetInput extends React.Component {
   }
 }
 
-export default BalanceSheetInput;
+BalanceSheetInput.propTypes = {
+  params: PropTypes.shape({
+    profileId: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+const BalanceSheetInputWrapper = () => {
+  const params = useParams();
+  const navigate = useNavigate();
+  return <BalanceSheetInput params={params} navigate={navigate} />;
+};
+
+export default BalanceSheetInputWrapper;

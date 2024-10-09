@@ -11,14 +11,7 @@ import Loader from '../components/Loader';
 import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputsCollection';
 import { defineMethod, removeItMethod, updateMethod } from '../../api/base/BaseCollection.methods';
 import InputSheetMessage from '../components/InputSheetMessage';
-
-/**
- * yearOptions is an array of years for the dropdown menu.
- */
-const yearOptions = Array.from(new Array(50), (val, index) => {
-  const year = 2024 - index;
-  return { key: year, value: year, text: year };
-});
+import { generateYears } from '../utilities/ComboBox';
 
 /**
  * BalanceSheetInput class component for entering balance sheet data using Semantic UI React Form.
@@ -36,6 +29,7 @@ class BalanceSheetInput extends React.Component {
       isLoading: true,
       selectedYear: 2024,
       record: [],
+      dropdownOptions: {},
     };
     this.tracker = null;
   }
@@ -51,6 +45,11 @@ class BalanceSheetInput extends React.Component {
 
       this.setState({ isLoading: !rdy, record: balanceSheetData });
     });
+
+    const options = {};
+    const yearOptions = generateYears();
+    options.yearOptions = yearOptions;
+    this.setState({ dropdownOptions: options });
   }
 
   // Fires when the component updates
@@ -157,7 +156,7 @@ class BalanceSheetInput extends React.Component {
 
   // Render the component
   render() {
-    const { isLoading, activeItem, selectedYear, record, snackBar } = this.state;
+    const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions} = this.state;
     const username = Meteor.user()?.username;
     const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
 
@@ -178,7 +177,7 @@ class BalanceSheetInput extends React.Component {
                 <Dropdown
                   placeholder="Select Year"
                   selection
-                  options={yearOptions}
+                  options={dropdownOptions.yearOptions}
                   value={selectedYear}
                   onChange={this.handleYearChange}
                 />

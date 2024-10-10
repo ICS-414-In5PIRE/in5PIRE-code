@@ -48,7 +48,6 @@ Meteor.methods({
       throw new Meteor.Error('Profile not found');
     }
 
-    // Ensure the current user is the owner or an admin
     const currentUserId = Meteor.userId();
     const isOwnerOrAdmin = profile.owner === currentUserId ||
       profile.members.some(member => member.userId === currentUserId && member.role === 'admin');
@@ -57,10 +56,29 @@ Meteor.methods({
       throw new Meteor.Error('Not authorized');
     }
 
-    // Update the member's role
-    FinancialProfiles.update(
-      { _id: profileId, 'members.userId': userId },
-      { $set: { 'members.$.role': newRole } }
+    const memberIndex = profile.members.findIndex(member => member.userId === userId);
+    if (memberIndex === -1) {
+      throw new Meteor.Error('User not found in members');
+    }
+    const memberField = `members.${memberIndex}.role`;
+    const updateResult = FinancialProfiles._collection.update(
+      { _id: profileId },
+      { $set: { [memberField]: newRole } },
     );
+
+    if (updateResult === 0) {
+      throw new Meteor.Error('Update failed');
+    }
+
+    return 'Role updated successfully';
+  },
+
+  getProfile(profileId) {
+    check(profileId, String);
+    const profile = FinancialProfiles.findOne(profileId);
+    if (!profile) {
+      throw new Meteor.Error('Profile not found');
+    }
+    return profile;
   },
 });

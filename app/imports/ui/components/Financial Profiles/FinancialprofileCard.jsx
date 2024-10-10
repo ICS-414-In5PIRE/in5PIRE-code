@@ -2,10 +2,12 @@
 // import PropTypes from 'prop-types';
 // import { Card, CardHeader, Row, Col, Button } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
+import { useTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import { Card, CardHeader, Row, Col, Button, Form } from 'react-bootstrap';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
+import { FinancialProfiles } from '../../../api/FinancialProfiles/FinancialProfilesCollection';
 
 const FinancialProfileCard = ({
   title,
@@ -17,8 +19,11 @@ const FinancialProfileCard = ({
   onDelete,
   userRole,
   profileId,
-  members,
 }) => {
+  const { members } = useTracker(() => {
+    const profile = FinancialProfiles.findOne(profileId);
+    return { members: profile ? profile.members : [] };
+  });
 
   useEffect(() => {
     // Subscribe to userEmails to get access to users' emails
@@ -33,6 +38,7 @@ const FinancialProfileCard = ({
   const [inviteRole, setInviteRole] = useState('viewer');
   const [selectedMember, setSelectedMember] = useState(null);
   const [updatedRole, setUpdatedRole] = useState('viewer');
+  // const [members, setMembers] = useState(initialMembers);
 
   const toggleInviteForm = () => setShowInviteForm(!showInviteForm);
 
@@ -55,22 +61,46 @@ const FinancialProfileCard = ({
     });
   };
 
-  const handleMemberChange = (member) => {
+  const handleMemberChange = (e) => {
+    const selectedUserId = e.target.value;
+    const member = members.find(m => m.userId === selectedUserId);
+
+    if (!member) {
+      console.error('Selected member not found');
+      return;
+    }
+
     setSelectedMember(member);
     setUpdatedRole(member.role); // Set the current role as default in the dropdown
   };
 
   const handleRoleUpdate = () => {
-    if (selectedMember && updatedRole !== selectedMember.role) {
-      Meteor.call('updateUserRoleInProfile', { profileId, userId: selectedMember.userId, newRole: updatedRole }, (error) => {
-        if (error) {
-          swal('Error', error.message, 'error');
-        } else {
-          swal('Success', 'Role updated successfully', 'success');
-          setSelectedMember(null); // Clear the selection
-        }
-      });
+    if (!selectedMember) {
+      swal('Error', 'No member selected.', 'error');
+      return;
     }
+
+    // Check if the new role is the same as the current role
+    if (updatedRole === selectedMember.role) {
+      swal('Error', `The user is already assigned the role: ${updatedRole}.`, 'error');
+      return;
+    }
+
+    // Check if the selected member is the owner and prevent changing their role
+    if (selectedMember.userId === Meteor.userId() && selectedMember.role === 'admin') {
+      swal('Error', 'You are the owner of this profile and cannot change your own role. You are destined to be an admin forever.', 'error');
+      return;
+    }
+
+    // Proceed with the role update if the roles are different and the user is not the owner
+    Meteor.call('updateUserRoleInProfile', { profileId, userId: selectedMember.userId, newRole: updatedRole }, (error) => {
+      if (error) {
+        swal('Error', error.message, 'error');
+      } else {
+        swal('Success', 'Role updated successfully', 'success');
+        setSelectedMember(null); // Clear the selection
+      }
+    });
   };
 
   return (
@@ -139,71 +169,33 @@ const FinancialProfileCard = ({
             </>
           )}
 
-          {/* /!* List of members *!/ */}
-          {/* <Row className="px-4 pt-4"> */}
-          {/*  <h2>Members</h2> */}
-          {/*  {members && members.length > 0 ? ( */}
-          {/*    members.map((member) => { */}
-          {/*      // Fetch the user object based on userId */}
-          {/*      const user = Meteor.users.findOne({ _id: member.userId }); */}
-          {/*      // Get the user's email if available */}
-          {/*      const userEmail = user && user.emails && user.emails[0] ? user.emails[0].address : 'Unknown Email'; */}
-
-          {/*      return ( */}
-          {/*        <div key={member.userId}> */}
-          {/*          <p>{userEmail} - {member.role}</p> /!* Display email instead of userId *!/ */}
-          {/*        </div> */}
-          {/*      ); */}
-          {/*    }) */}
-          {/*  ) : ( */}
-          {/*    <p>No members found.</p> */}
-          {/*  )} */}
-          {/* </Row> */}
-
-          {/* /!* If admin, allow role change *!/ */}
-          {/* {userRole === 'admin' && selectedMember && ( */}
-          {/*  <Row className="px-4 pt-4"> */}
-          {/*    <h3>Change Role</h3> */}
-          {/*    <Form.Group controlId="formUpdateRole"> */}
-          {/*      <Form.Label>New Role for {selectedMember.userEmail}</Form.Label> */}
-          {/*      <Form.Control */}
-          {/*        as="select" */}
-          {/*        value={updatedRole} */}
-          {/*        onChange={(e) => setUpdatedRole(e.target.value)} */}
-          {/*      > */}
-          {/*        <option value="viewer">Viewer</option> */}
-          {/*        <option value="admin">Admin</option> */}
-          {/*      </Form.Control> */}
-          {/*    </Form.Group> */}
-          {/*    <Button variant="primary" className="mt-3" onClick={handleRoleUpdate}> */}
-          {/*      Update Role */}
-          {/*    </Button> */}
-          {/*  </Row> */}
-          {/* )} */}
           {/* List of members */}
           <Row className="px-4 pt-4">
             <h2>Members</h2>
             {members && members.length > 0 ? (
-              members.map((member) => {
-                const user = Meteor.users.findOne({ _id: member.userId });
-                const userEmail = user && user.emails && user.emails[0] ? user.emails[0].address : 'Unknown Email';
+              <Form.Group controlId="selectMember">
+                <Form.Label>Select a Member</Form.Label>
+                <Form.Control as="select" onChange={handleMemberChange}>
+                  <option value="">Select a member</option>
+                  {members.map((member) => {
+                    const user = Meteor.users.findOne({ _id: member.userId });
+                    const userEmail = user && user.emails && user.emails[0] ? user.emails[0].address : 'Unknown Email';
 
-                return (
-                  <div key={member.userId}>
-                    <p>{userEmail} - {member.role}</p>
-                    {userRole === 'admin' && (
-                      <Button onClick={() => handleMemberChange({ userId: member.userId, role: member.role, userEmail })}>
-                        Change Role
-                      </Button>
-                    )}
-                  </div>
-                );
-              })
+                    return (
+                      <option key={member.userId} value={member.userId}>
+                        {userEmail} - {member.role}
+                      </option>
+                    );
+                  })}
+                </Form.Control>
+              </Form.Group>
+
             ) : (
               <p>No members found.</p>
             )}
           </Row>
 
+          {/* If admin, allow role change */}
           {userRole === 'admin' && selectedMember && (
             <Row className="px-4 pt-4">
               <h3>Change Role</h3>
@@ -254,10 +246,10 @@ FinancialProfileCard.propTypes = {
   onDelete: PropTypes.func,
   userRole: PropTypes.string.isRequired,
   profileId: PropTypes.string.isRequired,
-  members: PropTypes.arrayOf(PropTypes.shape({
-    userId: PropTypes.string.isRequired,
-    role: PropTypes.string.isRequired,
-  })),
+  // members: PropTypes.arrayOf(PropTypes.shape({
+  //   userId: PropTypes.string.isRequired,
+  //   role: PropTypes.string.isRequired,
+  // })),
 };
 
 // Default props for optional fields
@@ -267,7 +259,7 @@ FinancialProfileCard.defaultProps = {
   createdDate: 'Not available',
   editedDate: 'Not available',
   onDelete: null,
-  members: [],
+  // members: [],
 };
 
 export default FinancialProfileCard;

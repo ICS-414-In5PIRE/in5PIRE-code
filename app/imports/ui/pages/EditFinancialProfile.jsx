@@ -8,9 +8,10 @@ import { Meteor } from 'meteor/meteor';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection';
-import { updateMethod } from '../../api/base/BaseCollection.methods';
+import { updateMethod, removeItMethod } from '../../api/base/BaseCollection.methods';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import MemberListDropdown from '../components/Financial Profiles/ListMembers';
+import InviteUsers from '../components/Financial Profiles/InviteUsers';
 
 const formSchema = new SimpleSchema({
   title: String,
@@ -81,6 +82,26 @@ const EditFinancialProfile = () => {
       });
   };
 
+  const handleDelete = () => {
+    swal({
+      title: 'Are you sure?',
+      text: 'This will delete the financial profile and cannot be undone!',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          removeItMethod.callPromise({ collectionName: FinancialProfiles.getCollectionName(), instance: profileId })
+            .then(() => {
+              swal('Profile deleted successfully', { icon: 'success' });
+              navigate('/financial-profiles');
+            })
+            .catch(error => swal('Error', error.message, 'error'));
+        }
+      });
+  };
+
   const handleMemberChange = (e) => {
     const selectedUserId = e.target.value;
     const member = members.find(m => m.userId === selectedUserId);
@@ -140,6 +161,9 @@ const EditFinancialProfile = () => {
             </AutoForm>
           )}
 
+          <InviteUsers profileId={profileId} />
+          {/*<MemberListDropdown members={members} />*/}
+
           {/* List of members */}
           <Row className="px-4 pt-4">
             <h2>Manage Members</h2>
@@ -184,6 +208,13 @@ const EditFinancialProfile = () => {
             ) : (
               <p>No members found.</p>
             )}
+          </Row>
+
+          {/* Delete the profile */}
+          <Row className="pt-4">
+            <Button variant="danger" onClick={handleDelete}>
+              Delete Financial Profile
+            </Button>
           </Row>
         </Col>
       </Row>

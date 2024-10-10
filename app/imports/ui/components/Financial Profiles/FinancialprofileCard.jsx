@@ -18,7 +18,7 @@ const FinancialProfileCard = ({
   description,
   createdDate,
   editedDate,
-  onDelete,
+  // onDelete,
   userRole,
   profileId,
 }) => {
@@ -218,11 +218,11 @@ const FinancialProfileCard = ({
             </Card>
           )}
 
-          {userRole !== 'viewer' && (
-            <Row className="px-4 pt-4">
-              <Button variant="danger" onClick={onDelete}>Delete Profile</Button>
-            </Row>
-          )}
+          {/* {userRole !== 'viewer' && ( */}
+          {/*  <Row className="px-4 pt-4"> */}
+          {/*    <Button variant="danger" onClick={onDelete}>Delete Profile</Button> */}
+          {/*  </Row> */}
+          {/* )} */}
         </Col>
       </Row>
       <Row className="px-4">
@@ -245,7 +245,7 @@ FinancialProfileCard.propTypes = {
   description: PropTypes.string,
   createdDate: PropTypes.string,
   editedDate: PropTypes.string,
-  onDelete: PropTypes.func,
+  // onDelete: PropTypes.func,
   userRole: PropTypes.string.isRequired,
   profileId: PropTypes.string.isRequired,
   // members: PropTypes.arrayOf(PropTypes.shape({
@@ -260,7 +260,7 @@ FinancialProfileCard.defaultProps = {
   description: 'No description available.',
   createdDate: 'Not available',
   editedDate: 'Not available',
-  onDelete: null,
+  // onDelete: null,
   // members: [],
 };
 

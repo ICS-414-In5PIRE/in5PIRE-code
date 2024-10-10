@@ -56,7 +56,7 @@ NetAssets.propTypes = {
     restrictedFederalFunds: PropTypes.number,
     unrestricted: PropTypes.number,
     totalNetAssets: PropTypes.number,
-    totalLiabilitiesAndNetAssets: PropTypes.number,
+    totalLiabilitiesNetAssets: PropTypes.number,
   }),
   handleChange: PropTypes.func,
 };

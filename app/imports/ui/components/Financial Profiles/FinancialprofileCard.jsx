@@ -31,6 +31,8 @@ const FinancialProfileCard = ({
   const [showInviteForm, setShowInviteForm] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState('viewer');
+  const [selectedMember, setSelectedMember] = useState(null);
+  const [updatedRole, setUpdatedRole] = useState('viewer');
 
   const toggleInviteForm = () => setShowInviteForm(!showInviteForm);
 
@@ -51,6 +53,24 @@ const FinancialProfileCard = ({
         setShowInviteForm(false); // Hide form
       }
     });
+  };
+
+  const handleMemberChange = (member) => {
+    setSelectedMember(member);
+    setUpdatedRole(member.role); // Set the current role as default in the dropdown
+  };
+
+  const handleRoleUpdate = () => {
+    if (selectedMember && updatedRole !== selectedMember.role) {
+      Meteor.call('updateUserRoleInProfile', { profileId, userId: selectedMember.userId, newRole: updatedRole }, (error) => {
+        if (error) {
+          swal('Error', error.message, 'error');
+        } else {
+          swal('Success', 'Role updated successfully', 'success');
+          setSelectedMember(null); // Clear the selection
+        }
+      });
+    }
   };
 
   return (
@@ -114,23 +134,68 @@ const FinancialProfileCard = ({
                     </Button>
                   </Form>
                 </Row>
+
               )}
             </>
           )}
 
+          {/* /!* List of members *!/ */}
+          {/* <Row className="px-4 pt-4"> */}
+          {/*  <h2>Members</h2> */}
+          {/*  {members && members.length > 0 ? ( */}
+          {/*    members.map((member) => { */}
+          {/*      // Fetch the user object based on userId */}
+          {/*      const user = Meteor.users.findOne({ _id: member.userId }); */}
+          {/*      // Get the user's email if available */}
+          {/*      const userEmail = user && user.emails && user.emails[0] ? user.emails[0].address : 'Unknown Email'; */}
+
+          {/*      return ( */}
+          {/*        <div key={member.userId}> */}
+          {/*          <p>{userEmail} - {member.role}</p> /!* Display email instead of userId *!/ */}
+          {/*        </div> */}
+          {/*      ); */}
+          {/*    }) */}
+          {/*  ) : ( */}
+          {/*    <p>No members found.</p> */}
+          {/*  )} */}
+          {/* </Row> */}
+
+          {/* /!* If admin, allow role change *!/ */}
+          {/* {userRole === 'admin' && selectedMember && ( */}
+          {/*  <Row className="px-4 pt-4"> */}
+          {/*    <h3>Change Role</h3> */}
+          {/*    <Form.Group controlId="formUpdateRole"> */}
+          {/*      <Form.Label>New Role for {selectedMember.userEmail}</Form.Label> */}
+          {/*      <Form.Control */}
+          {/*        as="select" */}
+          {/*        value={updatedRole} */}
+          {/*        onChange={(e) => setUpdatedRole(e.target.value)} */}
+          {/*      > */}
+          {/*        <option value="viewer">Viewer</option> */}
+          {/*        <option value="admin">Admin</option> */}
+          {/*      </Form.Control> */}
+          {/*    </Form.Group> */}
+          {/*    <Button variant="primary" className="mt-3" onClick={handleRoleUpdate}> */}
+          {/*      Update Role */}
+          {/*    </Button> */}
+          {/*  </Row> */}
+          {/* )} */}
           {/* List of members */}
           <Row className="px-4 pt-4">
             <h2>Members</h2>
             {members && members.length > 0 ? (
               members.map((member) => {
-                // Fetch the user object based on userId
                 const user = Meteor.users.findOne({ _id: member.userId });
-                // Get the user's email if available
                 const userEmail = user && user.emails && user.emails[0] ? user.emails[0].address : 'Unknown Email';
 
                 return (
                   <div key={member.userId}>
-                    <p>{userEmail} - {member.role}</p> {/* Display email instead of userId */}
+                    <p>{userEmail} - {member.role}</p>
+                    {userRole === 'admin' && (
+                      <Button onClick={() => handleMemberChange({ userId: member.userId, role: member.role, userEmail })}>
+                        Change Role
+                      </Button>
+                    )}
                   </div>
                 );
               })
@@ -138,6 +203,26 @@ const FinancialProfileCard = ({
               <p>No members found.</p>
             )}
           </Row>
+
+          {userRole === 'admin' && selectedMember && (
+            <Row className="px-4 pt-4">
+              <h3>Change Role</h3>
+              <Form.Group controlId="formUpdateRole">
+                <Form.Label>New Role for {selectedMember.userEmail}</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={updatedRole}
+                  onChange={(e) => setUpdatedRole(e.target.value)}
+                >
+                  <option value="viewer">Viewer</option>
+                  <option value="admin">Admin</option>
+                </Form.Control>
+              </Form.Group>
+              <Button variant="primary" className="mt-3" onClick={handleRoleUpdate}>
+                Update Role
+              </Button>
+            </Row>
+          )}
 
           {userRole !== 'viewer' && (
             <Row className="px-4 pt-4">

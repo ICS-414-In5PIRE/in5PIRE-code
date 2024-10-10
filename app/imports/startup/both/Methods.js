@@ -37,4 +37,30 @@ Meteor.methods({
     // Call your server-side function
     FinancialProfiles.inviteUserByEmail(profileId, email, role);
   },
+
+  updateUserRoleInProfile({ profileId, userId, newRole }) {
+    check(profileId, String);
+    check(userId, String);
+    check(newRole, String);
+
+    const profile = FinancialProfiles.findOne(profileId);
+    if (!profile) {
+      throw new Meteor.Error('Profile not found');
+    }
+
+    // Ensure the current user is the owner or an admin
+    const currentUserId = Meteor.userId();
+    const isOwnerOrAdmin = profile.owner === currentUserId ||
+      profile.members.some(member => member.userId === currentUserId && member.role === 'admin');
+
+    if (!isOwnerOrAdmin) {
+      throw new Meteor.Error('Not authorized');
+    }
+
+    // Update the member's role
+    FinancialProfiles.update(
+      { _id: profileId, 'members.userId': userId },
+      { $set: { 'members.$.role': newRole } }
+    );
+  },
 });

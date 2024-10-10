@@ -121,7 +121,7 @@ const EditFinancialProfile = () => {
       return;
     }
 
-    // Check if the selected member is the owner and prevent changing their role
+    // Check if the selected member is the owner and prevent changing their role. They must delete the profile
     if (selectedMember.userId === Meteor.userId() && selectedMember.role === 'admin') {
       swal('Error', 'You are the owner of this profile and cannot change your own role. You are destined to be an admin forever.', 'error');
       return;
@@ -141,15 +141,14 @@ const EditFinancialProfile = () => {
               swal('Error', error.message, 'error');
             } else {
               swal('Success', 'Member removed successfully', 'success');
-              setSelectedMember(null); // Clear the selection
+              setSelectedMember(null);
             }
           });
         }
       });
-      return; // Exit the function here since we are removing the member
+      return;
     }
 
-    // Proceed with the role update if the roles are different and the user is not the owner
     Meteor.call('updateUserRoleInProfile', { profileId, userId: selectedMember.userId, newRole: updatedRole }, (error) => {
       if (error) {
         swal('Error', error.message, 'error');

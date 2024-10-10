@@ -263,26 +263,29 @@ const FinancialProfileCard = ({
 
       {userRole !== 'admin' && (
         <Row className="px-4 pt-4">
-          <Button variant="danger" onClick={() => {
-            swal({
-              title: "Are you sure?",
-              text: "You will be removed from this profile!",
-              icon: "warning",
-              buttons: true,
-              dangerMode: true,
-            }).then((willDelete) => {
-              if (willDelete) {
-                Meteor.call('FinancialProfiles.removeMember', profileId, Meteor.userId(), (error) => {
-                  if (error) {
-                    swal('Error', error.message, 'error');
-                  } else {
-                    swal('Success', 'You have been removed from the profile', 'success');
-                    navigate('/financial-profiles');
-                  }
-                });
-              }
-            });
-          }}>
+          <Button
+            variant="danger"
+            onClick={() => {
+              swal({
+                title: 'Are you sure?',
+                text: 'You will be removed from this profile!',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+              }).then((willDelete) => {
+                if (willDelete) {
+                  Meteor.call('FinancialProfiles.removeMember', profileId, Meteor.userId(), (error) => {
+                    if (error) {
+                      swal('Error', error.message, 'error');
+                    } else {
+                      swal('Success', 'You have been removed from the profile', 'success');
+                      navigate('/financial-profiles');
+                    }
+                  });
+                }
+              });
+            }}
+          >
             Leave Profile
           </Button>
         </Row>

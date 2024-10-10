@@ -32,4 +32,9 @@ Meteor.methods({
     // Remove the profile from the collection
     FinancialProfiles._collection.remove(profileId);
   },
+
+  inviteUserToProfileByEmail({ profileId, email, role }) {
+    // Call your server-side function
+    FinancialProfiles.inviteUserByEmail(profileId, email, role);
+  },
 });

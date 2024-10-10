@@ -72,6 +72,12 @@ class FinancialProfilesCollection extends BaseCollection {
       description,
       image,
       createdAt: new Date(),
+      members: [
+        {
+          userId: owner, // Add the owner to the members list
+          role: 'admin',
+        },
+      ],
     });
     return docID;
   }
@@ -108,6 +114,53 @@ class FinancialProfilesCollection extends BaseCollection {
   }
 
   /**
+   * Method to invite a user to a financial profile by email and assign a role.
+   * @param {String} profileId - The ID of the financial profile.
+   * @param {String} email - The email of the user to invite.
+   * @param {String} role - The role to assign (admin/viewer).
+   */
+  inviteUserByEmail(profileId, email, role) {
+    // Find the profile document by its ID
+    const profile = this.findDoc(profileId);
+    if (!profile) {
+      throw new Meteor.Error('Profile not found');
+    }
+
+    // Ensure the current user is the owner or an admin
+    const currentUserId = Meteor.userId();
+    const isOwnerOrAdmin = profile.owner === currentUserId ||
+      profile.members.some(member => member.userId === currentUserId && member.role === 'admin');
+
+    if (!isOwnerOrAdmin) {
+      throw new Meteor.Error('Not authorized');
+    }
+
+    // Find the user by email using Meteor.users collection
+    const userToInvite = Meteor.users.findOne({ 'emails.address': email });
+    if (!userToInvite) {
+      throw new Meteor.Error('User not found');
+    }
+
+    const userId = userToInvite._id; // Get the user ID from the found user
+
+    // Check if the user is already a member of the profile
+    const isAlreadyMember = profile.members.some(member => member.userId === userId);
+    if (isAlreadyMember) {
+      throw new Meteor.Error('User is already a member of this profile');
+    }
+
+    // Add the user to the profile with the given role
+    this._collection.update(profileId, {
+      $push: {
+        members: {
+          userId,
+          role,
+        },
+      },
+    });
+  }
+
+  /**
    * Removes a profile from the collection.
    * @param { String | Object } profile A profile document or docID in this collection.
    * @returns true
@@ -127,11 +180,23 @@ class FinancialProfilesCollection extends BaseCollection {
     if (Meteor.isServer) {
       const instance = this;
 
-      // Publishes profiles associated with the logged-in user
+      // // Publishes profiles associated with the logged-in user
+      // Meteor.publish(financialProfilesPublications.profiles, function publish() {
+      //   if (this.userId) {
+      //     const username = Meteor.users.findOne(this.userId).username;
+      //     return instance._collection.find({ owner: username });
+      //   }
+      //   return this.ready();
+      // });
       Meteor.publish(financialProfilesPublications.profiles, function publish() {
         if (this.userId) {
           const username = Meteor.users.findOne(this.userId).username;
-          return instance._collection.find({ owner: username });
+          return instance._collection.find({
+            $or: [
+              { owner: username },
+              { 'members.userId': this.userId },
+            ],
+          });
         }
         return this.ready();
       });

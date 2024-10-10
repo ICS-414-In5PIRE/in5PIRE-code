@@ -1,10 +1,10 @@
 import React from 'react';
 import { Tab } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 import CashAndCashEquivalents from './CashAndCashEquivalentsFS';
 import OtherAssets from './OtherAssetsFS';
 import Liabilities from './LiabilitiesFS';
 import NetAssets from './NetAssets';
-import PropTypes from 'prop-types';
 
 const NetPosition = ({ formData, handleChange }) => {
   const panes = [
@@ -46,9 +46,14 @@ const NetPosition = ({ formData, handleChange }) => {
   );
 };
 
+NetPosition.propTypes = {
+  formData: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  handleChange: PropTypes.func,
+};
+
 NetPosition.defaultProps = {
   formData: [],
-  handleChange: PropTypes.func,
+  handleChange: () => {},
 };
 
 export default NetPosition;

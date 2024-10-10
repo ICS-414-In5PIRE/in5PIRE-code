@@ -46,6 +46,11 @@ const Revenues = ({ formData, handleChange }) => {
   );
 };
 
+Revenues.propTypes = {
+  formData: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  handleChange: PropTypes.func,
+};
+
 Revenues.defaultProps = {
   formData: [],
   handleChange: PropTypes.func,

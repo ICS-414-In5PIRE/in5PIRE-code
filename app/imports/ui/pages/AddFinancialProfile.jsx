@@ -50,33 +50,6 @@ const bridge = new SimpleSchema2Bridge(formSchema);
 const AddFinancialProfile = () => {
   const navigate = useNavigate();
 
-  // On submit, insert the data.
-  // const submit = (data, formRef) => {
-  //   const { title, type, description, image, members = [] } = data;
-  //   const owner = Meteor.user().username;
-  //   const ownerId = Meteor.userId(); // Get the owner's ID
-  //   console.log('Current User:', owner, 'Owner ID:', ownerId);
-  //
-  //   // Automatically assign the profile creator as an admin
-  //   const fullMembers = [{ userId: ownerId, role: 'admin' }, ...members.map((member) => {
-  //     const user = Meteor.users.findOne({ username: member.username });
-  //     return { userId: user._id, role: member.role };
-  //   })];
-  //   console.log('Members:', fullMembers); // Log the members array
-  //
-  //   const collectionName = FinancialProfiles.getCollectionName();
-  //   const definitionData = { title, type, description, image, owner, members: fullMembers };
-  //
-  //   defineMethod.callPromise({ collectionName, definitionData })
-  //     .catch(error => swal('Error', error.message, 'error'))
-  //     .then(() => {
-  //       swal('Success', 'Financial profile added successfully', 'success');
-  //       formRef.reset();
-  //       navigate('/financial-profiles');
-  //     });
-  //
-  // };
-
   const submit = (data, formRef) => {
     const { title, type, description, image, members = [] } = data;
     const ownerId = Meteor.userId();

@@ -6,6 +6,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import { Card, CardHeader, Row, Col, Button, Form } from 'react-bootstrap';
 import swal from 'sweetalert';
+import { useNavigate } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { FinancialProfiles } from '../../../api/FinancialProfiles/FinancialProfilesCollection';
 
@@ -20,10 +21,15 @@ const FinancialProfileCard = ({
   userRole,
   profileId,
 }) => {
+  const navigate = useNavigate();
   const { members } = useTracker(() => {
     const profile = FinancialProfiles.findOne(profileId);
     return { members: profile ? profile.members : [] };
   });
+
+  const handleEditProfile = () => {
+    navigate(`/edit-financial-profile/${profileId}`);
+  };
 
   useEffect(() => {
     // Subscribe to userEmails to get access to users' emails
@@ -126,7 +132,8 @@ const FinancialProfileCard = ({
           {userRole === 'admin' && (
             <>
               <Row className="px-4">
-                <Button variant="primary">Edit Profile</Button>
+                {/* Navigate to the edit profile page */}
+                <Button variant="primary" onClick={handleEditProfile}>Edit Profile</Button>
               </Row>
               <Row className="px-4">
                 <Button variant="secondary" onClick={toggleInviteForm}>

@@ -22,4 +22,5 @@ export const PAGE_IDS = {
   UPLOAD_FILE: 'upload-file',
   FAQ: 'faq',
   AUDITED_FS: 'audited-fs',
+  EDIT_FINANCIAL_PROFILE: 'edit-financial-profile',
 };

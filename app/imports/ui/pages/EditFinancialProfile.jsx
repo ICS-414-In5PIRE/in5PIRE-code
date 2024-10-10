@@ -115,22 +115,47 @@ const EditFinancialProfile = () => {
       return;
     }
 
+    // Check if the new role is the same as the current role
     if (updatedRole === selectedMember.role) {
       swal('Error', `The user is already assigned the role: ${updatedRole}.`, 'error');
       return;
     }
 
+    // Check if the selected member is the owner and prevent changing their role
     if (selectedMember.userId === Meteor.userId() && selectedMember.role === 'admin') {
-      swal('Error', 'You are the owner of this profile and cannot change your own role.', 'error');
+      swal('Error', 'You are the owner of this profile and cannot change your own role. You are destined to be an admin forever.', 'error');
       return;
     }
 
+    // If the updated role is "remove", call the updateMethod to remove the member
+    if (updatedRole === 'remove') {
+      swal({
+        title: `Remove ${selectedMember.userEmail} from this profile?`,
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          Meteor.call('FinancialProfiles.removeMember', profileId, selectedMember.userId, (error) => {
+            if (error) {
+              swal('Error', error.message, 'error');
+            } else {
+              swal('Success', 'Member removed successfully', 'success');
+              setSelectedMember(null); // Clear the selection
+            }
+          });
+        }
+      });
+      return; // Exit the function here since we are removing the member
+    }
+
+    // Proceed with the role update if the roles are different and the user is not the owner
     Meteor.call('updateUserRoleInProfile', { profileId, userId: selectedMember.userId, newRole: updatedRole }, (error) => {
       if (error) {
         swal('Error', error.message, 'error');
       } else {
         swal('Success', 'Role updated successfully', 'success');
-        setSelectedMember(null);
+        setSelectedMember(null); // Clear the selection
       }
     });
   };
@@ -162,7 +187,7 @@ const EditFinancialProfile = () => {
           )}
 
           <InviteUsers profileId={profileId} />
-          {/*<MemberListDropdown members={members} />*/}
+          {/* <MemberListDropdown members={members} /> */}
 
           {/* List of members */}
           <Row className="px-4 pt-4">
@@ -198,6 +223,7 @@ const EditFinancialProfile = () => {
                     >
                       <option value="viewer">Viewer</option>
                       <option value="admin">Admin</option>
+                      <option value="remove">Remove Member</option>
                     </Form.Control>
                     <Button variant="primary" className="mt-3" onClick={handleRoleUpdate}>
                       Update Role

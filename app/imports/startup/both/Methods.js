@@ -81,4 +81,13 @@ Meteor.methods({
     }
     return profile;
   },
+
+  'FinancialProfiles.removeMember'(profileId, userId) {
+    check(profileId, String);
+    check(userId, String);
+    if (!this.userId) {
+      throw new Meteor.Error('Not authorized');
+    }
+    FinancialProfiles.removeMember(profileId, userId);
+  },
 });

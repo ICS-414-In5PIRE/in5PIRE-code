@@ -32,4 +32,53 @@ Meteor.methods({
     // Remove the profile from the collection
     FinancialProfiles._collection.remove(profileId);
   },
+
+  inviteUserToProfileByEmail({ profileId, email, role }) {
+    // Call your server-side function
+    FinancialProfiles.inviteUserByEmail(profileId, email, role);
+  },
+
+  updateUserRoleInProfile({ profileId, userId, newRole }) {
+    check(profileId, String);
+    check(userId, String);
+    check(newRole, String);
+
+    const profile = FinancialProfiles.findOne(profileId);
+    if (!profile) {
+      throw new Meteor.Error('Profile not found');
+    }
+
+    const currentUserId = Meteor.userId();
+    const isOwnerOrAdmin = profile.owner === currentUserId ||
+      profile.members.some(member => member.userId === currentUserId && member.role === 'admin');
+
+    if (!isOwnerOrAdmin) {
+      throw new Meteor.Error('Not authorized');
+    }
+
+    const memberIndex = profile.members.findIndex(member => member.userId === userId);
+    if (memberIndex === -1) {
+      throw new Meteor.Error('User not found in members');
+    }
+    const memberField = `members.${memberIndex}.role`;
+    const updateResult = FinancialProfiles._collection.update(
+      { _id: profileId },
+      { $set: { [memberField]: newRole } },
+    );
+
+    if (updateResult === 0) {
+      throw new Meteor.Error('Update failed');
+    }
+
+    return 'Role updated successfully';
+  },
+
+  getProfile(profileId) {
+    check(profileId, String);
+    const profile = FinancialProfiles.findOne(profileId);
+    if (!profile) {
+      throw new Meteor.Error('Profile not found');
+    }
+    return profile;
+  },
 });

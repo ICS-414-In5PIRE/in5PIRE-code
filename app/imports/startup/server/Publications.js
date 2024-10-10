@@ -25,6 +25,14 @@ Meteor.publish('staticFinancials', function publishStaticFinancials() {
   return this.ready();
 });
 
+// publish emails
+Meteor.publish('userEmails', function publishUserEmails() {
+  if (this.userId) {
+    return Meteor.users.find({}, { fields: { emails: 1 } }); // Publish only emails field
+  }
+  return this.ready();
+});
+
 // Publish StaticFinancials for admin users
 Meteor.publish('staticFinancialsAdmin', function publishStaticFinancialsAdmin() {
   if (this.userId && Roles.userIsInRole(this.userId, 'ADMIN')) {

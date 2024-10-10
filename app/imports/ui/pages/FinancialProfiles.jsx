@@ -11,6 +11,9 @@ import { PAGE_IDS } from '../utilities/PageIDs';
 // FinancialProfiles page
 const FinancialProfilesPage = () => {
   const navigate = useNavigate();
+  useTracker(() => {
+    Meteor.subscribe('userEmails');
+  }, []);
 
   // Subscribe to the financial profiles and fetch the current user's profiles
   const { financialProfiles: profiles, loading: isLoading } = useTracker(() => {
@@ -86,6 +89,7 @@ const FinancialProfilesPage = () => {
                   onDelete={isOwner ? () => handleDeleteProfile(profile) : null}
                   userRole={userRole}
                   profileId={profile._id}
+                  members={profile.members}
                 />
               </Container>
             );

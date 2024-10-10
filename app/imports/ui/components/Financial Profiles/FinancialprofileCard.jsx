@@ -1,7 +1,7 @@
 // import React from 'react';
 // import PropTypes from 'prop-types';
 // import { Card, CardHeader, Row, Col, Button } from 'react-bootstrap';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardHeader, Row, Col, Button, Form } from 'react-bootstrap';
 import swal from 'sweetalert';
@@ -17,7 +17,17 @@ const FinancialProfileCard = ({
   onDelete,
   userRole,
   profileId,
+  members,
 }) => {
+
+  useEffect(() => {
+    // Subscribe to userEmails to get access to users' emails
+    const userEmailSubscription = Meteor.subscribe('userEmails');
+    return () => {
+      userEmailSubscription.stop(); // Clean up on unmount
+    };
+  }, []);
+
   const [showInviteForm, setShowInviteForm] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState('viewer');
@@ -108,6 +118,27 @@ const FinancialProfileCard = ({
             </>
           )}
 
+          {/* List of members */}
+          <Row className="px-4 pt-4">
+            <h2>Members</h2>
+            {members && members.length > 0 ? (
+              members.map((member) => {
+                // Fetch the user object based on userId
+                const user = Meteor.users.findOne({ _id: member.userId });
+                // Get the user's email if available
+                const userEmail = user && user.emails && user.emails[0] ? user.emails[0].address : 'Unknown Email';
+
+                return (
+                  <div key={member.userId}>
+                    <p>{userEmail} - {member.role}</p> {/* Display email instead of userId */}
+                  </div>
+                );
+              })
+            ) : (
+              <p>No members found.</p>
+            )}
+          </Row>
+
           {userRole !== 'viewer' && (
             <Row className="px-4 pt-4">
               <Button variant="danger" onClick={onDelete}>Delete Profile</Button>
@@ -138,6 +169,10 @@ FinancialProfileCard.propTypes = {
   onDelete: PropTypes.func,
   userRole: PropTypes.string.isRequired,
   profileId: PropTypes.string.isRequired,
+  members: PropTypes.arrayOf(PropTypes.shape({
+    userId: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired,
+  })),
 };
 
 // Default props for optional fields
@@ -147,6 +182,7 @@ FinancialProfileCard.defaultProps = {
   createdDate: 'Not available',
   editedDate: 'Not available',
   onDelete: null,
+  members: [],
 };
 
 export default FinancialProfileCard;

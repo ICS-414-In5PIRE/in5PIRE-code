@@ -1,11 +1,10 @@
 import React from 'react';
 import { Tab } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 import ProgramRevenues from './ProgramRevenues';
 import GeneralRevenues from './GeneralRevenues';
 import Expenditures from './Expenditures';
 import FundBalances from './FundBalances';
-import PropTypes from 'prop-types';
-import NetPosition from './NetPosition';
 
 const Revenues = ({ formData, handleChange }) => {
   const panes = [

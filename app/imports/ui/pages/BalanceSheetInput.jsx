@@ -9,16 +9,9 @@ import CommitmentsAndContingencies from '../components/BalanceSheetComponents/Co
 import { PAGE_IDS } from '../utilities/PageIDs';
 import Loader from '../components/Loader';
 import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputsCollection';
-import { defineMethod } from '../../api/base/BaseCollection.methods';
+import { defineMethod, removeItMethod, updateMethod } from '../../api/base/BaseCollection.methods';
 import InputSheetMessage from '../components/InputSheetMessage';
-
-/**
- * yearOptions is an array of years for the dropdown menu.
- */
-const yearOptions = Array.from(new Array(50), (val, index) => {
-  const year = 2024 - index;
-  return { key: year, value: year, text: year };
-});
+import { generateYears } from '../utilities/ComboBox';
 
 /**
  * BalanceSheetInput class component for entering balance sheet data using Semantic UI React Form.
@@ -35,7 +28,8 @@ class BalanceSheetInput extends React.Component {
       activeItem: 'Cash And Equivalents',
       isLoading: true,
       selectedYear: 2024,
-      record: {},
+      record: [],
+      dropdownOptions: {},
     };
     this.tracker = null;
   }
@@ -49,8 +43,13 @@ class BalanceSheetInput extends React.Component {
       const username = Meteor.user()?.username;
       const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
 
-      this.setState({ isLoading: !rdy, record: balanceSheetData[0] });
+      this.setState({ isLoading: !rdy, record: balanceSheetData });
     });
+
+    const options = {};
+    const yearOptions = generateYears();
+    options.yearOptions = yearOptions;
+    this.setState({ dropdownOptions: options });
   }
 
   // Fires when the component updates
@@ -59,7 +58,8 @@ class BalanceSheetInput extends React.Component {
     if (prevState.selectedYear !== selectedYear) {
       const username = Meteor.user()?.username;
       const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
-      this.setState({ record: balanceSheetData.length > 0 ? balanceSheetData[0] : {} });
+      this.setState({ record: balanceSheetData.length > 0 ? balanceSheetData : [] });
+      this.handleSnackBar(false, '', false);
     }
   }
 
@@ -73,8 +73,11 @@ class BalanceSheetInput extends React.Component {
   // Handle input changes
   handleChange = (e, { name, value }) => {
     const { record } = this.state;
-
-    const updatedFormData = { ...record, [name]: value };
+    const updatedFormData = JSON.parse(JSON.stringify(record));
+    if (updatedFormData.length === 0) {
+      updatedFormData.push({});
+    }
+    updatedFormData[0][name] = value;
     this.setState({ record: updatedFormData }, () => {
     });
   };
@@ -88,13 +91,53 @@ class BalanceSheetInput extends React.Component {
   handleSubmit = () => {
     const { record, selectedYear } = this.state;
     const collectionName = BalanceSheetInputs.getCollectionName();
+    const data = JSON.parse(JSON.stringify(record));
+    if (data.length === 0) {
+      data.push({});
+    }
     const owner = Meteor.user()?.username;
-    const data = { ...record, owner: owner, year: selectedYear };
-    defineMethod.callPromise({ collectionName: collectionName, definitionData: data })
-      .then((response) => {
-        const isError = response.status <= 0;
-        const errorMessage = isError ? response.errorMessage : 'Record has been inserted successfully!';
-        this.handleSnackBar(true, errorMessage, isError);
+    const balanceSheetData = BalanceSheetInputs.find({ owner: owner, year: selectedYear }).fetch();
+    if (balanceSheetData.length === 0) {
+      data[0].year = selectedYear;
+      data[0].owner = owner;
+      defineMethod.callPromise({ collectionName: collectionName, definitionData: data[0] })
+        .then((response) => {
+          const isError = response.status <= 0;
+          const errorMessage = isError ? response.errorMessage : 'Record has been inserted successfully!';
+          this.handleSnackBar(true, errorMessage, isError);
+        })
+        .catch((error) => {
+          if (error) {
+            this.handleSnackBar(true, 'Something went wrong!', true);
+          }
+        });
+    } else {
+      data[0].id = record[0]._id;
+      updateMethod.callPromise({ collectionName, updateData: data[0] })
+        .then(() => {
+          this.handleSnackBar(true, 'Item updated successfully', false);
+        })
+        .catch((error) => {
+          if (error) {
+            this.handleSnackBar(true, 'Something went wrong!', true);
+          }
+        });
+    }
+  };
+
+  // Handles delete
+  handleDelete = () => {
+    const { selectedYear } = this.state;
+    const collectionName = BalanceSheetInputs.getCollectionName();
+    const owner = Meteor.user()?.username;
+
+    const balanceSheetData = BalanceSheetInputs.find({ owner: owner, year: selectedYear }).fetch();
+    const recordId = balanceSheetData[0]._id;
+
+    removeItMethod.callPromise({ collectionName, instance: recordId })
+      .then(() => {
+        this.handleSnackBar(true, 'Record has been deleted successfully!', false);
+        this.setState({ record: [] });
       })
       .catch((error) => {
         if (error) {
@@ -113,7 +156,9 @@ class BalanceSheetInput extends React.Component {
 
   // Render the component
   render() {
-    const { isLoading, activeItem, selectedYear, record, snackBar } = this.state;
+    const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions } = this.state;
+    const username = Meteor.user()?.username;
+    const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
 
     if (isLoading) {
       return (
@@ -126,13 +171,13 @@ class BalanceSheetInput extends React.Component {
         <Grid centered>
           <Grid.Column>
             <h2>Balance Sheet Input</h2>
-            <Form onSubmit={this.handleSubmit}>
+            <Form>
               <Form.Field>
                 Select Year
                 <Dropdown
                   placeholder="Select Year"
                   selection
-                  options={yearOptions}
+                  options={dropdownOptions.yearOptions}
                   value={selectedYear}
                   onChange={this.handleYearChange}
                 />
@@ -163,25 +208,32 @@ class BalanceSheetInput extends React.Component {
 
                 <Segment>
                   {activeItem === 'Cash And Equivalents' && (
-                    <CashAndCashEquivalents formData={record} handleChange={this.handleChange} />
+                    <CashAndCashEquivalents formData={record[0]} handleChange={this.handleChange} />
                   )}
                   {activeItem === 'Other Assets' && (
-                    <OtherAssets formData={record} handleChange={this.handleChange} />
+                    <OtherAssets formData={record[0]} handleChange={this.handleChange} />
                   )}
                   {activeItem === 'Liabilities' && (
-                    <Liabilities formData={record} handleChange={this.handleChange} />
+                    <Liabilities formData={record[0]} handleChange={this.handleChange} />
                   )}
                   {activeItem === 'Commitments And Contingencies' && (
-                    <CommitmentsAndContingencies formData={record} handleChange={this.handleChange} />
+                    <CommitmentsAndContingencies formData={record[0]} handleChange={this.handleChange} />
                   )}
                 </Segment>
               </div>
               <InputSheetMessage snackBar={snackBar} handleSnackBar={this.handleSnackBar} />
               <Grid className="py-3">
                 <Grid.Column textAlign="right">
-                  <Button primary type="submit">
-                    Submit
+                  <Button primary type="submit" onClick={this.handleSubmit}>
+                    {balanceSheetData.length > 0 ? 'Update' : 'Submit'}
                   </Button>
+                  {
+                    balanceSheetData.length > 0 && (
+                      <Button color="red" onClick={this.handleDelete}>
+                        Delete
+                      </Button>
+                    )
+                  }
                 </Grid.Column>
               </Grid>
             </Form>

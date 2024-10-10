@@ -10,6 +10,7 @@ import SimpleSchema from 'simpl-schema';
 import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection';
 import { updateMethod } from '../../api/base/BaseCollection.methods';
 import { PAGE_IDS } from '../utilities/PageIDs';
+import MemberListDropdown from '../components/Financial Profiles/ListMembers';
 
 const formSchema = new SimpleSchema({
   title: String,
@@ -141,9 +142,10 @@ const EditFinancialProfile = () => {
 
           {/* List of members */}
           <Row className="px-4 pt-4">
-            <h2>Members</h2>
+            <h2>Manage Members</h2>
             {members && members.length > 0 ? (
               <>
+                <MemberListDropdown members={members} />
                 <Form.Group controlId="selectMember">
                   <Form.Label>Manage Member Role</Form.Label>
                   <Form.Control as="select" onChange={handleMemberChange}>

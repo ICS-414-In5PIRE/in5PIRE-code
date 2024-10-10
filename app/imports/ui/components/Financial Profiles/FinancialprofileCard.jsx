@@ -173,48 +173,66 @@ const FinancialProfileCard = ({
           <Row className="px-4 pt-4">
             <h2>Members</h2>
             {members && members.length > 0 ? (
-              <Form.Group controlId="selectMember">
-                <Form.Label>Select a Member</Form.Label>
-                <Form.Control as="select" onChange={handleMemberChange}>
-                  <option value="">Select a member</option>
-                  {members.map((member) => {
-                    const user = Meteor.users.findOne({ _id: member.userId });
-                    const userEmail = user && user.emails && user.emails[0] ? user.emails[0].address : 'Unknown Email';
+              <>
+                {/* First Dropdown: List all members */}
+                <Form.Group controlId="listAllMembers">
+                  <Form.Label>My Account</Form.Label>
+                  <Form.Control as="select" disabled>
+                    {members.map((member) => {
+                      // Fetch user object based on userId
+                      const user = Meteor.users.findOne({ _id: member.userId });
+                      const userEmail = user && user.emails && user.emails[0] ? user.emails[0].address : 'Unknown Email';
 
-                    return (
-                      <option key={member.userId} value={member.userId}>
-                        {userEmail} - {member.role}
-                      </option>
-                    );
-                  })}
-                </Form.Control>
-              </Form.Group>
+                      return (
+                        <option key={member.userId} value={member.userId}>
+                          {userEmail} - {member.role}
+                        </option>
+                      );
+                    })}
+                  </Form.Control>
+                </Form.Group>
 
+                {/* Manage Members */}
+                <Form.Group controlId="selectMember">
+                  <Form.Label>Manage Member Role</Form.Label>
+                  <Form.Control as="select" onChange={handleMemberChange}>
+                    <option value="">Select a member to manage</option>
+                    {members.map((member) => {
+                      // Fetch user object based on userId
+                      const user = Meteor.users.findOne({ _id: member.userId });
+                      const userEmail = user && user.emails && user.emails[0] ? user.emails[0].address : 'Unknown Email';
+
+                      return (
+                        <option key={member.userId} value={member.userId}>
+                          {userEmail} - {member.role}
+                        </option>
+                      );
+                    })}
+                  </Form.Control>
+                </Form.Group>
+
+                {/* Only show the role change prompt when a member is selected */}
+                {selectedMember && (
+                  <Form.Group controlId="changeMemberRole" className="mt-3">
+                    <Form.Label>Change Role to {selectedMember.userEmail}</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={updatedRole}
+                      onChange={(e) => setUpdatedRole(e.target.value)}
+                    >
+                      <option value="viewer">Viewer</option>
+                      <option value="admin">Admin</option>
+                    </Form.Control>
+                    <Button variant="primary" className="mt-3" onClick={handleRoleUpdate}>
+                      Update Role
+                    </Button>
+                  </Form.Group>
+                )}
+              </>
             ) : (
               <p>No members found.</p>
             )}
           </Row>
-
-          {/* If admin, allow role change */}
-          {userRole === 'admin' && selectedMember && (
-            <Row className="px-4 pt-4">
-              <h3>Change Role</h3>
-              <Form.Group controlId="formUpdateRole">
-                <Form.Label>New Role for {selectedMember.userEmail}</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={updatedRole}
-                  onChange={(e) => setUpdatedRole(e.target.value)}
-                >
-                  <option value="viewer">Viewer</option>
-                  <option value="admin">Admin</option>
-                </Form.Control>
-              </Form.Group>
-              <Button variant="primary" className="mt-3" onClick={handleRoleUpdate}>
-                Update Role
-              </Button>
-            </Row>
-          )}
 
           {userRole !== 'viewer' && (
             <Row className="px-4 pt-4">

@@ -83,12 +83,6 @@ const EditFinancialProfile = () => {
   const handleMemberChange = (e) => {
     const selectedUserId = e.target.value;
     const member = members.find(m => m.userId === selectedUserId);
-
-    if (!member) {
-      console.error('Selected member not found');
-      return;
-    }
-
     setSelectedMember(member);
     setUpdatedRole(member.role);
   };

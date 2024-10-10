@@ -91,7 +91,7 @@ class FinancialProfilesCollection extends BaseCollection {
    * @param image the new image (optional).
    * @param lastEditedAt the new last edited date (optional).
    */
-  update(docID, { title, type, description, image, lastEditedAt }) {
+  update(docID, { title, type, description, image }) {
     const updateData = {};
     if (title) {
       updateData.title = title;
@@ -105,11 +105,7 @@ class FinancialProfilesCollection extends BaseCollection {
     if (image) {
       updateData.image = image;
     }
-    if (lastEditedAt) {
-      updateData.lastEditedAt = lastEditedAt;
-    } else {
-      updateData.lastEditedAt = new Date();
-    }
+    updateData.lastEditedAt = new Date();
     this._collection.update(docID, { $set: updateData });
   }
 

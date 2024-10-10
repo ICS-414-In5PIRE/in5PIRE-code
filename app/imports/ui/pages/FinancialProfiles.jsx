@@ -67,7 +67,7 @@ const FinancialProfilesPage = () => {
   return (
     <Container id={PAGE_IDS.FINANCIAL_PROFILES}>
       <Container className="profile-container">
-        <h1>User&apos;s Financial Profiles</h1>
+        <h1>User&apos;s Financial Scenarios</h1>
       </Container>
 
       {/* Flexbox Container for Cards */}
@@ -95,7 +95,7 @@ const FinancialProfilesPage = () => {
             );
           })
         ) : (
-          <p>No financial profiles found.</p>
+          <p>No financial scenarios found.</p>
         )}
 
         {/* Hard-Coded Add New Profile Card */}
@@ -106,11 +106,11 @@ const FinancialProfilesPage = () => {
         >
           <Card id="Financial-Card" className="d-flex flex-column h-100">
             <CardHeader className="d-flex justify-content-center" id="browse-financial-card-name">
-              <h1>Create a New Financial Profile</h1>
+              <h1>Create a New Financial Scenario</h1>
             </CardHeader>
             <Row className="flex-grow-1 d-flex">
               <img
-                src="/images/GraphPlaceholder.png"
+                src="/images/AddButton.png"
                 alt="Add New Profile"
                 className="img-thumbnail m-4 p-4"
                 style={{ width: '80%', objectFit: 'contain' }}

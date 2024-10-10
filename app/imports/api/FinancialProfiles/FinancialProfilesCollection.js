@@ -109,6 +109,31 @@ class FinancialProfilesCollection extends BaseCollection {
     this._collection.update(docID, { $set: updateData });
   }
 
+  /** Removes a member from the collection
+   * @param {String} profileId - The ID of the financial profile.
+   * @param {String} userId - The user id
+   */
+  removeMember(profileId, userId) {
+    const profile = this.findDoc(profileId);
+    const currentUserId = Meteor.userId();
+
+    // Check if current user is the owner, an admin, or is removing themselves
+    const isOwnerOrAdmin = profile.owner === currentUserId ||
+      profile.members.some(member => member.userId === currentUserId && member.role === 'admin');
+
+    // Allow non-admin users to remove themselves
+    const isRemovingSelf = currentUserId === userId;
+
+    if (!isOwnerOrAdmin && !isRemovingSelf) {
+      throw new Meteor.Error('Not authorized');
+    }
+
+    // Remove the member from the profile
+    this._collection.update(profileId, {
+      $pull: { members: { userId } },
+    });
+  }
+
   /**
    * Method to invite a user to a financial profile by email and assign a role.
    * @param {String} profileId - The ID of the financial profile.

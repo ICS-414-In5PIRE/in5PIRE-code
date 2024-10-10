@@ -18,7 +18,7 @@ const FinancialProfileCard = ({
   description,
   createdDate,
   editedDate,
-  onDelete,
+  // onDelete,
   userRole,
   profileId,
 }) => {
@@ -93,6 +93,28 @@ const FinancialProfileCard = ({
       return;
     }
 
+    // If the updated role is "remove", call the updateMethod to remove the member
+    if (updatedRole === 'remove') {
+      swal({
+        title: `Remove ${selectedMember.userEmail} from this profile?`,
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          Meteor.call('FinancialProfiles.removeMember', profileId, selectedMember.userId, (error) => {
+            if (error) {
+              swal('Error', error.message, 'error');
+            } else {
+              swal('Success', 'Member removed successfully', 'success');
+              setSelectedMember(null); // Clear the selection
+            }
+          });
+        }
+      });
+      return; // Exit the function here since we are removing the member
+    }
+
     // Proceed with the role update if the roles are different and the user is not the owner
     Meteor.call('updateUserRoleInProfile', { profileId, userId: selectedMember.userId, newRole: updatedRole }, (error) => {
       if (error) {
@@ -103,7 +125,6 @@ const FinancialProfileCard = ({
       }
     });
   };
-
   return (
     <Card id="Financial-Card" className="d-flex flex-column h-100">
       <CardHeader className="d-flex justify-content-center" id="browse-financial-card-name">
@@ -150,17 +171,28 @@ const FinancialProfileCard = ({
                       />
                     </Form.Group>
 
-                    <Form.Group controlId="formRole" className="mt-3">
-                      <Form.Label>Role</Form.Label>
-                      <Form.Control
-                        as="select"
-                        value={inviteRole}
-                        onChange={(e) => setInviteRole(e.target.value)}
-                      >
-                        <option value="viewer">Viewer</option>
-                        <option value="admin">Admin</option>
-                      </Form.Control>
-                    </Form.Group>
+                    {selectedMember && (
+                      <>
+                        <Form.Group controlId="changeMemberRole" className="mb-3">
+                          <Form.Label>Change Role for {selectedMember.userEmail}</Form.Label>
+                          <Form.Control
+                            as="select"
+                            value={updatedRole}
+                            onChange={(e) => setUpdatedRole(e.target.value)}
+                          >
+                            <option value="viewer">Viewer</option>
+                            <option value="admin">Admin</option>
+                            {userRole === 'admin' && (
+                              <option value="remove">Remove Member</option>
+                            )}
+                          </Form.Control>
+                        </Form.Group>
+
+                        <Button variant="primary" onClick={handleRoleUpdate}>
+                          {updatedRole === 'remove' ? 'Remove Member' : 'Update Role'}
+                        </Button>
+                      </>
+                    )}
 
                     <Button variant="primary" className="mt-3" onClick={handleInviteSubmit}>
                       Submit Invite
@@ -207,6 +239,10 @@ const FinancialProfileCard = ({
                       >
                         <option value="viewer">Viewer</option>
                         <option value="admin">Admin</option>
+                        {/* Add "Remove Member" option only for admin */}
+                        {userRole === 'admin' && (
+                          <option value="remove">Remove Member</option>
+                        )}
                       </Form.Control>
                     </Form.Group>
                     <Button variant="primary" onClick={handleRoleUpdate}>
@@ -218,17 +254,43 @@ const FinancialProfileCard = ({
             </Card>
           )}
 
-          {userRole !== 'viewer' && (
-            <Row className="px-4 pt-4">
-              <Button variant="danger" onClick={onDelete}>Delete Profile</Button>
-            </Row>
-          )}
         </Col>
       </Row>
       <Row className="px-4">
         <h2>Profile Description</h2>
         <p>{description}</p>
       </Row>
+
+      {userRole !== 'admin' && (
+        <Row className="px-4 pt-4">
+          <Button
+            variant="danger"
+            onClick={() => {
+              swal({
+                title: 'Are you sure?',
+                text: 'You will be removed from this profile!',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+              }).then((willDelete) => {
+                if (willDelete) {
+                  Meteor.call('FinancialProfiles.removeMember', profileId, Meteor.userId(), (error) => {
+                    if (error) {
+                      swal('Error', error.message, 'error');
+                    } else {
+                      swal('Success', 'You have been removed from the profile', 'success');
+                      navigate('/financial-profiles');
+                    }
+                  });
+                }
+              });
+            }}
+          >
+            Leave Profile
+          </Button>
+        </Row>
+      )}
+
       <Row className="px-4">
         <p style={{ fontSize: '0.8em', color: 'gray', marginBottom: '2px' }}>Created: {createdDate}</p>
         <p style={{ fontSize: '0.8em', color: 'gray', marginTop: '2px' }}>Last edited: {editedDate}</p>
@@ -245,7 +307,7 @@ FinancialProfileCard.propTypes = {
   description: PropTypes.string,
   createdDate: PropTypes.string,
   editedDate: PropTypes.string,
-  onDelete: PropTypes.func,
+  // onDelete: PropTypes.func,
   userRole: PropTypes.string.isRequired,
   profileId: PropTypes.string.isRequired,
   // members: PropTypes.arrayOf(PropTypes.shape({
@@ -260,7 +322,7 @@ FinancialProfileCard.defaultProps = {
   description: 'No description available.',
   createdDate: 'Not available',
   editedDate: 'Not available',
-  onDelete: null,
+  // onDelete: null,
   // members: [],
 };
 

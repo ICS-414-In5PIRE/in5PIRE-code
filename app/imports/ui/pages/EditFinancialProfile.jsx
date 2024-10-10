@@ -8,9 +8,10 @@ import { Meteor } from 'meteor/meteor';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
 import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection';
-import { updateMethod } from '../../api/base/BaseCollection.methods';
+import { updateMethod, removeItMethod } from '../../api/base/BaseCollection.methods';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import MemberListDropdown from '../components/Financial Profiles/ListMembers';
+import InviteUsers from '../components/Financial Profiles/InviteUsers';
 
 const formSchema = new SimpleSchema({
   title: String,
@@ -81,6 +82,26 @@ const EditFinancialProfile = () => {
       });
   };
 
+  const handleDelete = () => {
+    swal({
+      title: 'Are you sure?',
+      text: 'This will delete the financial profile and cannot be undone!',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          removeItMethod.callPromise({ collectionName: FinancialProfiles.getCollectionName(), instance: profileId })
+            .then(() => {
+              swal('Profile deleted successfully', { icon: 'success' });
+              navigate('/financial-profiles');
+            })
+            .catch(error => swal('Error', error.message, 'error'));
+        }
+      });
+  };
+
   const handleMemberChange = (e) => {
     const selectedUserId = e.target.value;
     const member = members.find(m => m.userId === selectedUserId);
@@ -94,13 +115,37 @@ const EditFinancialProfile = () => {
       return;
     }
 
+    // Check if the new role is the same as the current role
     if (updatedRole === selectedMember.role) {
       swal('Error', `The user is already assigned the role: ${updatedRole}.`, 'error');
       return;
     }
 
+    // Check if the selected member is the owner and prevent changing their role. They must delete the profile
     if (selectedMember.userId === Meteor.userId() && selectedMember.role === 'admin') {
-      swal('Error', 'You are the owner of this profile and cannot change your own role.', 'error');
+      swal('Error', 'You are the owner of this profile and cannot change your own role. You are destined to be an admin forever.', 'error');
+      return;
+    }
+
+    // If the updated role is "remove", call the updateMethod to remove the member
+    if (updatedRole === 'remove') {
+      swal({
+        title: `Remove ${selectedMember.userEmail} from this profile?`,
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          Meteor.call('FinancialProfiles.removeMember', profileId, selectedMember.userId, (error) => {
+            if (error) {
+              swal('Error', error.message, 'error');
+            } else {
+              swal('Success', 'Member removed successfully', 'success');
+              setSelectedMember(null);
+            }
+          });
+        }
+      });
       return;
     }
 
@@ -109,7 +154,7 @@ const EditFinancialProfile = () => {
         swal('Error', error.message, 'error');
       } else {
         swal('Success', 'Role updated successfully', 'success');
-        setSelectedMember(null);
+        setSelectedMember(null); // Clear the selection
       }
     });
   };
@@ -139,6 +184,9 @@ const EditFinancialProfile = () => {
               </Card>
             </AutoForm>
           )}
+
+          <InviteUsers profileId={profileId} />
+          {/* <MemberListDropdown members={members} /> */}
 
           {/* List of members */}
           <Row className="px-4 pt-4">
@@ -174,6 +222,7 @@ const EditFinancialProfile = () => {
                     >
                       <option value="viewer">Viewer</option>
                       <option value="admin">Admin</option>
+                      <option value="remove">Remove Member</option>
                     </Form.Control>
                     <Button variant="primary" className="mt-3" onClick={handleRoleUpdate}>
                       Update Role
@@ -184,6 +233,13 @@ const EditFinancialProfile = () => {
             ) : (
               <p>No members found.</p>
             )}
+          </Row>
+
+          {/* Delete the profile */}
+          <Row className="pt-4">
+            <Button variant="danger" onClick={handleDelete}>
+              Delete Financial Profile
+            </Button>
           </Row>
         </Col>
       </Row>

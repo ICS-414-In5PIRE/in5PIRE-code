@@ -112,10 +112,9 @@ const FinancialProfileCard = ({
           });
         }
       });
-      return; // Exit the function here since we are removing the member
+      return;
     }
 
-    // Proceed with the role update if the roles are different and the user is not the owner
     Meteor.call('updateUserRoleInProfile', { profileId, userId: selectedMember.userId, newRole: updatedRole }, (error) => {
       if (error) {
         swal('Error', error.message, 'error');

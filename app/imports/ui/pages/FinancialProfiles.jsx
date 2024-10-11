@@ -70,7 +70,7 @@ const FinancialProfilesPage = () => {
         <h1>User&apos;s Financial Scenarios</h1>
       </Container>
 
-      {/* Flexbox Container for Cards */}
+      {/* Container for Cards */}
       <Container className="d-flex justify-content-around flex-wrap py-3">
         {profiles.length > 0 ? (
           profiles.map((profile) => {
@@ -102,7 +102,7 @@ const FinancialProfilesPage = () => {
         <Container
           className="flex-card py-3 d-flex"
           style={{ flex: '0 1 30%', margin: '10px', cursor: 'pointer' }}
-          onClick={handleAddNewProfile} // Make the card clickable
+          onClick={handleAddNewProfile}
         >
           <Card id="Financial-Card" className="d-flex flex-column h-100">
             <CardHeader className="d-flex justify-content-center" id="browse-financial-card-name">

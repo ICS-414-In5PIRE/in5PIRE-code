@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Card, Col, Container, Row, Form, Button } from 'react-bootstrap';
+import { Card, Col, Container, Row, Form, Button, Spinner } from 'react-bootstrap';
 import { AutoForm, ErrorsField, SubmitField, TextField, SelectField } from 'uniforms-bootstrap5';
 import swal from 'sweetalert';
 import { useTracker } from 'meteor/react-meteor-data';
@@ -160,7 +160,14 @@ const EditFinancialProfile = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Container className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+        <div className="text-center">
+          <Spinner animation="border" role="status" />
+          <h2 style={{ marginTop: '1rem' }}>Loading your financial profiles...</h2>
+        </div>
+      </Container>
+    );
   }
 
   let fRef = null;

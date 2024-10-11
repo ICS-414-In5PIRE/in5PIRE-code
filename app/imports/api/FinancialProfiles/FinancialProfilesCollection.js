@@ -52,7 +52,43 @@ class FinancialProfilesCollection extends BaseCollection {
         type: String,
         allowedValues: ['admin', 'viewer'],
       },
+      balanceSheetIds: {
+        type: Array,
+        optional: true,
+      },
+      'balanceSheetIds.$': {
+        type: String,
+      },
+      staticFinancialIds: {
+        type: Array,
+        optional: true,
+      },
+      'staticFinancialIds.$': {
+        type: String,
+      },
     }));
+  }
+
+  /**
+   * Defines a new link a profile to a balance sheet.
+   * @param {String} profileId - The ID of the financial profile.
+   * @param balanceSheetId - the ID of the balancesheet.
+   */
+  linkBalanceSheet(profileId, balanceSheetId) {
+    this._collection.update(profileId, {
+      $push: { balanceSheetIds: balanceSheetId },
+    });
+  }
+
+  /**
+   * Defines a new link to a static financial sheet.
+   * @param {String} profileId - The ID of the financial profile.
+   * @param staticFinancialId - the ID of the static financial sheet.
+   */
+  linkStaticFinancial(profileId, staticFinancialId) {
+    this._collection.update(profileId, {
+      $push: { staticFinancialIds: staticFinancialId },
+    });
   }
 
   /**
@@ -62,9 +98,10 @@ class FinancialProfilesCollection extends BaseCollection {
    * @param owner the owner (user) of the profile.
    * @param description the description of the profile (optional).
    * @param image the image associated with the profile (optional).
+   * @param balanceSheetId - the ID of the balancesheet.
    * @return {String} the docID of the new profile document.
    */
-  define({ title, type, owner, description, image }) {
+  define({ title, type, owner, description, image, balanceSheetIds = [], staticFinancialIds = [] }) {
     const docID = this._collection.insert({
       title,
       type,
@@ -74,10 +111,12 @@ class FinancialProfilesCollection extends BaseCollection {
       createdAt: new Date(),
       members: [
         {
-          userId: owner, // Add the owner to the members list
+          userId: owner,
           role: 'admin',
         },
       ],
+      balanceSheetIds,
+      staticFinancialIds,
     });
     return docID;
   }
@@ -91,7 +130,7 @@ class FinancialProfilesCollection extends BaseCollection {
    * @param image the new image (optional).
    * @param lastEditedAt the new last edited date (optional).
    */
-  update(docID, { title, type, description, image }) {
+  update(docID, { title, type, description, image, balanceSheetIds, staticFinancialIds }) {
     const updateData = {};
     if (title) {
       updateData.title = title;
@@ -104,6 +143,12 @@ class FinancialProfilesCollection extends BaseCollection {
     }
     if (image) {
       updateData.image = image;
+    }
+    if (balanceSheetIds) {
+      updateData.balanceSheetIds = balanceSheetIds;
+    }
+    if (staticFinancialIds) {
+      updateData.staticFinancialIds = staticFinancialIds;
     }
     updateData.lastEditedAt = new Date();
     this._collection.update(docID, { $set: updateData });
@@ -200,15 +245,6 @@ class FinancialProfilesCollection extends BaseCollection {
   publish() {
     if (Meteor.isServer) {
       const instance = this;
-
-      // // Publishes profiles associated with the logged-in user
-      // Meteor.publish(financialProfilesPublications.profiles, function publish() {
-      //   if (this.userId) {
-      //     const username = Meteor.users.findOne(this.userId).username;
-      //     return instance._collection.find({ owner: username });
-      //   }
-      //   return this.ready();
-      // });
       Meteor.publish(financialProfilesPublications.profiles, function publish() {
         if (this.userId) {
           const username = Meteor.users.findOne(this.userId).username;

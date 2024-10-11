@@ -32,6 +32,18 @@ const FinancialProfileCard = ({
     navigate(`/edit-financial-profile/${profileId}`);
   };
 
+  const handleEditBudget = () => {
+    navigate(`/budget-form/${profileId}`);
+  };
+
+  const handleEditBalanceSheet = () => {
+    navigate(`/balance-sheet-input/${profileId}`);
+  };
+
+  const handleEditAuditedFinancial = () => {
+    navigate(`/audited-fs/${profileId}`);
+  };
+
   useEffect(() => {
     // Subscribe to userEmails to get access to users' emails
     const userEmailSubscription = Meteor.subscribe('userEmails');
@@ -149,6 +161,18 @@ const FinancialProfileCard = ({
               <Row className="px-4">
                 {/* Navigate to the edit profile page */}
                 <Button variant="primary" onClick={handleEditProfile}>Edit Profile</Button>
+              </Row>
+              <Row className="px-4">
+                {/* Navigate to the balance sheet input page */}
+                <Button variant="secondary" onClick={handleEditBalanceSheet}>Edit Balance Sheet</Button>
+              </Row>
+              <Row className="px-4">
+                {/* Navigate to the edit profile page */}
+                <Button variant="secondary" onClick={handleEditBudget}>Edit Budget</Button>
+              </Row>
+              <Row className="px-4">
+                {/* Navigate to the edit profile page */}
+                <Button variant="secondary" onClick={handleEditAuditedFinancial}>Edit Audited Financials</Button>
               </Row>
               <Row className="px-4">
                 <Button variant="secondary" onClick={toggleInviteForm}>

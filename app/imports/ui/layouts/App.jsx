@@ -58,6 +58,7 @@ const App = () => {
           <Route path="/list" element={<ProtectedRoute><ListStuff /></ProtectedRoute>} />
           <Route path="/add" element={<ProtectedRoute><AddStuff /></ProtectedRoute>} />
           <Route path="/edit/:_id" element={<ProtectedRoute><EditStuff /></ProtectedRoute>} />
+          <Route path="/balance-sheet-input/:profileId" element={<ProtectedRoute><BalanceSheetInput /></ProtectedRoute>} />
           <Route path="/financial-profiles/" element={<ProtectedRoute><FinancialProfilesPage /></ProtectedRoute>} />
           <Route path="/edit-financial-profile/:profileId" element={<ProtectedRoute><EditFinancialProfile /></ProtectedRoute>} />
           <Route path="/add-financial-profile/" element={<ProtectedRoute><AddFinancialProfile /></ProtectedRoute>} />
@@ -67,8 +68,10 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
           <Route path="/balance-sheet" element={<ProtectedRoute><BalanceSheetInput /></ProtectedRoute>} />
           <Route path="/audited-fs" element={<ProtectedRoute><FinancialStatement /></ProtectedRoute>} />
+          <Route path="/audited-fs/:profileId" element={<ProtectedRoute><FinancialStatement /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/budget-form" element={<ProtectedRoute><BudgetForm /></ProtectedRoute>} />
+          <Route path="/budget-form/:profileId" element={<ProtectedRoute><BudgetForm /></ProtectedRoute>} />
           <Route path="/upload-file" element={<ProtectedRoute><UploadFile /></ProtectedRoute>} />
         </Routes>
         <Footer />

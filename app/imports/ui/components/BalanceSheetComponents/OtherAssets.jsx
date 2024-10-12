@@ -80,6 +80,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               onChange={handleChange}
               type="number"
               readOnly
+              icon="calculator"
             />
           </Form.Group>
           <Divider />
@@ -109,6 +110,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               onChange={handleChange}
               type="number"
               readOnly
+              icon="calculator"
             />
           </Form.Group>
           <Divider />
@@ -122,6 +124,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               onChange={handleChange}
               type="number"
               readOnly
+              icon="calculator"
             />
           </Form.Group>
         </Tab.Pane>
@@ -172,6 +175,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               onChange={handleChange}
               type="number"
               readOnly
+              icon="calculator"
             />
           </Form.Group>
           <Divider />
@@ -206,6 +210,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               onChange={handleChange}
               type="number"
               readOnly
+              icon="calculator"
             />
           </Form.Group>
           <Divider />
@@ -259,6 +264,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               onChange={handleChange}
               type="number"
               readOnly
+              icon="calculator"
             />
           </Form.Group>
           <Divider />
@@ -280,6 +286,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               onChange={handleChange}
               type="number"
               readOnly
+              icon="calculator"
             />
           </Form.Group>
           <Divider />
@@ -293,6 +300,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               onChange={handleChange}
               type="number"
               readOnly
+              icon="calculator"
             />
           </Form.Group>
         </Tab.Pane>
@@ -381,6 +389,7 @@ const OtherAssets = ({ formData, handleChange }) => {
           onChange={handleChange}
           type="number"
           readOnly
+          icon="calculator"
         />
       </Form.Group>
       <Form.Group>
@@ -407,8 +416,8 @@ const OtherAssets = ({ formData, handleChange }) => {
           name="netAssetsDeferredOutflows"
           value={formData.netAssetsDeferredOutflows ?? ''}
           onChange={handleChange}
-          type="number"
           readOnly
+          icon="calculator"
         />
       </Form.Group>
       <Divider />

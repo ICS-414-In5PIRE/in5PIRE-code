@@ -22,20 +22,23 @@ class BalanceSheetInputsCollection extends BaseCollection {
    * @return {String} The document ID of the new BalanceSheetInput.
    */
   define({
-    pettyCash, cash, cashInBanks, totalCashAndCashEquivalents, accountsReceivables, dueFromOtherFunds,
+    pettyCash, cash, cashInBanks, accountsReceivables, dueFromOtherFunds,
     interestAndDividendsReceivable, otherAssets, notesReceivableBeforeOneYear, notesReceivableAfterOneYear,
     securityDeposits, cashByInvestmentManager, mutualFunds, commingledFunds, hedgeFunds, privateEquityFunds,
-    commonTrustFunds, commonAndPreferredStocks, privateDebt, otherInvestments, subtotalInvestments, usTreasuries,
-    usAgencies, subtotalLoanFund, totalInvestments, buildings, leaseholdImprovements, furnitureFixturesEquipment,
-    accumulatedDepreciation, netCapitalAssets, landA, landB, constructionInProgress, subtotalCapitalAssetsNet,
+    commonTrustFunds, commonAndPreferredStocks, privateDebt, otherInvestments, usTreasuries,
+    usAgencies, buildings, leaseholdImprovements, furnitureFixturesEquipment,
+    accumulatedDepreciation, landA, landB, constructionInProgress,
     llcBuildings, llcLeaseholdImprovements, llcFurnitureFixturesEquipment, vehicles, llcAccumulatedDepreciation,
-    llcNet, llcLand, llcAssetsNet, totalCapitalAssetsNet, restrictedCash, totalOtherAssets, deferredOutflowsPensions,
-    deferredOutflowsOPEB, netAssetsDeferredOutflows, accountsPayable, dueToFund, dueToOtherFunds, totalLiabilities,
-    deferredInflowsPensions, deferredInflowsOPEB, netLiabilitiesDeferredInflows, investedInCapitalAssets,
-    restrictedFederalFunds, unrestricted, totalNetPosition, totalLiabilitiesDeferredNetPosition, owner, year,
-    accruedVacation, workersCompensation, accruedRetirementPlan, accruedLeaseGuaranty, capitalLeaseObligations,
-    notesPayableBuildingA, netPensionLiability, netOPEBLiability, lineOfCreditBuildingA, lineOfCreditBuildingB,
-    debtService, netLiabilities,
+    llcLand, restrictedCash, deferredOutflowsPensions,
+    deferredOutflowsOPEB, accountsPayable, dueToFund, dueToOtherFunds,
+    deferredInflowsPensions, deferredInflowsOPEB, investedInCapitalAssets,
+    restrictedFederalFunds, unrestricted, owner, year, accruedVacationDueWithinOneYear, workersCompensationDueWithinOneYear, accruedRetirementPlanDueWithinOneYear,
+    accruedLeaseGuarantyDueWithinOneYear, capitalLeaseObligationsDueWithinOneYear, notesPayableBuildingADueWithinOneYear,
+    netPensionLiabilityDueWithinOneYear, netOPEBLiabilityDueWithinOneYear, lineOfCreditBuildingADueWithinOneYear,
+    lineOfCreditBuildingBDueWithinOneYear, debtServiceDueWithinOneYear, accruedVacationDueAfterOneYear, workersCompensationDueAfterOneYear, accruedRetirementPlanDueAfterOneYear,
+    accruedLeaseGuarantyDueAfterOneYear, capitalLeaseObligationsDueAfterOneYear, notesPayableBuildingADueAfterOneYear,
+    netPensionLiabilityDueAfterOneYear, netOPEBLiabilityDueAfterOneYear, lineOfCreditBuildingADueAfterOneYear,
+    lineOfCreditBuildingBDueAfterOneYear, debtServiceDueAfterOneYear,
   }) {
     try {
       const existingDocument = this._collection.findOne({ owner, year });
@@ -47,6 +50,118 @@ class BalanceSheetInputsCollection extends BaseCollection {
           docId: existingDocument._id,
         };
       }
+
+      // Auto-calculate total cash and cash equivalents
+      const totalCashAndCashEquivalents =
+        (parseFloat(pettyCash) || 0) +
+        (parseFloat(cash) || 0) +
+        (parseFloat(cashInBanks) || 0);
+
+      // Auto-calculate subtotal investments
+      const subtotalInvestments =
+        (parseFloat(mutualFunds) || 0) +
+        (parseFloat(commingledFunds) || 0) +
+        (parseFloat(hedgeFunds) || 0) +
+        (parseFloat(privateEquityFunds) || 0) +
+        (parseFloat(commonTrustFunds) || 0) +
+        (parseFloat(commonAndPreferredStocks) || 0) +
+        (parseFloat(privateDebt) || 0) +
+        (parseFloat(otherInvestments) || 0);
+
+      // Auto-calculate subtotal loan fund
+      const subtotalLoanFund =
+        (parseFloat(usTreasuries) || 0) +
+        (parseFloat(usAgencies) || 0);
+
+      // Auto-calculate total investments
+      const totalInvestments = subtotalInvestments + subtotalLoanFund;
+
+      // Auto-calculate net capital assets
+      const netCapitalAssets =
+        (parseFloat(buildings) || 0) +
+        (parseFloat(leaseholdImprovements) || 0) +
+        (parseFloat(furnitureFixturesEquipment) || 0) +
+        (parseFloat(accumulatedDepreciation) || 0);
+
+      // Auto-calculate subtotal capital assets net
+      const subtotalCapitalAssetsNet =
+        (parseFloat(landA) || 0) +
+        (parseFloat(landB) || 0) +
+        (parseFloat(constructionInProgress) || 0);
+
+      // Auto-calculate LLC Net
+      const llcNet =
+        (parseFloat(llcBuildings) || 0) +
+        (parseFloat(llcLeaseholdImprovements) || 0) +
+        (parseFloat(llcFurnitureFixturesEquipment) || 0) +
+        (parseFloat(vehicles) || 0) +
+        (parseFloat(llcAccumulatedDepreciation) || 0);
+
+      // Auto-calculate total capital assets net
+      const llcAssetsNet = llcNet + (parseFloat(llcLand) || 0);
+
+      // Auto-calculate total capital assets net
+      const totalCapitalAssetsNet = netCapitalAssets + subtotalCapitalAssetsNet + llcAssetsNet;
+
+      // Auto-calculate total other assets
+      const totalOtherAssets =
+        (parseFloat(accountsReceivables) || 0) +
+        (parseFloat(dueFromOtherFunds) || 0) +
+        (parseFloat(interestAndDividendsReceivable) || 0) +
+        (parseFloat(otherAssets) || 0) +
+        (parseFloat(notesReceivableBeforeOneYear) || 0) +
+        (parseFloat(notesReceivableAfterOneYear) || 0) +
+        (parseFloat(securityDeposits) || 0) +
+        (parseFloat(cashByInvestmentManager) || 0) +
+        (parseFloat(totalInvestments) || 0) +
+        (parseFloat(totalCapitalAssetsNet) || 0) +
+        (parseFloat(restrictedCash) || 0);
+
+      // Auto-calculate net assets deferred outflows
+      const netAssetsDeferredOutflows = (parseFloat(totalCashAndCashEquivalents) || 0) + (parseFloat(totalOtherAssets) || 0) + (parseFloat(deferredOutflowsPensions) || 0) + (parseFloat(deferredOutflowsOPEB) || 0);
+
+      // Auto-calculate net liabilities due within one year
+      const netLiabilitiesDueWithinOneYear =
+        (parseFloat(accruedVacationDueWithinOneYear) || 0) +
+        (parseFloat(workersCompensationDueWithinOneYear) || 0) +
+        (parseFloat(accruedRetirementPlanDueWithinOneYear) || 0) +
+        (parseFloat(accruedLeaseGuarantyDueWithinOneYear) || 0) +
+        (parseFloat(capitalLeaseObligationsDueWithinOneYear) || 0) +
+        (parseFloat(notesPayableBuildingADueWithinOneYear) || 0) +
+        (parseFloat(netPensionLiabilityDueWithinOneYear) || 0) +
+        (parseFloat(netOPEBLiabilityDueWithinOneYear) || 0) +
+        (parseFloat(lineOfCreditBuildingADueWithinOneYear) || 0) +
+        (parseFloat(lineOfCreditBuildingBDueWithinOneYear) || 0) +
+        (parseFloat(debtServiceDueWithinOneYear) || 0);
+
+      // Auto-calculate net liabilities due after one year
+      const netLiabilitiesDueAfterOneYear =
+        (parseFloat(accruedVacationDueAfterOneYear) || 0) +
+        (parseFloat(workersCompensationDueAfterOneYear) || 0) +
+        (parseFloat(accruedRetirementPlanDueAfterOneYear) || 0) +
+        (parseFloat(accruedLeaseGuarantyDueAfterOneYear) || 0) +
+        (parseFloat(capitalLeaseObligationsDueAfterOneYear) || 0) +
+        (parseFloat(notesPayableBuildingADueAfterOneYear) || 0) +
+        (parseFloat(netPensionLiabilityDueAfterOneYear) || 0) +
+        (parseFloat(netOPEBLiabilityDueAfterOneYear) || 0) +
+        (parseFloat(lineOfCreditBuildingADueAfterOneYear) || 0) +
+        (parseFloat(lineOfCreditBuildingBDueAfterOneYear) || 0) +
+        (parseFloat(debtServiceDueAfterOneYear) || 0);
+
+      // Auto-calculate total liabilities
+      const totalLiabilities = (parseFloat(accountsPayable) || 0) + (parseFloat(dueToFund) || 0) + (parseFloat(dueToOtherFunds) || 0) + netLiabilitiesDueWithinOneYear + netLiabilitiesDueAfterOneYear;
+
+      // Auto-calculate total liabilities deferred net position
+      const netLiabilitiesDeferredInflows = (parseFloat(deferredInflowsOPEB) || 0) + (parseFloat(deferredInflowsPensions) || 0) + totalLiabilities;
+
+      // Auto-calculate total net position
+      const totalNetPosition =
+        (parseFloat(investedInCapitalAssets) || 0) +
+        (parseFloat(restrictedFederalFunds) || 0) +
+        (parseFloat(unrestricted) || 0);
+
+      // Auto-calculate total liabilities deferred net position
+      const totalLiabilitiesDeferredNetPosition = netLiabilitiesDeferredInflows + totalNetPosition;
 
       // Insert a new document
       const docID = this._collection.insert({
@@ -60,10 +175,15 @@ class BalanceSheetInputsCollection extends BaseCollection {
         llcNet, llcLand, llcAssetsNet, totalCapitalAssetsNet, restrictedCash, totalOtherAssets, deferredOutflowsPensions,
         deferredOutflowsOPEB, netAssetsDeferredOutflows, accountsPayable, dueToFund, dueToOtherFunds, totalLiabilities,
         deferredInflowsPensions, deferredInflowsOPEB, netLiabilitiesDeferredInflows, investedInCapitalAssets,
-        restrictedFederalFunds, unrestricted, totalNetPosition, totalLiabilitiesDeferredNetPosition, owner, year,
-        accruedVacation, workersCompensation, accruedRetirementPlan, accruedLeaseGuaranty, capitalLeaseObligations,
-        notesPayableBuildingA, netPensionLiability, netOPEBLiability, lineOfCreditBuildingA, lineOfCreditBuildingB,
-        debtService, netLiabilities,
+        restrictedFederalFunds, unrestricted, totalNetPosition, totalLiabilitiesDeferredNetPosition,
+        accruedVacationDueWithinOneYear, workersCompensationDueWithinOneYear, accruedRetirementPlanDueWithinOneYear,
+        accruedLeaseGuarantyDueWithinOneYear, capitalLeaseObligationsDueWithinOneYear, notesPayableBuildingADueWithinOneYear,
+        netPensionLiabilityDueWithinOneYear, netOPEBLiabilityDueWithinOneYear, lineOfCreditBuildingADueWithinOneYear,
+        lineOfCreditBuildingBDueWithinOneYear, debtServiceDueWithinOneYear, netLiabilitiesDueWithinOneYear,
+        accruedVacationDueAfterOneYear, workersCompensationDueAfterOneYear, accruedRetirementPlanDueAfterOneYear,
+        accruedLeaseGuarantyDueAfterOneYear, capitalLeaseObligationsDueAfterOneYear, notesPayableBuildingADueAfterOneYear,
+        netPensionLiabilityDueAfterOneYear, netOPEBLiabilityDueAfterOneYear, lineOfCreditBuildingADueAfterOneYear,
+        lineOfCreditBuildingBDueAfterOneYear, debtServiceDueAfterOneYear, netLiabilitiesDueAfterOneYear, owner, year,
       });
 
       return {
@@ -87,7 +207,152 @@ class BalanceSheetInputsCollection extends BaseCollection {
    */
   update(docID, updateData) {
     this.assertDefined(docID);
-    this._collection.update(docID, { $set: updateData });
+
+    // Auto-calculate total cash and cash equivalents
+    const totalCashAndCashEquivalents =
+      (parseFloat(updateData.pettyCash) || 0) +
+      (parseFloat(updateData.cash) || 0) +
+      (parseFloat(updateData.cashInBanks) || 0);
+
+    // Auto-calculate subtotal investments
+    const subtotalInvestments =
+      (parseFloat(updateData.mutualFunds) || 0) +
+      (parseFloat(updateData.commingledFunds) || 0) +
+      (parseFloat(updateData.hedgeFunds) || 0) +
+      (parseFloat(updateData.privateEquityFunds) || 0) +
+      (parseFloat(updateData.commonTrustFunds) || 0) +
+      (parseFloat(updateData.commonAndPreferredStocks) || 0) +
+      (parseFloat(updateData.privateDebt) || 0) +
+      (parseFloat(updateData.otherInvestments) || 0);
+
+    // Auto-calculate subtotal loan fund
+    const subtotalLoanFund =
+      (parseFloat(updateData.usTreasuries) || 0) +
+      (parseFloat(updateData.usAgencies) || 0);
+
+    // Auto-calculate total investments
+    const totalInvestments = subtotalInvestments + subtotalLoanFund;
+
+    // Auto-calculate net capital assets
+    const netCapitalAssets =
+      (parseFloat(updateData.buildings) || 0) +
+      (parseFloat(updateData.leaseholdImprovements) || 0) +
+      (parseFloat(updateData.furnitureFixturesEquipment) || 0) +
+      (parseFloat(updateData.accumulatedDepreciation) || 0);
+
+    // Auto-calculate subtotal capital assets net
+    const subtotalCapitalAssetsNet =
+      (parseFloat(updateData.landA) || 0) +
+      (parseFloat(updateData.landB) || 0) +
+      (parseFloat(updateData.constructionInProgress) || 0);
+
+    // Auto-calculate LLC Net
+    const llcNet =
+      (parseFloat(updateData.llcBuildings) || 0) +
+      (parseFloat(updateData.llcLeaseholdImprovements) || 0) +
+      (parseFloat(updateData.llcFurnitureFixturesEquipment) || 0) +
+      (parseFloat(updateData.vehicles) || 0) +
+      (parseFloat(updateData.llcAccumulatedDepreciation) || 0);
+
+    // Auto-calculate total capital assets net
+    const llcAssetsNet = llcNet + (parseFloat(updateData.llcLand) || 0);
+    const totalCapitalAssetsNet = netCapitalAssets + subtotalCapitalAssetsNet + llcAssetsNet;
+
+    // Auto-calculate total other assets
+    const totalOtherAssets =
+      (parseFloat(updateData.accountsReceivables) || 0) +
+      (parseFloat(updateData.dueFromOtherFunds) || 0) +
+      (parseFloat(updateData.interestAndDividendsReceivable) || 0) +
+      (parseFloat(updateData.otherAssets) || 0) +
+      (parseFloat(updateData.notesReceivableBeforeOneYear) || 0) +
+      (parseFloat(updateData.notesReceivableAfterOneYear) || 0) +
+      (parseFloat(updateData.securityDeposits) || 0) +
+      (parseFloat(updateData.cashByInvestmentManager) || 0) +
+      totalInvestments +
+      totalCapitalAssetsNet +
+      (parseFloat(updateData.restrictedCash) || 0);
+
+    // Auto-calculate net assets deferred outflows
+    const netAssetsDeferredOutflows =
+      totalCashAndCashEquivalents +
+      totalOtherAssets +
+      (parseFloat(updateData.deferredOutflowsPensions) || 0) +
+      (parseFloat(updateData.deferredOutflowsOPEB) || 0);
+
+    // Auto-calculate net liabilities due within one year
+    const netLiabilitiesDueWithinOneYear =
+      (parseFloat(updateData.accruedVacationDueWithinOneYear) || 0) +
+      (parseFloat(updateData.workersCompensationDueWithinOneYear) || 0) +
+      (parseFloat(updateData.accruedRetirementPlanDueWithinOneYear) || 0) +
+      (parseFloat(updateData.accruedLeaseGuarantyDueWithinOneYear) || 0) +
+      (parseFloat(updateData.capitalLeaseObligationsDueWithinOneYear) || 0) +
+      (parseFloat(updateData.notesPayableBuildingADueWithinOneYear) || 0) +
+      (parseFloat(updateData.netPensionLiabilityDueWithinOneYear) || 0) +
+      (parseFloat(updateData.netOPEBLiabilityDueWithinOneYear) || 0) +
+      (parseFloat(updateData.lineOfCreditBuildingADueWithinOneYear) || 0) +
+      (parseFloat(updateData.lineOfCreditBuildingBDueWithinOneYear) || 0) +
+      (parseFloat(updateData.debtServiceDueWithinOneYear) || 0);
+
+    // Auto-calculate net liabilities due after one year
+    const netLiabilitiesDueAfterOneYear =
+      (parseFloat(updateData.accruedVacationDueAfterOneYear) || 0) +
+      (parseFloat(updateData.workersCompensationDueAfterOneYear) || 0) +
+      (parseFloat(updateData.accruedRetirementPlanDueAfterOneYear) || 0) +
+      (parseFloat(updateData.accruedLeaseGuarantyDueAfterOneYear) || 0) +
+      (parseFloat(updateData.capitalLeaseObligationsDueAfterOneYear) || 0) +
+      (parseFloat(updateData.notesPayableBuildingADueAfterOneYear) || 0) +
+      (parseFloat(updateData.netPensionLiabilityDueAfterOneYear) || 0) +
+      (parseFloat(updateData.netOPEBLiabilityDueAfterOneYear) || 0) +
+      (parseFloat(updateData.lineOfCreditBuildingADueAfterOneYear) || 0) +
+      (parseFloat(updateData.lineOfCreditBuildingBDueAfterOneYear) || 0) +
+      (parseFloat(updateData.debtServiceDueAfterOneYear) || 0);
+
+    // Auto-calculate total liabilities
+    const totalLiabilities =
+      (parseFloat(updateData.accountsPayable) || 0) +
+      (parseFloat(updateData.dueToFund) || 0) +
+      (parseFloat(updateData.dueToOtherFunds) || 0) +
+      netLiabilitiesDueWithinOneYear +
+      netLiabilitiesDueAfterOneYear;
+
+    // Auto-calculate total liabilities deferred net position
+    const netLiabilitiesDeferredInflows =
+      (parseFloat(updateData.deferredInflowsOPEB) || 0) +
+      (parseFloat(updateData.deferredInflowsPensions) || 0) +
+      totalLiabilities;
+
+    // Auto-calculate total net position
+    const totalNetPosition =
+      (parseFloat(updateData.investedInCapitalAssets) || 0) +
+      (parseFloat(updateData.restrictedFederalFunds) || 0) +
+      (parseFloat(updateData.unrestricted) || 0);
+
+    // Auto-calculate total liabilities deferred net position
+    const totalLiabilitiesDeferredNetPosition =
+      netLiabilitiesDeferredInflows + totalNetPosition;
+
+    const updatedDataWithCalculations = {
+      ...updateData,
+      totalCashAndCashEquivalents,
+      subtotalInvestments,
+      subtotalLoanFund,
+      totalInvestments,
+      netCapitalAssets,
+      subtotalCapitalAssetsNet,
+      llcNet,
+      llcAssetsNet,
+      totalCapitalAssetsNet,
+      totalOtherAssets,
+      netAssetsDeferredOutflows,
+      netLiabilitiesDueWithinOneYear,
+      netLiabilitiesDueAfterOneYear,
+      totalLiabilities,
+      netLiabilitiesDeferredInflows,
+      totalNetPosition,
+      totalLiabilitiesDeferredNetPosition,
+    };
+
+    this._collection.update(docID, { $set: updatedDataWithCalculations });
   }
 
   /**

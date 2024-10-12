@@ -73,6 +73,7 @@ const Liabilities = ({ formData, handleChange }) => {
           onChange={handleChange}
           type="number"
           readOnly
+          icon="calculator"
         />
       </Form.Group>
 
@@ -99,6 +100,7 @@ const Liabilities = ({ formData, handleChange }) => {
           onChange={handleChange}
           type="number"
           readOnly
+          icon="calculator"
         />
       </Form.Group>
     </>

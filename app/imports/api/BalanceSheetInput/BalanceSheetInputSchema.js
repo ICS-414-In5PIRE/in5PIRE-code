@@ -316,4 +316,127 @@ export const BalanceSheetInputSchema = new SimpleSchema({
     optional: true,
     defaultValue: null,
   },
+  // Liabilities Due Within One Year fields
+  accruedVacationDueWithinOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  workersCompensationDueWithinOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  accruedRetirementPlanDueWithinOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  accruedLeaseGuarantyDueWithinOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  capitalLeaseObligationsDueWithinOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  notesPayableBuildingADueWithinOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  netPensionLiabilityDueWithinOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  netOPEBLiabilityDueWithinOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  lineOfCreditBuildingADueWithinOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  lineOfCreditBuildingBDueWithinOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  debtServiceDueWithinOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+
+  // Liabilities Due After One Year fields
+  accruedVacationDueAfterOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  workersCompensationDueAfterOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  accruedRetirementPlanDueAfterOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  accruedLeaseGuarantyDueAfterOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  capitalLeaseObligationsDueAfterOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  notesPayableBuildingADueAfterOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  netPensionLiabilityDueAfterOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  netOPEBLiabilityDueAfterOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  lineOfCreditBuildingADueAfterOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  lineOfCreditBuildingBDueAfterOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  debtServiceDueAfterOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  netLiabilitiesDueWithinOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  netLiabilitiesDueAfterOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
 });

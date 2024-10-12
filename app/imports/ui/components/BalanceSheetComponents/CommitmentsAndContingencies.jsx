@@ -39,6 +39,7 @@ const CommitmentsAndContingencies = ({ formData, handleChange }) => (
         onChange={handleChange}
         type="number"
         readOnly
+        icon="calculator"
       />
       <Form.Input
         className="dotted-input"
@@ -48,6 +49,7 @@ const CommitmentsAndContingencies = ({ formData, handleChange }) => (
         onChange={handleChange}
         type="number"
         readOnly
+        icon="calculator"
       />
     </Form.Group>
   </>

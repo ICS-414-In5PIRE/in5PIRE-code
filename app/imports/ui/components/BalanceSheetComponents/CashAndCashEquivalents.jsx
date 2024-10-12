@@ -76,7 +76,6 @@ const CashAndCashEquivalents = ({ formData, handleChange }) => (
       type="number"
       readOnly
       icon="calculator"
-      placeholder="Auto-calculated"
     />
   </Form.Group>
 );

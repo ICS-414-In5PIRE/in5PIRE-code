@@ -8,7 +8,7 @@ const PersonnelAndFringeManagement = ({ formData, handleChange }) => (
       width={4}
       label="Salary"
       name="salary"
-      value={formData.salary}
+      value={formData.salaryManagement ?? ''}
       onChange={handleChange}
       type="number"
     />
@@ -17,28 +17,28 @@ const PersonnelAndFringeManagement = ({ formData, handleChange }) => (
       <Form.Input
         label="Pension Accumulation"
         name="pensionAccumulation"
-        value={formData.pensionAccumulation}
+        value={formData.pensionAccumulationManagement ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Retiree Health Insurance"
         name="retireeHealthInsurance"
-        value={formData.retireeHealthInsurance}
+        value={formData.retireeHealthInsuranceManagement ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Other Post-Employment Benefits"
         name="postEmploymentBenefits"
-        value={formData.postEmploymentBenefits}
+        value={formData.postEmploymentBenefitsManagement ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Employees Health Fund"
         name="employeesHealthFund"
-        value={formData.employeesHealthFund}
+        value={formData.employeesHealthFundManagement ?? ''}
         onChange={handleChange}
         type="number"
       />
@@ -47,35 +47,35 @@ const PersonnelAndFringeManagement = ({ formData, handleChange }) => (
       <Form.Input
         label="Social Security"
         name="socialSecurity"
-        value={formData.socialSecurity}
+        value={formData.socialSecurityManagement ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Medicare"
         name="medicare"
-        value={formData.medicare}
+        value={formData.medicareManagement ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Workers Compensation"
         name="workersCompensation"
-        value={formData.workersCompensation}
+        value={formData.workersCompensationManagement ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Unemployment Compensation"
         name="unemploymentCompensation"
-        value={formData.unemploymentCompensation}
+        value={formData.unemploymentCompensationManagement ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Pension Administration"
         name="pensionAdministration"
-        value={formData.pensionAdministration}
+        value={formData.pensionAdministrationManagement ?? ''}
         onChange={handleChange}
         type="number"
       />
@@ -85,22 +85,22 @@ const PersonnelAndFringeManagement = ({ formData, handleChange }) => (
 
 PersonnelAndFringeManagement.propTypes = {
   formData: PropTypes.shape({
-    salary: PropTypes.number,
-    pensionAccumulation: PropTypes.number,
-    retireeHealthInsurance: PropTypes.number,
-    postEmploymentBenefits: PropTypes.number,
-    employeesHealthFund: PropTypes.number,
-    socialSecurity: PropTypes.number,
-    medicare: PropTypes.number,
-    workersCompensation: PropTypes.number,
-    unemploymentCompensation: PropTypes.number,
-    pensionAdministration: PropTypes.number,
+    salaryManagement: PropTypes.number,
+    pensionAccumulationManagement: PropTypes.number,
+    retireeHealthInsuranceManagement: PropTypes.number,
+    postEmploymentBenefitsManagement: PropTypes.number,
+    employeesHealthFundManagement: PropTypes.number,
+    socialSecurityManagement: PropTypes.number,
+    medicareManagement: PropTypes.number,
+    workersCompensationManagement: PropTypes.number,
+    unemploymentCompensationManagement: PropTypes.number,
+    pensionAdministrationManagement: PropTypes.number,
   }),
   handleChange: PropTypes.func,
 };
 
 PersonnelAndFringeManagement.defaultProps = {
-  formData: [],
+  formData: {},
   handleChange: () => {},
 };
 

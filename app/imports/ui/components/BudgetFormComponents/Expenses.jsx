@@ -42,7 +42,7 @@ const Expenses = ({ formData, handleChange }) => {
         width={4}
         label="Personnel"
         name="personnel"
-        value={formData.personnel}
+        value={formData.personnel ?? ''}
         onChange={handleChange}
         type="number"
       />
@@ -51,28 +51,28 @@ const Expenses = ({ formData, handleChange }) => {
         <Form.Input
           label="Program"
           name="program"
-          value={formData.program}
+          value={formData.program ?? ''}
           onChange={handleChange}
           type="number"
         />
         <Form.Input
           label="Contracts"
           name="contracts"
-          value={formData.contracts}
+          value={formData.contracts ?? ''}
           onChange={handleChange}
           type="number"
         />
         <Form.Input
           label="Grants"
           name="grants"
-          value={formData.grants}
+          value={formData.grants ?? ''}
           onChange={handleChange}
           type="number"
         />
         <Form.Input
           label="Travel"
           name="travel"
-          value={formData.travel}
+          value={formData.travel ?? ''}
           onChange={handleChange}
           type="number"
         />
@@ -81,28 +81,28 @@ const Expenses = ({ formData, handleChange }) => {
         <Form.Input
           label="Equipment"
           name="equipment"
-          value={formData.equipment}
+          value={formData.equipment ?? ''}
           onChange={handleChange}
           type="number"
         />
         <Form.Input
           label="Overhead"
           name="overhead"
-          value={formData.overhead}
+          value={formData.overhead ?? ''}
           onChange={handleChange}
           type="number"
         />
         <Form.Input
           label="Debt Service"
           name="debtService"
-          value={formData.debtService}
+          value={formData.debtService ?? ''}
           onChange={handleChange}
           type="number"
         />
         <Form.Input
           label="Other"
           name="other"
-          value={formData.other}
+          value={formData.other ?? ''}
           onChange={handleChange}
           type="number"
         />
@@ -112,7 +112,7 @@ const Expenses = ({ formData, handleChange }) => {
           className="dotted-input"
           label="Total Expenses"
           name="totalExpenses"
-          value={formData.totalExpenses}
+          value={formData.totalExpenses ?? ''}
           onChange={handleChange}
           type="number"
           readOnly

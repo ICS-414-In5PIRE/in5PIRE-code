@@ -7,28 +7,28 @@ const Revenue = ({ formData, handleChange }) => (
     <Form.Input
       label="5% of the Investment Portfolio"
       name="fivePercent"
-      value={formData.fivePercent}
+      value={formData.fivePercent ?? ''}
       onChange={handleChange}
       type="number"
     />
     <Form.Input
       label="Revenues"
       name="revenues"
-      value={formData.revenues}
+      value={formData.revenues ?? ''}
       onChange={handleChange}
       type="number"
     />
     <Form.Input
       label="General Fund"
       name="generalFund"
-      value={formData.generalFund}
+      value={formData.generalFund ?? ''}
       onChange={handleChange}
       type="number"
     />
     <Form.Input
       label="Core Operating Budget NOT Authorized"
       name="coreOperatingBudget"
-      value={formData.coreOperatingBudget}
+      value={formData.coreOperatingBudget ?? ''}
       onChange={handleChange}
       type="number"
     />
@@ -36,7 +36,7 @@ const Revenue = ({ formData, handleChange }) => (
       className="dotted-input"
       label="Total Revenue"
       name="totalRevenue"
-      value={formData.totalRevenue}
+      value={formData.totalRevenue ?? ''}
       onChange={handleChange}
       type="number"
       readOnly

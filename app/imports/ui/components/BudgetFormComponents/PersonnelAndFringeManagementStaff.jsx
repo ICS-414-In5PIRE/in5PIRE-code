@@ -8,7 +8,7 @@ const PersonnelAndFringeManagementStaff = ({ formData, handleChange }) => (
       width={4}
       label="Salary"
       name="salary"
-      value={formData.salary}
+      value={formData.salaryStaff ?? ''}
       onChange={handleChange}
       type="number"
     />
@@ -17,28 +17,28 @@ const PersonnelAndFringeManagementStaff = ({ formData, handleChange }) => (
       <Form.Input
         label="Pension Accumulation"
         name="pensionAccumulation"
-        value={formData.pensionAccumulation}
+        value={formData.pensionAccumulationStaff ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Retiree Health Insurance"
         name="retireeHealthInsurance"
-        value={formData.retireeHealthInsurance}
+        value={formData.retireeHealthInsuranceStaff ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Other Post-Employment Benefits"
         name="postEmploymentBenefits"
-        value={formData.postEmploymentBenefits}
+        value={formData.postEmploymentBenefitsStaff ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Employees Health Fund"
         name="employeesHealthFund"
-        value={formData.employeesHealthFund}
+        value={formData.employeesHealthFundStaff ?? ''}
         onChange={handleChange}
         type="number"
       />
@@ -47,35 +47,35 @@ const PersonnelAndFringeManagementStaff = ({ formData, handleChange }) => (
       <Form.Input
         label="Social Security"
         name="socialSecurity"
-        value={formData.socialSecurity}
+        value={formData.socialSecurityStaff ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Medicare"
         name="medicare"
-        value={formData.medicare}
+        value={formData.medicareStaff ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Workers Compensation"
         name="workersCompensation"
-        value={formData.workersCompensation}
+        value={formData.workersCompensationStaff ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Unemployment Compensation"
         name="unemploymentCompensation"
-        value={formData.unemploymentCompensation}
+        value={formData.unemploymentCompensationStaff ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Pension Administration"
         name="pensionAdministration"
-        value={formData.pensionAdministration}
+        value={formData.pensionAdministrationStaff ?? ''}
         onChange={handleChange}
         type="number"
       />
@@ -85,22 +85,22 @@ const PersonnelAndFringeManagementStaff = ({ formData, handleChange }) => (
 
 PersonnelAndFringeManagementStaff.propTypes = {
   formData: PropTypes.shape({
-    salary: PropTypes.number,
-    pensionAccumulation: PropTypes.number,
-    retireeHealthInsurance: PropTypes.number,
-    postEmploymentBenefits: PropTypes.number,
-    employeesHealthFund: PropTypes.number,
-    socialSecurity: PropTypes.number,
-    medicare: PropTypes.number,
-    workersCompensation: PropTypes.number,
-    unemploymentCompensation: PropTypes.number,
-    pensionAdministration: PropTypes.number,
+    salaryStaff: PropTypes.number,
+    pensionAccumulationStaff: PropTypes.number,
+    retireeHealthInsuranceStaff: PropTypes.number,
+    postEmploymentBenefitsStaff: PropTypes.number,
+    employeesHealthFundStaff: PropTypes.number,
+    socialSecurityStaff: PropTypes.number,
+    medicareStaff: PropTypes.number,
+    workersCompensationStaff: PropTypes.number,
+    unemploymentCompensationStaff: PropTypes.number,
+    pensionAdministrationStaff: PropTypes.number,
   }),
   handleChange: PropTypes.func,
 };
 
 PersonnelAndFringeManagementStaff.defaultProps = {
-  formData: [],
+  formData: {},
   handleChange: () => {},
 };
 

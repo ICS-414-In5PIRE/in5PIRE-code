@@ -7,21 +7,21 @@ const Surplus = ({ formData, handleChange }) => (
     <Form.Input
       label="Management"
       name="management"
-      value={formData.management}
+      value={formData.management ?? ''}
       onChange={handleChange}
       type="number"
     />
     <Form.Input
       label="Support Services"
       name="supportServices"
-      value={formData.supportServices}
+      value={formData.supportServices ?? ''}
       onChange={handleChange}
       type="number"
     />
     <Form.Input
       label="Beneficiary Advocacy"
       name="beneficiaryAdvocacy"
-      value={formData.beneficiaryAdvocacy}
+      value={formData.beneficiaryAdvocacy ?? ''}
       onChange={handleChange}
       type="number"
     />

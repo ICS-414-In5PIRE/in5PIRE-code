@@ -41,7 +41,7 @@ const NetAssets = ({ formData, handleChange }) => (
         className="dotted-input"
         label="Total Liabilities and Net Assets"
         name="totalLiabilitiesNetAssets"
-        value={formData.totalLiabilitiesAndNetAssets}
+        value={formData.totalLiabilitiesNetAssets}
         onChange={handleChange}
         type="number"
         readOnly

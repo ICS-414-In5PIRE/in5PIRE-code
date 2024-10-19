@@ -55,7 +55,6 @@ Revenue.propTypes = {
   handleChange: PropTypes.func,
 };
 
-
 Revenue.defaultProps = {
   formData: {},
   handleChange: () => {},

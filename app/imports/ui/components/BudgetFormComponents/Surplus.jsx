@@ -30,9 +30,9 @@ const Surplus = ({ formData, handleChange }) => (
 
 Surplus.propTypes = {
   formData: PropTypes.shape({
-    management: PropTypes.number,
-    supportServices: PropTypes.number,
-    beneficiaryAdvocacy: PropTypes.number,
+    management: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    supportServices: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    beneficiaryAdvocacy: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
 };

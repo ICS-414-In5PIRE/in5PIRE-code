@@ -46,14 +46,15 @@ const Revenue = ({ formData, handleChange }) => (
 
 Revenue.propTypes = {
   formData: PropTypes.shape({
-    fivePercent: PropTypes.number,
-    revenues: PropTypes.number,
-    generalFund: PropTypes.number,
-    coreOperatingBudget: PropTypes.number,
-    totalRevenue: PropTypes.number,
+    fivePercent: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    revenues: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    generalFund: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    coreOperatingBudget: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    totalRevenue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
 };
+
 
 Revenue.defaultProps = {
   formData: {},

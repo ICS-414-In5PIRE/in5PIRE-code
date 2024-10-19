@@ -124,17 +124,17 @@ const Expenses = ({ formData, handleChange }) => {
 
 Expenses.propTypes = {
   formData: PropTypes.shape({
-    personnel: PropTypes.number,
-    managementSalary: PropTypes.number,
-    program: PropTypes.number,
-    contracts: PropTypes.number,
-    grants: PropTypes.number,
-    travel: PropTypes.number,
-    equipment: PropTypes.number,
-    overhead: PropTypes.number,
-    debtService: PropTypes.number,
-    other: PropTypes.number,
-    totalExpenses: PropTypes.number,
+    personnel: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    managementSalary: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    program: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    contracts: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    grants: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    travel: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    equipment: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    overhead: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    debtService: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    other: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    totalExpenses: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
 };

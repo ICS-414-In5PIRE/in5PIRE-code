@@ -19,10 +19,10 @@ const UploadFile = () => {
       const reader = new FileReader();
 
       // If the file is an .xlsx file
-      if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
+      if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
         reader.onload = (event) => {
           const data = new Uint8Array(event.target.result);
-          const workbook = XLSX.read(data, { type: "array" });
+          const workbook = XLSX.read(data, { type: 'array' });
 
           // Reads the fifth sheet in the workbook (for now)
           const firstSheetName = workbook.SheetNames[4];
@@ -33,12 +33,10 @@ const UploadFile = () => {
           setTableData(jsonData);
         };
         reader.readAsArrayBuffer(file);
-      }
-      // If the file is a .csv file
-      else if (fileName.endsWith(".csv")) {
+      } else if (fileName.endsWith('.csv')) {
         reader.onload = (event) => {
           const csvData = event.target.result;
-          const workbook = XLSX.read(csvData, { type: "string" });
+          const workbook = XLSX.read(csvData, { type: 'string' });
 
           const firstSheetName = workbook.SheetNames[0];
           const worksheet = workbook.Sheets[firstSheetName];
@@ -49,7 +47,7 @@ const UploadFile = () => {
         };
         reader.readAsText(file); // For CSV, use `readAsText`
       } else {
-        alert("Unsupported file type! Please upload a supported file type.");
+        alert('Unsupported file type! Please upload a supported file type.');
       }
     }
   };

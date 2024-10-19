@@ -11,18 +11,28 @@ import {
   SubmitField,
   BoolField,
 } from 'uniforms-bootstrap5';
-import { FaLock } from 'react-icons/fa'; // Import the lock icon
+import { FaLock } from 'react-icons/fa';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
+
+/**
+ * 2FA Setup Instructions:
+ * ----------------------------------------
+ * 1. Install MailDev: `npm install -g maildev` and run `maildev`.
+ * 2. Set `MAIL_URL="smtp://localhost:1025"` in your terminal or settings file.
+ * 3. Start the Meteor app and trigger email sending (e.g., via login).
+ * 4. View emails at `http://localhost:1080` in MailDev. You should also be able to see the code
+ *    your terminal (where you are running Meteor).
+ */
 
 const SignIn = () => {
   const [error, setError] = useState('');
   const [redirect, setRedirect] = useState(false);
-
-  // State to hold initial form data
+  const [twoFactorRequired, setTwoFactorRequired] = useState(false); // Track if 2FA is required
+  const [verificationCode, setVerificationCode] = useState(''); // Store the user's entered verification code
   const [formData, setFormData] = useState({ email: '', rememberMe: true });
 
-  // Use useEffect to check for stored email when component mounts
+  // Load remembered email if present
   useEffect(() => {
     const rememberedEmail = localStorage.getItem('rememberedEmail');
     if (rememberedEmail) {
@@ -30,37 +40,57 @@ const SignIn = () => {
     }
   }, []);
 
-  // Define the form schema, including the remember me checkbox
+  // Define form schema
   const schema = new SimpleSchema({
     email: String,
     password: String,
     rememberMe: {
       type: Boolean,
       optional: true,
-      defaultValue: true, // You can set default to true or false as per your preference
+      defaultValue: true,
     },
   });
   const bridge = new SimpleSchema2Bridge(schema);
 
+  // Handle email/password login
   const submit = (doc) => {
     const { email, password, rememberMe } = doc;
 
-    Meteor.loginWithPassword({ email }, password, (err) => {
-      if (err) {
-        setError(err.reason);
+    Meteor.loginWithPassword({ email }, password, (loginError) => {
+      if (loginError) {
+        setError(loginError.reason);
       } else {
+        // Call server to send verification code
+        Meteor.call('sendVerificationCode', email, (sendError) => {
+          if (sendError) {
+            setError('Failed to send verification code');
+          } else {
+            setTwoFactorRequired(true); // Switch to 2FA input mode
+          }
+        });
+
+        // Handle remember me logic
         if (rememberMe) {
-          // Store the email in localStorage
           localStorage.setItem('rememberedEmail', email);
         } else {
-          // Remove the email from localStorage if it exists
           localStorage.removeItem('rememberedEmail');
         }
-        setRedirect(true);
       }
     });
   };
 
+  // Handle verification code submission
+  const verifyCode = () => {
+    Meteor.call('verifyCode', { email: formData.email, code: verificationCode }, (verifyError) => {
+      if (verifyError) {
+        setError('Invalid verification code');
+      } else {
+        setRedirect(true); // Redirect after successful verification
+      }
+    });
+  };
+
+  // Redirect to home page on successful verification
   if (redirect) {
     return <Navigate to="/" />;
   }
@@ -85,34 +115,51 @@ const SignIn = () => {
                 <h2 className="mt-3">Sign In</h2>
               </div>
 
-              {/* Sign-in Form */}
-              <AutoForm schema={bridge} onSubmit={submit} model={formData}>
-                <TextField
-                  className="mb-3"
-                  inputClassName="input-no-border"
-                  id={COMPONENT_IDS.SIGN_IN_FORM_EMAIL}
-                  name="email"
-                  placeholder="Enter email"
-                />
-                <TextField
-                  className="mb-3"
-                  inputClassName="input-no-border"
-                  id={COMPONENT_IDS.SIGN_IN_FORM_PASSWORD}
-                  name="password"
-                  placeholder="Enter password"
-                  type="password"
-                />
-                <BoolField
-                  name="rememberMe"
-                  label="Remember me"
-                  className="form-check d-flex justify-content-center mb-3"
-                />
-                <ErrorsField />
-                <SubmitField
-                  id={COMPONENT_IDS.SIGN_IN_FORM_SUBMIT}
-                  value="Sign In"
-                />
-              </AutoForm>
+              {!twoFactorRequired ? (
+              // Show regular login form if 2FA is not required yet
+                <AutoForm schema={bridge} onSubmit={submit} model={formData}>
+                  <TextField
+                    className="mb-3"
+                    inputClassName="input-no-border"
+                    id={COMPONENT_IDS.SIGN_IN_FORM_EMAIL}
+                    name="email"
+                    placeholder="Enter email"
+                  />
+                  <TextField
+                    className="mb-3"
+                    inputClassName="input-no-border"
+                    id={COMPONENT_IDS.SIGN_IN_FORM_PASSWORD}
+                    name="password"
+                    placeholder="Enter password"
+                    type="password"
+                  />
+                  <BoolField
+                    name="rememberMe"
+                    label="Remember me"
+                    className="form-check d-flex justify-content-center mb-3"
+                  />
+                  <ErrorsField />
+                  <SubmitField
+                    id={COMPONENT_IDS.SIGN_IN_FORM_SUBMIT}
+                    value="Sign In"
+                  />
+                </AutoForm>
+              ) : (
+              // Show verification code input field after email/password login
+                <>
+                  <p>Please enter the verification code sent to your email</p>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter verification code"
+                    value={verificationCode}
+                    onChange={(e) => setVerificationCode(e.target.value)}
+                  />
+                  <button type="button" className="btn btn-primary" onClick={verifyCode}>
+                    Verify
+                  </button>
+                </>
+              )}
 
               {/* Forgot Password Link */}
               <div className="text-center mt-3">
@@ -124,12 +171,11 @@ const SignIn = () => {
                 <p>
                   Don&apos;t have an account? <Link to="/signup">Sign Up</Link>
                 </p>
-
               </div>
             </Card.Body>
           </Card>
 
-          {/* Error Alert */}
+          {/* Display error messages if present */}
           {error && (
             <Alert variant="danger" className="mt-3">
               <Alert.Heading>Login was not successful</Alert.Heading>

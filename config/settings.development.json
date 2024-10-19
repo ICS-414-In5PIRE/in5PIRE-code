@@ -50,6 +50,8 @@
     }
   ],
 
+  "MAIL_URL": "smtp://localhost:1025",
+
   "public": {
     "development": true
   }

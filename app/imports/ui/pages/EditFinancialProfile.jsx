@@ -185,15 +185,14 @@ const EditFinancialProfile = () => {
             </AutoForm>
           )}
 
+          <MemberListDropdown members={members} />
           <InviteUsers profileId={profileId} />
-          {/* <MemberListDropdown members={members} /> */}
 
           {/* List of members */}
           <Row className="px-4 pt-4">
             <h2>Manage Members</h2>
             {members && members.length > 0 ? (
               <>
-                <MemberListDropdown members={members} />
                 <Form.Group controlId="selectMember">
                   <Form.Label>Manage Member Role</Form.Label>
                   <Form.Control as="select" onChange={handleMemberChange}>

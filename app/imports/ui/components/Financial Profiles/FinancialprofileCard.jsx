@@ -68,12 +68,12 @@ const FinancialProfileCard = ({
     });
   };
 
-  const handleMemberChange = (e) => {
-    const selectedUserId = e.target.value;
-    const member = members.find(m => m.userId === selectedUserId);
-    setSelectedMember(member);
-    setUpdatedRole(member.role); // Set the current role as default in the dropdown
-  };
+  // const handleMemberChange = (e) => {
+  //   const selectedUserId = e.target.value;
+  //   const member = members.find(m => m.userId === selectedUserId);
+  //   setSelectedMember(member);
+  //   setUpdatedRole(member.role); // Set the current role as default in the dropdown
+  // };
 
   const handleRoleUpdate = () => {
     if (!selectedMember) {
@@ -140,9 +140,11 @@ const FinancialProfileCard = ({
       </Row>
       <Row className="flex-grow-1 d-flex">
         <Col className="d-flex flex-column">
-          <Row className="px-4 pt-4">
-            <h2>Profile Type</h2>
-            <p>{profileType}</p>
+          <Row className="px-4 pt-4 justify-content-center" style={{ textAlign: 'center' }}>
+            <div>
+              <strong style={{ fontSize: '1.2rem' }}>Profile Type: </strong>
+              <span style={{ fontSize: '1.2rem' }}>{profileType}</span>
+            </div>
           </Row>
 
           {userRole === 'admin' && (
@@ -206,58 +208,10 @@ const FinancialProfileCard = ({
 
           <MemberListDropdown members={members} />
 
-          {/* Manage Members - only visible if userRole is 'admin' */}
-          {userRole === 'admin' && (
-            <Card className="mt-4">
-              <Card.Header as="h5">Manage Member Role</Card.Header>
-              <Card.Body>
-                <Form.Group controlId="selectMember" className="mb-3">
-                  <Form.Control as="select" onChange={handleMemberChange} className="mb-3">
-                    <option value="">Select a member to manage</option>
-                    {members.map((member) => {
-                      const user = Meteor.users.findOne({ _id: member.userId });
-                      const userEmail = user && user.emails && user.emails[0] ? user.emails[0].address : 'Unknown Email';
-
-                      return (
-                        <option key={member.userId} value={member.userId}>
-                          {userEmail} - {member.role}
-                        </option>
-                      );
-                    })}
-                  </Form.Control>
-                </Form.Group>
-
-                {/* Only show the role change dropdown when a member is selected */}
-                {selectedMember && (
-                  <>
-                    <Form.Group controlId="changeMemberRole" className="mb-3">
-                      <Form.Label>Change Role for {selectedMember.userEmail}</Form.Label>
-                      <Form.Control
-                        as="select"
-                        value={updatedRole}
-                        onChange={(e) => setUpdatedRole(e.target.value)}
-                      >
-                        <option value="viewer">Viewer</option>
-                        <option value="admin">Admin</option>
-                        {/* Add "Remove Member" option only for admin */}
-                        {userRole === 'admin' && (
-                          <option value="remove">Remove Member</option>
-                        )}
-                      </Form.Control>
-                    </Form.Group>
-                    <Button variant="primary" onClick={handleRoleUpdate}>
-                      Update Role
-                    </Button>
-                  </>
-                )}
-              </Card.Body>
-            </Card>
-          )}
-
         </Col>
       </Row>
       <Row className="px-4">
-        <h2>Profile Description</h2>
+        <h3>Profile Description</h3>
         <p>{description}</p>
       </Row>
 

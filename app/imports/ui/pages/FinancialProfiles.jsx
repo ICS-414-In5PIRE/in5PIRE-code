@@ -4,7 +4,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Container, Row, Card, CardHeader, Spinner } from 'react-bootstrap';
 import swal from 'sweetalert';
-import FinancialProfileCard from '../components/Financial Profiles/FinancialprofileCard';
+import FinancialProfileCard from '../components/Financial Profiles/FinancialProfileCard';
 import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection';
 import { PAGE_IDS } from '../utilities/PageIDs';
 

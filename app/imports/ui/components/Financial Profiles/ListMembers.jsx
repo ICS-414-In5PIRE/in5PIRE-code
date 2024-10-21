@@ -13,7 +13,7 @@ const MemberListDropdown = ({ members }) => {
   return (
     <>
       {/* Toggle Button */}
-      <Button variant="primary" onClick={toggleDropdown}>
+      <Button class="mt-1 btn btn-primary" variant="primary" onClick={toggleDropdown}>
         {dropdownEnabled ? 'Hide Member List' : 'Show Member List'}
       </Button>
 

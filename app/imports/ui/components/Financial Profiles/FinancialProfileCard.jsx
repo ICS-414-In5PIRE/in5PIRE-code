@@ -141,17 +141,19 @@ const FinancialProfileCard = ({
       <Row className="flex-grow-1 d-flex">
         <Col className="d-flex flex-column">
           <Row className="px-4 pt-4">
-            <h2>Profile Type</h2>
+            <h3>Profile Type</h3>
             <p>{profileType}</p>
           </Row>
 
           {userRole === 'admin' && (
             <>
-              <Row className="px-4">
+              <br />
+              <h3>Admin Actions</h3>
+              <Row className="px-4 mt-1">
                 {/* Navigate to the edit profile page */}
                 <Button variant="primary" onClick={handleEditProfile}>Edit Profile</Button>
               </Row>
-              <Row className="px-4">
+              <Row className="px-4 mt-1">
                 <Button variant="secondary" onClick={toggleInviteForm}>
                   {showInviteForm ? 'Cancel Invite' : 'Invite Users'}
                 </Button>
@@ -204,7 +206,7 @@ const FinancialProfileCard = ({
             </>
           )}
 
-          <MemberListDropdown members={members} />
+          <MemberListDropdown className="px-4" members={members} />
 
           {/* Manage Members - only visible if userRole is 'admin' */}
           {userRole === 'admin' && (

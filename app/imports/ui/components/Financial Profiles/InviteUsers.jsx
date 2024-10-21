@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, Row } from 'react-bootstrap';
 import swal from 'sweetalert';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { Meteor } from 'meteor/meteor';
 import PropTypes from 'prop-types';
 
@@ -33,9 +34,27 @@ const InviteUsers = ({ profileId }) => {
   return (
     <>
       <Row className="px-4">
-        <Button variant="secondary" onClick={toggleInviteForm}>
-          {showInviteForm ? 'Cancel Invite' : 'Invite Users'}
+        <Button
+          onClick={toggleInviteForm}
+          style={{
+            cursor: 'pointer',
+            padding: '10px',
+            textAlign: 'center',
+            backgroundColor: '#f8f9fa',
+            border: '1px solid #ced4da',
+            borderRadius: '5px',
+            fontSize: '1rem',
+            color: '#007bff',
+            display: 'inline-block',
+            transition: 'background-color 0.2s ease',
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#e2e6ea'; }} // Hover effect
+          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#f8f9fa'; }} // Revert hover effect
+        >
+          {showInviteForm ? 'Cancel Invite' : 'Invite Members'}{' '}
+          {showInviteForm ? <FaChevronUp /> : <FaChevronDown />}
         </Button>
+
       </Row>
 
       {showInviteForm && (

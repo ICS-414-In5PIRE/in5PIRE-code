@@ -1,10 +1,10 @@
 // import React from 'react';
 // import PropTypes from 'prop-types';
 // import { Card, CardHeader, Row, Col, Button } from 'react-bootstrap';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
-import { Card, CardHeader, Row, Col, Button, Form } from 'react-bootstrap';
+import { Card, CardHeader, Row, Col, Button } from 'react-bootstrap';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
@@ -18,7 +18,6 @@ const FinancialProfileCard = ({
   description,
   createdDate,
   editedDate,
-  // onDelete,
   userRole,
   profileId,
 }) => {
@@ -40,91 +39,6 @@ const FinancialProfileCard = ({
     };
   }, []);
 
-  const [showInviteForm, setShowInviteForm] = useState(false);
-  const [inviteEmail, setInviteEmail] = useState('');
-  const [inviteRole, setInviteRole] = useState('viewer');
-  const [selectedMember, setSelectedMember] = useState(null);
-  const [updatedRole, setUpdatedRole] = useState('viewer');
-  // const [members, setMembers] = useState(initialMembers);
-
-  const toggleInviteForm = () => setShowInviteForm(!showInviteForm);
-
-  const handleInviteSubmit = () => {
-    if (!inviteEmail.trim()) {
-      swal('Error', 'Email is required', 'error');
-      return;
-    }
-
-    // Call the Meteor method to invite the user by email
-    Meteor.call('inviteUserToProfileByEmail', { profileId, email: inviteEmail, role: inviteRole }, (error) => {
-      if (error) {
-        swal('Error', error.message, 'error');
-      } else {
-        swal('Success', 'User invited successfully', 'success');
-        setInviteEmail(''); // Clear form
-        setInviteRole('viewer'); // Reset role
-        setShowInviteForm(false); // Hide form
-      }
-    });
-  };
-
-  // const handleMemberChange = (e) => {
-  //   const selectedUserId = e.target.value;
-  //   const member = members.find(m => m.userId === selectedUserId);
-  //   setSelectedMember(member);
-  //   setUpdatedRole(member.role); // Set the current role as default in the dropdown
-  // };
-
-  const handleRoleUpdate = () => {
-    if (!selectedMember) {
-      swal('Error', 'No member selected.', 'error');
-      return;
-    }
-
-    // Check if the new role is the same as the current role
-    if (updatedRole === selectedMember.role) {
-      swal('Error', `The user is already assigned the role: ${updatedRole}.`, 'error');
-      return;
-    }
-
-    // Check if the selected member is the owner and prevent changing their role
-    if (selectedMember.userId === Meteor.userId() && selectedMember.role === 'admin') {
-      swal('Error', 'You are the owner of this profile and cannot change your own role. You are destined to be an admin forever.', 'error');
-      return;
-    }
-
-    // If the updated role is "remove", call the updateMethod to remove the member
-    if (updatedRole === 'remove') {
-      swal({
-        title: `Remove ${selectedMember.userEmail} from this profile?`,
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
-      }).then((willDelete) => {
-        if (willDelete) {
-          Meteor.call('FinancialProfiles.removeMember', profileId, selectedMember.userId, (error) => {
-            if (error) {
-              swal('Error', error.message, 'error');
-            } else {
-              swal('Success', 'Member removed successfully', 'success');
-              setSelectedMember(null); // Clear the selection
-            }
-          });
-        }
-      });
-      return; // Exit the function here since we are removing the member
-    }
-
-    // Proceed with the role update if the roles are different and the user is not the owner
-    Meteor.call('updateUserRoleInProfile', { profileId, userId: selectedMember.userId, newRole: updatedRole }, (error) => {
-      if (error) {
-        swal('Error', error.message, 'error');
-      } else {
-        swal('Success', 'Role updated successfully', 'success');
-        setSelectedMember(null); // Clear the selection
-      }
-    });
-  };
   return (
     <Card id="Financial-Card" className="d-flex flex-column h-100">
       <CardHeader className="d-flex justify-content-center" id="browse-financial-card-name">
@@ -148,64 +62,12 @@ const FinancialProfileCard = ({
           </Row>
 
           {userRole === 'admin' && (
-            <>
-              <Row className="px-4">
-                {/* Navigate to the edit profile page */}
-                <Button variant="primary" onClick={handleEditProfile}>Edit Profile</Button>
-              </Row>
-              <Row className="px-4">
-                <Button variant="secondary" onClick={toggleInviteForm}>
-                  {showInviteForm ? 'Cancel Invite' : 'Invite Users'}
-                </Button>
-              </Row>
-
-              {/* Invite Users */}
-              {showInviteForm && (
-                <Row className="px-4 pt-4">
-                  <Form>
-                    <Form.Group controlId="formEmail">
-                      <Form.Label>Email</Form.Label>
-                      <Form.Control
-                        type="email"
-                        placeholder="Enter email"
-                        value={inviteEmail}
-                        onChange={(e) => setInviteEmail(e.target.value)} // Updated to email
-                      />
-                    </Form.Group>
-
-                    {selectedMember && (
-                      <>
-                        <Form.Group controlId="changeMemberRole" className="mb-3">
-                          <Form.Label>Change Role for {selectedMember.userEmail}</Form.Label>
-                          <Form.Control
-                            as="select"
-                            value={updatedRole}
-                            onChange={(e) => setUpdatedRole(e.target.value)}
-                          >
-                            <option value="viewer">Viewer</option>
-                            <option value="admin">Admin</option>
-                            {userRole === 'admin' && (
-                              <option value="remove">Remove Member</option>
-                            )}
-                          </Form.Control>
-                        </Form.Group>
-
-                        <Button variant="primary" onClick={handleRoleUpdate}>
-                          {updatedRole === 'remove' ? 'Remove Member' : 'Update Role'}
-                        </Button>
-                      </>
-                    )}
-
-                    <Button variant="primary" className="mt-3" onClick={handleInviteSubmit}>
-                      Submit Invite
-                    </Button>
-                  </Form>
-                </Row>
-
-              )}
-            </>
+            <Row className="px-4">
+              {/* Navigate to the edit profile page */}
+              <Button variant="primary" onClick={handleEditProfile}>Edit Profile</Button>
+            </Row>
           )}
-
+          {/* List the Members */}
           <MemberListDropdown members={members} />
 
         </Col>

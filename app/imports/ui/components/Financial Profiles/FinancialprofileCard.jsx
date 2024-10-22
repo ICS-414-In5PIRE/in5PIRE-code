@@ -31,6 +31,14 @@ const FinancialProfileCard = ({
     navigate(`/edit-financial-profile/${profileId}`);
   };
 
+  const handleEditData = () => {
+    navigate(`/balance-sheet/${profileId}`);
+  };
+
+  const handleViewDashboard = () => {
+    navigate('/dashboard');
+  };
+
   useEffect(() => {
     // Subscribe to userEmails to get access to users' emails
     const userEmailSubscription = Meteor.subscribe('userEmails');
@@ -65,8 +73,11 @@ const FinancialProfileCard = ({
             <Row className="px-4">
               {/* Navigate to the edit profile page */}
               <Button variant="primary" onClick={handleEditProfile}>Edit Profile</Button>
+              <Button variant="primary" onClick={handleEditData}>Edit Data</Button>
             </Row>
+
           )}
+          <Button variant="primary" onClick={handleViewDashboard}>View Dashboard</Button>
           {/* List the Members */}
           <MemberListDropdown members={members} />
 

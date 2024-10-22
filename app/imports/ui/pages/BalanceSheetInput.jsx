@@ -3,7 +3,6 @@ import { Form, Segment, Container, Grid, Button, Menu, Dropdown } from 'semantic
 import { Tracker } from 'meteor/tracker';
 import { Meteor } from 'meteor/meteor';
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router-dom';
 import OtherAssets from '../components/BalanceSheetComponents/OtherAssets';
 import CashAndCashEquivalents from '../components/BalanceSheetComponents/CashAndCashEquivalents';
 import Liabilities from '../components/BalanceSheetComponents/Liabilities';
@@ -34,6 +33,7 @@ class BalanceSheetInput extends React.Component {
       dropdownOptions: {},
     };
     this.tracker = null;
+    this.navigate = null;
   }
 
   // Fires when the component mounts
@@ -55,12 +55,12 @@ class BalanceSheetInput extends React.Component {
     this.setState({ dropdownOptions: options });
   }
 
-  // Fires when the component updates
   componentDidUpdate(prevProps, prevState) {
     const { selectedYear } = this.state;
     const { profileId } = this.props;
-    if (prevState.selectedYear !== selectedYear) {
+    if (prevState.selectedYear !== selectedYear || prevProps.profileId !== profileId) {
       const username = Meteor.user()?.username;
+      // Update the condition to include year and profileId
       const balanceSheetData = BalanceSheetInputs.find({ owner: username, profileId, year: selectedYear }).fetch();
       this.setState({ record: balanceSheetData.length > 0 ? balanceSheetData : [] });
       this.handleSnackBar(false, '', false);
@@ -73,6 +73,11 @@ class BalanceSheetInput extends React.Component {
       this.tracker.stop();
     }
   }
+
+  handleViewOverview = () => {
+    const { profileId, navigate } = this.props;
+    navigate(`/profile-balance-sheet/${profileId}`);
+  };
 
   // Handle input changes
   handleChange = (e, { name, value }) => {
@@ -91,22 +96,26 @@ class BalanceSheetInput extends React.Component {
     this.setState({ activeItem: name });
   };
 
-  // Handle form submission
   handleSubmit = () => {
     const { record, selectedYear } = this.state;
-    const { profileId } = this.props;
+    const { profileId } = this.props; // Ensure profileId is obtained from props
     const collectionName = BalanceSheetInputs.getCollectionName();
     const data = JSON.parse(JSON.stringify(record));
+
     if (data.length === 0) {
       data.push({});
     }
+
     const owner = Meteor.user()?.username;
     const balanceSheetData = BalanceSheetInputs.find({ owner: owner, year: selectedYear }).fetch();
+
     if (balanceSheetData.length === 0) {
+      // When inserting a new record, include profileId
       data[0].year = selectedYear;
       data[0].owner = owner;
-      data[0].profileId = profileId;
-      defineMethod.callPromise({ collectionName: collectionName, profileId, definitionData: data[0] })
+      data[0].profileId = profileId; // Make sure to set profileId here
+
+      defineMethod.callPromise({ collectionName: collectionName, definitionData: data[0] })
         .then((response) => {
           const isError = response.status <= 0;
           const errorMessage = isError ? response.errorMessage : 'Record has been inserted successfully!';
@@ -119,6 +128,8 @@ class BalanceSheetInput extends React.Component {
         });
     } else {
       data[0].id = record[0]._id;
+      data[0].profileId = profileId; // Ensure profileId is present during updates
+
       updateMethod.callPromise({ collectionName, updateData: data[0] })
         .then(() => {
           this.handleSnackBar(true, 'Item updated successfully', false);
@@ -174,6 +185,13 @@ class BalanceSheetInput extends React.Component {
 
     return (
       <Container id={PAGE_IDS.BALANCE_SHEET_INPUT}>
+        <Grid.Column textAlign="left">
+          <Button primary onClick={this.handleViewOverview}>
+            View Overview
+          </Button>
+
+        </Grid.Column>
+
         <Grid centered>
           <Grid.Column>
             <h2>Balance Sheet Input</h2>
@@ -231,10 +249,10 @@ class BalanceSheetInput extends React.Component {
               <Grid className="py-3">
                 <Grid.Column textAlign="right">
                   <Button primary type="submit" onClick={this.handleSubmit}>
-                    {balanceSheetData.length > 0 ? 'Update' : 'Submit'}
+                    {record.length > 0 ? 'Update' : 'Submit'}
                   </Button>
                   {
-                    balanceSheetData.length > 0 && (
+                    record.length > 0 && (
                       <Button color="red" onClick={this.handleDelete}>
                         Delete
                       </Button>
@@ -242,6 +260,7 @@ class BalanceSheetInput extends React.Component {
                   }
                 </Grid.Column>
               </Grid>
+
             </Form>
           </Grid.Column>
         </Grid>
@@ -251,7 +270,7 @@ class BalanceSheetInput extends React.Component {
 }
 
 BalanceSheetInput.propTypes = {
-  profileId: PropTypes.string.isRequired,
+  profileId: PropTypes.string,
 };
 
 export default BalanceSheetInput;

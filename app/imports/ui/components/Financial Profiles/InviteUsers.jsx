@@ -33,7 +33,7 @@ const InviteUsers = ({ profileId }) => {
   return (
     <>
       <Row className="px-4">
-        <Button variant="secondary" onClick={toggleInviteForm}>
+        <Button variant="success" onClick={toggleInviteForm}>
           {showInviteForm ? 'Cancel Invite' : 'Invite Users'}
         </Button>
       </Row>

@@ -66,8 +66,9 @@ const FinancialProfilesPage = () => {
 
   return (
     <Container id={PAGE_IDS.FINANCIAL_PROFILES}>
-      <Container className="profile-container">
-        <h1>User&apos;s Financial Scenarios</h1>
+      <Container className="profile-container mt-4">
+        <h1>Your Financial Scenarios</h1>
+        <hr />
       </Container>
 
       {/* Flexbox Container for Cards */}
@@ -106,7 +107,7 @@ const FinancialProfilesPage = () => {
         >
           <Card id="Financial-Card" className="d-flex flex-column h-100">
             <CardHeader className="d-flex justify-content-center" id="browse-financial-card-name">
-              <h1>Create a New Financial Scenario</h1>
+              <h2>Create New Financial Scenario</h2>
             </CardHeader>
             <Row className="flex-grow-1 d-flex">
               <img

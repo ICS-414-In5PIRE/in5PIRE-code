@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Col, Container, Row, Form, Button } from 'react-bootstrap';
-import { AutoForm, ErrorsField, SubmitField, TextField, SelectField } from 'uniforms-bootstrap5';
+import { AutoForm, ErrorsField, SubmitField, TextField, SelectField, LongTextField } from 'uniforms-bootstrap5';
 import swal from 'sweetalert';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
@@ -170,75 +170,83 @@ const EditFinancialProfile = () => {
       <Row className="justify-content-center">
         <Col xs={5}>
           <Col className="text-center"><h2>Edit Financial Profile</h2></Col>
+          <hr />
           {formData && (
             <AutoForm ref={ref => { fRef = ref; }} schema={bridge} model={formData} onSubmit={data => submit(data, fRef)}>
               <Card>
                 <Card.Body>
                   <TextField name="title" />
                   <SelectField name="type" />
-                  <TextField name="description" />
-                  <TextField name="image" placeholder="Enter image URL (optional)" />
+                  <LongTextField name="description" />
+                  <LongTextField name="image" placeholder="Enter image URL (optional)" />
                   <SubmitField value="Update Profile" />
                   <ErrorsField />
                 </Card.Body>
               </Card>
             </AutoForm>
           )}
-
-          <InviteUsers profileId={profileId} />
-          {/* <MemberListDropdown members={members} /> */}
-
           {/* List of members */}
-          <Row className="px-4 pt-4">
-            <h2>Manage Members</h2>
-            {members && members.length > 0 ? (
-              <>
-                <MemberListDropdown members={members} />
-                <Form.Group controlId="selectMember">
-                  <Form.Label>Manage Member Role</Form.Label>
-                  <Form.Control as="select" onChange={handleMemberChange}>
-                    <option value="">Select a member to manage</option>
-                    {members.map((member) => {
-                      const user = Meteor.users.findOne({ _id: member.userId });
-                      const userEmail = user && user.emails && user.emails[0] ? user.emails[0].address : 'Unknown Email';
-
-                      return (
-                        <option key={member.userId} value={member.userId}>
-                          {userEmail} - {member.role}
-                        </option>
-                      );
-                    })}
-                  </Form.Control>
-                </Form.Group>
-
-                {/* Show the role change option only when a member is selected */}
-                {selectedMember && (
-                  <Form.Group controlId="changeMemberRole" className="mt-3">
-                    <Form.Label>Change Role for {selectedMember.userEmail}</Form.Label>
-                    <Form.Control
-                      as="select"
-                      value={updatedRole}
-                      onChange={(e) => setUpdatedRole(e.target.value)}
-                    >
-                      <option value="viewer">Viewer</option>
-                      <option value="admin">Admin</option>
-                      <option value="remove">Remove Member</option>
-                    </Form.Control>
-                    <Button variant="primary" className="mt-3" onClick={handleRoleUpdate}>
-                      Update Role
-                    </Button>
-                  </Form.Group>
-                )}
-              </>
-            ) : (
-              <p>No members found.</p>
-            )}
+          <br />
+          <Row className="justify-content-center">
+            <Col>
+              <h2>Manage Members</h2>
+              <hr />
+              <Row className="mb-1 justify-content-center">
+                <InviteUsers profileId={profileId} />
+              </Row>
+              {/* <MemberListDropdown members={members} /> */}
+              {members && members.length > 0 ? (
+                <>
+                  <Row className="px-4 mt-1">
+                    <MemberListDropdown className="mt-1" members={members} />
+                  </Row>
+                  <Card className="mt-4">
+                    <Card.Header as="h5">Manage Member Roles</Card.Header>
+                    <Card.Body>
+                      <Form.Group controlId="selectMember" className="mb-3">
+                        <Form.Control as="select" onChange={handleMemberChange} className="mb-3">
+                          <option value="">Select a member to manage</option>
+                          {members.map((member) => {
+                            const user = Meteor.users.findOne({ _id: member.userId });
+                            const userEmail = user && user.emails && user.emails[0] ? user.emails[0].address : 'Unknown Email';
+                            return (
+                              <option key={member.userId} value={member.userId}>
+                                {userEmail} - {member.role}
+                              </option>
+                            );
+                          })}
+                        </Form.Control>
+                      </Form.Group>
+                      {/* Show the role change option only when a member is selected */}
+                      {selectedMember && (
+                        <Form.Group controlId="changeMemberRole">
+                          <Form.Label>Change Role for {selectedMember.userEmail}</Form.Label>
+                          <Form.Control
+                            as="select"
+                            value={updatedRole}
+                            onChange={(e) => setUpdatedRole(e.target.value)}
+                          >
+                            <option value="viewer">Viewer</option>
+                            <option value="admin">Admin</option>
+                            <option value="remove">Remove Member</option>
+                          </Form.Control>
+                          <Button variant="primary" className="mt-3" onClick={handleRoleUpdate}>
+                            Update Role
+                          </Button>
+                        </Form.Group>
+                      )}
+                    </Card.Body>
+                  </Card>
+                </>
+              ) : (<p>No members found.</p>)}
+            </Col>
           </Row>
 
+          <br />
           {/* Delete the profile */}
-          <Row className="pt-4">
+          <Row className="px-4">
             <Button variant="danger" onClick={handleDelete}>
-              Delete Financial Profile
+              Delete This Financial Profile
             </Button>
           </Row>
         </Col>

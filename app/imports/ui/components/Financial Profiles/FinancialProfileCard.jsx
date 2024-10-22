@@ -134,8 +134,8 @@ const FinancialProfileCard = ({
         <img
           src={imgSrc}
           alt="Graph"
-          className="img-fluid m-4 p-4"
-          style={{ width: '80%', objectFit: 'contain' }}
+          className="img-fluid m-4"
+          style={{ width: '80%', objectFit: 'contain', paddingLeft: '35px' }}
         />
       </Row>
       <Row className="flex-grow-1 d-flex">
@@ -144,17 +144,21 @@ const FinancialProfileCard = ({
             <h3>Profile Type</h3>
             <p>{profileType}</p>
           </Row>
+          <br />
+          <Row className="px-4">
+            <h3>Profile Description</h3>
+            <p>{description}</p>
+          </Row>
 
           {userRole === 'admin' && (
             <>
-              <br />
               <h3>Admin Actions</h3>
               <Row className="px-4 mt-1">
                 {/* Navigate to the edit profile page */}
                 <Button variant="primary" onClick={handleEditProfile}>Edit Profile</Button>
               </Row>
               <Row className="px-4 mt-1">
-                <Button variant="secondary" onClick={toggleInviteForm}>
+                <Button variant="success" onClick={toggleInviteForm}>
                   {showInviteForm ? 'Cancel Invite' : 'Invite Users'}
                 </Button>
               </Row>
@@ -205,13 +209,14 @@ const FinancialProfileCard = ({
               )}
             </>
           )}
-
-          <MemberListDropdown className="px-4" members={members} />
+          <Row className="px-4 mt-1">
+            <MemberListDropdown members={members} />
+          </Row>
 
           {/* Manage Members - only visible if userRole is 'admin' */}
           {userRole === 'admin' && (
             <Card className="mt-4">
-              <Card.Header as="h5">Manage Member Role</Card.Header>
+              <Card.Header as="h5">Manage Member Roles</Card.Header>
               <Card.Body>
                 <Form.Group controlId="selectMember" className="mb-3">
                   <Form.Control as="select" onChange={handleMemberChange} className="mb-3">
@@ -257,10 +262,6 @@ const FinancialProfileCard = ({
           )}
 
         </Col>
-      </Row>
-      <Row className="px-4">
-        <h2>Profile Description</h2>
-        <p>{description}</p>
       </Row>
 
       {userRole !== 'admin' && (

@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Container, Header } from 'semantic-ui-react';
+import { Table, Container, Header, Button } from 'semantic-ui-react';
 import { Meteor } from 'meteor/meteor';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Tracker } from 'meteor/tracker'; // Importing Tracker from meteor/tracker
 import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputsCollection';
 import Loader from '../components/Loader';
 
 const ProfileBalanceSheetOverview = () => {
+  const navigate = useNavigate();
   const { profileId } = useParams();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const backToDataInput = () => {
+    navigate(`/balance-sheet/${profileId}`);
+  };
 
   useEffect(() => {
     // Subscribe to balance sheet data for the given profileId
@@ -47,6 +52,9 @@ const ProfileBalanceSheetOverview = () => {
 
   return (
     <Container>
+      <Button primary onClick={backToDataInput}>
+        Back to Data Input
+      </Button>
       <Header as="h2">Balance Sheet Overview</Header>
       <Table celled>
         <Table.Header>

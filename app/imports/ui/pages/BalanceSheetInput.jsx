@@ -55,17 +55,6 @@ class BalanceSheetInput extends React.Component {
     this.setState({ dropdownOptions: options });
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   const { selectedYear } = this.state;
-  //   const { profileId } = this.props;
-  //   if (prevState.selectedYear !== selectedYear || prevProps.profileId !== profileId) {
-  //     const username = Meteor.user()?.username;
-  //     // Update the condition to include year and profileId
-  //     const balanceSheetData = BalanceSheetInputs.find({ owner: username, profileId, year: selectedYear }).fetch();
-  //     this.setState({ record: balanceSheetData.length > 0 ? balanceSheetData : [] });
-  //     this.handleSnackBar(false, '', false);
-  //   }
-  // }
   componentDidUpdate(prevProps, prevState) {
     const { selectedYear } = this.state;
     const { profileId } = this.props;
@@ -93,6 +82,11 @@ class BalanceSheetInput extends React.Component {
   handleViewOverview = () => {
     const { profileId, navigate } = this.props;
     navigate(`/profile-balance-sheet/${profileId}`);
+  };
+
+  handleBackToScenarios = () => {
+    const { navigate } = this.props;
+    navigate('/financial-profiles');
   };
 
   // Handle input changes
@@ -206,7 +200,7 @@ class BalanceSheetInput extends React.Component {
   // Render the component
   render() {
     const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions } = this.state;
-    const username = Meteor.user()?.username;
+    // const username = Meteor.user()?.username;
     // const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
 
     if (isLoading) {
@@ -218,10 +212,12 @@ class BalanceSheetInput extends React.Component {
     return (
       <Container id={PAGE_IDS.BALANCE_SHEET_INPUT}>
         <Grid.Column textAlign="left">
+          <Button primary onClick={this.handleBackToScenarios}>
+            Back to Scenarios
+          </Button>
           <Button primary onClick={this.handleViewOverview}>
             View Overview
           </Button>
-
         </Grid.Column>
 
         <Grid centered>

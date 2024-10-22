@@ -32,9 +32,9 @@ const FundBalances = ({ formData, handleChange }) => (
 
 FundBalances.propTypes = {
   formData: PropTypes.shape({
-    beginningOfYear: PropTypes.number,
-    restatementAdjustment: PropTypes.number,
-    netPositionEndOfYear: PropTypes.number,
+    beginningOfYear: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    restatementAdjustment: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    netPositionEndOfYear: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
 };

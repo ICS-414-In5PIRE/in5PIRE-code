@@ -14,7 +14,7 @@ const Expenditures = ({ formData, handleChange }) => (
       />
       <Form.Input
         label="Support Services"
-        name="supportServies"
+        name="supportServices"
         value={formData.supportServices}
         onChange={handleChange}
         type="number"
@@ -53,9 +53,9 @@ const Expenditures = ({ formData, handleChange }) => (
     <Form.Group className="total-fields">
       <Form.Input
         className="dotted-input"
-        label="Total Expenditures"
-        name="totalExpenditures"
-        value={formData.totalExpenditures}
+        label="Total Expenses"
+        name="totalExpenses"
+        value={formData.totalExpenses}
         onChange={handleChange}
         type="number"
         readOnly
@@ -108,18 +108,18 @@ const Expenditures = ({ formData, handleChange }) => (
 
 Expenditures.propTypes = {
   formData: PropTypes.shape({
-    management: PropTypes.number,
-    supportServices: PropTypes.number,
-    beneficiaryAdvocacy: PropTypes.number,
-    depreciation: PropTypes.number,
-    llcA: PropTypes.number,
-    llcBExpenditures: PropTypes.number,
-    totalExpenditures: PropTypes.number,
-    excessRevenuesOverExpenditures: PropTypes.number,
-    proceedsFromDebt: PropTypes.number,
-    proceedsFromCapital: PropTypes.number,
-    netTransfers: PropTypes.number,
-    changeInNetAssets: PropTypes.number,
+    management: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    supportServices: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    beneficiaryAdvocacy: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    depreciation: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    llcA: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    llcBExpenditures: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    totalExpenses: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    excessRevenuesOverExpenditures: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    proceedsFromDebt: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    proceedsFromCapital: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    netTransfers: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    changeInNetAssets: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
 };

@@ -2,7 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
-import { Container, Row, Card, CardHeader, Spinner } from 'react-bootstrap';
+import { Container, Row, Card, CardHeader, Spinner, Button, Col } from 'react-bootstrap';
+import { BsBookmarkPlusFill } from 'react-icons/bs';
 import swal from 'sweetalert';
 import FinancialProfileCard from '../components/Financial Profiles/FinancialProfileCard';
 import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection';
@@ -71,7 +72,9 @@ const FinancialProfilesPage = () => {
         <h1>Your Financial Scenarios</h1>
         <hr />
       </Container>
-
+      <Row xs={3} className="justify-content-center">
+        <Button className="btn-success center" variant="success" onClick={handleAddNewProfile}>Create New Financial Scenerio <BsBookmarkPlusFill /></Button>
+      </Row>
       {/* Flexbox Container for Cards */}
       <Container className="d-flex justify-content-around flex-wrap py-3">
         {profiles.length > 0 ? (

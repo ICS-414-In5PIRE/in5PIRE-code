@@ -12,46 +12,36 @@ const ProfileBalanceSheetOverview = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log(`Profile ID in Overview: ${profileId}`);
-
     // Subscribe to balance sheet data for the given profileId
     const subscription = Meteor.subscribe('balanceSheet', profileId);
-    console.log('Subscription created:', subscription);
 
     // Set up a Tracker to monitor the subscription and collection
     const tracker = Tracker.autorun(() => {
-      console.log('Running Tracker autorun...');
       const ready = subscription.ready();
-      console.log(`Checking if subscription is ready: ${ready}`);
 
       if (ready) {
         // Fetch all balance sheet data for the given profileId, sorted by year
         const balanceSheetData = BalanceSheetInputs.find({ profileId }, { sort: { year: 1 } }).fetch();
-        console.log('Fetched balance sheet data:', balanceSheetData);
 
         setData(balanceSheetData);
         setIsLoading(false);
       }
     });
 
-    // Cleanup the tracker when the component unmounts
     return () => {
-      console.log('Cleaning up Tracker autorun...');
       tracker.stop();
     };
   }, [profileId]);
 
   if (isLoading) {
-    console.log('Component is still loading...');
     return <Loader text="Loading balance sheet overview..." />;
   }
 
   if (data.length === 0) {
-    console.log('No balance sheet data available for this profile.');
     return <Container><Header>No balance sheet data available for this profile.</Header></Container>;
   }
 
-  // Get the list of years and fields dynamically from the fetched data
+  // Get the years from the data
   const years = data.map(item => item.year);
   const fields = Object.keys(data[0]).filter(field => field !== '_id' && field !== 'owner' && field !== 'profileId' && field !== 'year');
 

@@ -41,8 +41,7 @@ class BalanceSheetInputsCollection extends BaseCollection {
     lineOfCreditBuildingBDueAfterOneYear, debtServiceDueAfterOneYear,
   }) {
     try {
-      const existingDocument = this._collection.findOne({ owner, year });
-
+      const existingDocument = this._collection.findOne({ owner, year, profileId });
       if (existingDocument) {
         return {
           status: 0,

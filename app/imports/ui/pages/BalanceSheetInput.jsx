@@ -33,7 +33,7 @@ class BalanceSheetInput extends React.Component {
       dropdownOptions: {},
     };
     this.tracker = null;
-    this.navigate = null;
+    // this.navigate = null;
   }
 
   // Fires when the component mounts
@@ -55,14 +55,30 @@ class BalanceSheetInput extends React.Component {
     this.setState({ dropdownOptions: options });
   }
 
+  // componentDidUpdate(prevProps, prevState) {
+  //   const { selectedYear } = this.state;
+  //   const { profileId } = this.props;
+  //   if (prevState.selectedYear !== selectedYear || prevProps.profileId !== profileId) {
+  //     const username = Meteor.user()?.username;
+  //     // Update the condition to include year and profileId
+  //     const balanceSheetData = BalanceSheetInputs.find({ owner: username, profileId, year: selectedYear }).fetch();
+  //     this.setState({ record: balanceSheetData.length > 0 ? balanceSheetData : [] });
+  //     this.handleSnackBar(false, '', false);
+  //   }
+  // }
   componentDidUpdate(prevProps, prevState) {
     const { selectedYear } = this.state;
     const { profileId } = this.props;
     if (prevState.selectedYear !== selectedYear || prevProps.profileId !== profileId) {
       const username = Meteor.user()?.username;
-      // Update the condition to include year and profileId
-      const balanceSheetData = BalanceSheetInputs.find({ owner: username, profileId, year: selectedYear }).fetch();
-      this.setState({ record: balanceSheetData.length > 0 ? balanceSheetData : [] });
+      const balanceSheetData = BalanceSheetInputs.find({
+        owner: username,
+        profileId,
+        year: selectedYear,
+      }).fetch();
+      // Check if a record exists for the selected year
+      const isExistingRecord = balanceSheetData.length > 0;
+      this.setState({ record: isExistingRecord ? balanceSheetData : [] });
       this.handleSnackBar(false, '', false);
     }
   }
@@ -107,7 +123,12 @@ class BalanceSheetInput extends React.Component {
     }
 
     const owner = Meteor.user()?.username;
-    const balanceSheetData = BalanceSheetInputs.find({ owner: owner, year: selectedYear }).fetch();
+    // Check if a record exists for this specific profileId and year
+    const balanceSheetData = BalanceSheetInputs.find({
+      owner,
+      profileId, // Ensure profileId is part of the check
+      year: selectedYear,
+    }).fetch();
 
     if (balanceSheetData.length === 0) {
       // When inserting a new record, include profileId
@@ -142,13 +163,24 @@ class BalanceSheetInput extends React.Component {
     }
   };
 
-  // Handles delete
   handleDelete = () => {
     const { selectedYear } = this.state;
+    const { profileId } = this.props; // Ensure profileId is obtained from props
     const collectionName = BalanceSheetInputs.getCollectionName();
     const owner = Meteor.user()?.username;
 
-    const balanceSheetData = BalanceSheetInputs.find({ owner: owner, year: selectedYear }).fetch();
+    // Find record matching owner, profileId, and selected year
+    const balanceSheetData = BalanceSheetInputs.find({
+      owner,
+      profileId,
+      year: selectedYear,
+    }).fetch();
+
+    if (balanceSheetData.length === 0) {
+      this.handleSnackBar(true, 'No record found to delete for the selected year.', true);
+      return;
+    }
+
     const recordId = balanceSheetData[0]._id;
 
     removeItMethod.callPromise({ collectionName, instance: recordId })
@@ -175,7 +207,7 @@ class BalanceSheetInput extends React.Component {
   render() {
     const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions } = this.state;
     const username = Meteor.user()?.username;
-    const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
+    // const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
 
     if (isLoading) {
       return (
@@ -270,7 +302,8 @@ class BalanceSheetInput extends React.Component {
 }
 
 BalanceSheetInput.propTypes = {
-  profileId: PropTypes.string,
+  profileId: PropTypes.string.isRequired,
+  navigate: PropTypes.string.isRequired,
 };
 
 export default BalanceSheetInput;

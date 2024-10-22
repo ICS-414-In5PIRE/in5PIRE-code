@@ -78,6 +78,7 @@ const UploadFile = () => {
 
   return (
     <Container id={PAGE_IDS.UPLOAD_FILE} style={{ marginTop: '20px' }}>
+      <br />
       <Header as="h2" icon textAlign="center">
         <Icon name="file excel outline" />
         <Header.Content>Upload Files</Header.Content>

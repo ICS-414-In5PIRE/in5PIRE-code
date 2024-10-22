@@ -68,7 +68,9 @@ const BudgetForm = () => {
     <Container id={PAGE_IDS.BUDGET_FORM}>
       <Grid centered>
         <Grid.Column>
+          <br />
           <h2>Budget Form</h2>
+          <hr />
           {submitted ? (
             <Message positive>
               <Message.Header>Form submitted successfully!</Message.Header>

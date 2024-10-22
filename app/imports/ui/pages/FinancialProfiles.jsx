@@ -66,7 +66,8 @@ const FinancialProfilesPage = () => {
 
   return (
     <Container id={PAGE_IDS.FINANCIAL_PROFILES}>
-      <Container className="profile-container mt-4">
+      <Container className="profile-container">
+        <br />
         <h1>Your Financial Scenarios</h1>
         <hr />
       </Container>

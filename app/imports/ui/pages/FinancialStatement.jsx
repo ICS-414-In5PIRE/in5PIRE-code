@@ -40,7 +40,9 @@ const FinancialStatement = () => {
     <Container id={PAGE_IDS.AUDITED_FS}>
       <Grid centered>
         <Grid.Column>
+          <br />
           <h2>Audited Financial Statement</h2>
+          <hr />
           {submitted ? (
             <Message positive>
               <Message.Header>Form submitted successfully!</Message.Header>

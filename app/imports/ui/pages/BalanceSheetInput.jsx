@@ -169,7 +169,9 @@ class BalanceSheetInput extends React.Component {
       <Container id={PAGE_IDS.BALANCE_SHEET_INPUT}>
         <Grid centered>
           <Grid.Column>
+            <br />
             <h2>Balance Sheet Input</h2>
+            <hr />
             <Form>
               <Form.Field>
                 Select Year

@@ -294,6 +294,7 @@ const FinancialProfileCard = ({
         </Row>
       )}
 
+      <br />
       <Row className="px-4">
         <p style={{ fontSize: '0.8em', color: 'gray', marginBottom: '2px' }}>Created: {createdDate}</p>
         <p style={{ fontSize: '0.8em', color: 'gray', marginTop: '2px' }}>Last edited: {editedDate}</p>

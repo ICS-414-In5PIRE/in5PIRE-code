@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import * as XLSX from 'xlsx';
 import { Table, Header, Container, Button, Icon, Grid } from 'semantic-ui-react';
 import { PAGE_IDS } from '../utilities/PageIDs';
+import { DataContext } from '../utilities/DataContext';
 
 /**
  * UploadFile: Allows the user to upload a spreadsheet or .csv file
@@ -10,6 +11,8 @@ import { PAGE_IDS } from '../utilities/PageIDs';
 
 const UploadFile = () => {
   const [tableData, setTableData] = useState([]);
+  const [cashEquivalents, setCashEquivalents] = useState(null); // Initialize as null
+  const { setUploadedData } = useContext(DataContext); // Access setUploadedData from context
 
   // Function to handle file upload and conversion
   const handleFileUpload = (e) => {
@@ -18,27 +21,47 @@ const UploadFile = () => {
       const fileName = file.name.toLowerCase();
       const reader = new FileReader();
 
-      // If the file is an .xlsx file
-      if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
+      // If the file is an .xlsx or .xls file
+      if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
         reader.onload = (event) => {
           const data = new Uint8Array(event.target.result);
-          const workbook = XLSX.read(data, { type: "array" });
+          const workbook = XLSX.read(data, { type: 'array' });
 
           // Reads the fifth sheet in the workbook (for now)
-          const firstSheetName = workbook.SheetNames[4];
+          const firstSheetName = workbook.SheetNames[4]; // adjust if needed
           const worksheet = workbook.Sheets[firstSheetName];
 
           // Convert the sheet to JSON
           const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
           setTableData(jsonData);
+
+          // Assume years start from column 9 (2020 in this case), and continue across subsequent columns
+          const years = [2020, 2021, 2022, 2023, 2024]; // Adjust as necessary based on your table
+          const startingYearColumnIndex = 9; // Adjust if needed
+
+          const cashAndEquivalents = {
+            pettyCash: {},
+            cash: {},
+            cashInBanks: {},
+          };
+
+          // Extract values for each year
+          years.forEach((year, index) => {
+            cashAndEquivalents.pettyCash[year] = jsonData[11]?.[startingYearColumnIndex + index]; // Petty Cash values
+            cashAndEquivalents.cash[year] = jsonData[12]?.[startingYearColumnIndex + index]; // Cash values
+            cashAndEquivalents.cashInBanks[year] = jsonData[13]?.[startingYearColumnIndex + index]; // Cash in Banks values
+          });
+
+          setCashEquivalents(cashAndEquivalents);
+          setUploadedData(cashAndEquivalents); // Update the context with the extracted data
         };
         reader.readAsArrayBuffer(file);
       }
       // If the file is a .csv file
-      else if (fileName.endsWith(".csv")) {
+      else if (fileName.endsWith('.csv')) {
         reader.onload = (event) => {
           const csvData = event.target.result;
-          const workbook = XLSX.read(csvData, { type: "string" });
+          const workbook = XLSX.read(csvData, { type: 'string' });
 
           const firstSheetName = workbook.SheetNames[0];
           const worksheet = workbook.Sheets[firstSheetName];
@@ -46,10 +69,29 @@ const UploadFile = () => {
           // Convert the CSV sheet to JSON
           const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
           setTableData(jsonData);
+
+          const years = [2020, 2021, 2022, 2023, 2024]; // Adjust as necessary
+          const startingYearColumnIndex = 9; // Adjust if needed
+
+          const cashAndEquivalents = {
+            pettyCash: {},
+            cash: {},
+            cashInBanks: {},
+          };
+
+          // Extract values for each year
+          years.forEach((year, index) => {
+            cashAndEquivalents.pettyCash[year] = jsonData[11]?.[startingYearColumnIndex + index]; // Petty Cash values
+            cashAndEquivalents.cash[year] = jsonData[12]?.[startingYearColumnIndex + index]; // Cash values
+            cashAndEquivalents.cashInBanks[year] = jsonData[13]?.[startingYearColumnIndex + index]; // Cash in Banks values
+          });
+
+          setCashEquivalents(cashAndEquivalents);
+          setUploadedData(cashAndEquivalents); // Update the context with the extracted data
         };
         reader.readAsText(file); // For CSV, use `readAsText`
       } else {
-        alert("Unsupported file type! Please upload a supported file type.");
+        alert('Unsupported file type! Please upload a supported file type.');
       }
     }
   };
@@ -103,6 +145,23 @@ const UploadFile = () => {
         <div style={{ marginTop: '20px' }}>
           <Header as="h3">Data from the File:</Header>
           {renderTable()}
+        </div>
+      )}
+
+      {/* Display extracted Cash and Cash Equivalents */}
+      {cashEquivalents && cashEquivalents.pettyCash && cashEquivalents.cash && cashEquivalents.cashInBanks && (
+        <div style={{ marginTop: '20px' }}>
+          <h4>Cash and Cash Equivalents Extracted Data by Year:</h4>
+          <div>
+            {Object.keys(cashEquivalents.pettyCash).map((year) => (
+              <div key={year}>
+                <p>Year {year}:</p>
+                <p>Petty Cash: {cashEquivalents.pettyCash[year]}</p>
+                <p>Cash: {cashEquivalents.cash[year]}</p>
+                <p>Cash in Banks: {cashEquivalents.cashInBanks[year]}</p>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </Container>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; // Add useContext and useEffect
 import { Form, Segment, Container, Grid, Button, Menu, Dropdown } from 'semantic-ui-react';
 import { Tracker } from 'meteor/tracker';
 import { Meteor } from 'meteor/meteor';
@@ -13,9 +13,9 @@ import { defineMethod, removeItMethod, updateMethod } from '../../api/base/BaseC
 import InputSheetMessage from '../components/InputSheetMessage';
 import { generateYears } from '../utilities/ComboBox';
 
-/**
- * BalanceSheetInput class component for entering balance sheet data using Semantic UI React Form.
- */
+// Import DataContext to access uploaded data from the file
+import { DataContext } from '../utilities/DataContext';
+
 class BalanceSheetInput extends React.Component {
   constructor(props) {
     super(props);
@@ -30,9 +30,12 @@ class BalanceSheetInput extends React.Component {
       selectedYear: 2024,
       record: [],
       dropdownOptions: {},
+      isEditing: false, // Add isEditing flag here
     };
     this.tracker = null;
   }
+
+  static contextType = DataContext; // Add DataContext to the class component
 
   // Fires when the component mounts
   componentDidMount() {
@@ -51,25 +54,56 @@ class BalanceSheetInput extends React.Component {
     this.setState({ dropdownOptions: options });
   }
 
-  // Fires when the component updates
   componentDidUpdate(prevProps, prevState) {
-    const { selectedYear } = this.state;
-    if (prevState.selectedYear !== selectedYear) {
+    const { selectedYear, isEditing } = this.state;
+    const { uploadedData } = this.context;
+
+    // Skip the update if the user is currently editing the form
+    if (isEditing) {
+      return;
+    }
+
+    // Log the current selected year and uploaded data to verify
+    console.log('componentDidUpdate - Selected Year:', selectedYear);
+    console.log('componentDidUpdate - Uploaded Data:', uploadedData);
+
+    // Update if selected year changes or uploaded data changes
+    if (prevState.selectedYear !== selectedYear || prevState.uploadedData !== uploadedData) {
       const username = Meteor.user()?.username;
       const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
-      this.setState({ record: balanceSheetData.length > 0 ? balanceSheetData : [] });
-      this.handleSnackBar(false, '', false);
+
+      // Check if uploadedData contains the year
+      if (uploadedData && uploadedData.pettyCash && uploadedData.pettyCash[selectedYear] !== undefined) {
+        console.log('componentDidUpdate - Using uploadedData to autofill record');
+
+        const updatedRecord = [{
+          pettyCash: uploadedData.pettyCash[selectedYear] ?? null,
+          cash: uploadedData.cash[selectedYear] ?? null,
+          cashInBanks: uploadedData.cashInBanks[selectedYear] ?? null,
+        }];
+
+        // Only update if the new record is different from the current record to avoid infinite loop
+        if (JSON.stringify(updatedRecord) !== JSON.stringify(this.state.record)) {
+          console.log('componentDidUpdate - Updated Record to Set in State:', updatedRecord);
+          this.setState({ record: updatedRecord });
+        }
+      } else {
+        // Fallback to the balance sheet data from the database if uploaded data isn't available
+        console.log('componentDidUpdate - Using balanceSheetData from database:', balanceSheetData);
+
+        if (JSON.stringify(balanceSheetData) !== JSON.stringify(this.state.record)) {
+          this.setState({ record: balanceSheetData.length > 0 ? balanceSheetData : [] });
+        }
+      }
     }
   }
 
-  // Fires when the component unmounts
   componentWillUnmount() {
     if (this.tracker) {
       this.tracker.stop();
     }
   }
 
-  // Handle input changes
   handleChange = (e, { name, value }) => {
     const { record } = this.state;
     const updatedFormData = JSON.parse(JSON.stringify(record));
@@ -77,8 +111,7 @@ class BalanceSheetInput extends React.Component {
       updatedFormData.push({});
     }
     updatedFormData[0][name] = value;
-    this.setState({ record: updatedFormData }, () => {
-    });
+    this.setState({ record: updatedFormData, isEditing: true }); // Set isEditing to true
   };
 
   // Handles menu item change
@@ -86,7 +119,6 @@ class BalanceSheetInput extends React.Component {
     this.setState({ activeItem: name });
   };
 
-  // Handle form submission
   handleSubmit = () => {
     const { record, selectedYear } = this.state;
     const collectionName = BalanceSheetInputs.getCollectionName();
@@ -96,6 +128,7 @@ class BalanceSheetInput extends React.Component {
     }
     const owner = Meteor.user()?.username;
     const balanceSheetData = BalanceSheetInputs.find({ owner: owner, year: selectedYear }).fetch();
+
     if (balanceSheetData.length === 0) {
       data[0].year = selectedYear;
       data[0].owner = owner;
@@ -104,6 +137,7 @@ class BalanceSheetInput extends React.Component {
           const isError = response.status <= 0;
           const errorMessage = isError ? response.errorMessage : 'Record has been inserted successfully!';
           this.handleSnackBar(true, errorMessage, isError);
+          this.setState({ isEditing: false }); // Reset isEditing flag after successful submit
         })
         .catch((error) => {
           if (error) {
@@ -115,6 +149,7 @@ class BalanceSheetInput extends React.Component {
       updateMethod.callPromise({ collectionName, updateData: data[0] })
         .then(() => {
           this.handleSnackBar(true, 'Item updated successfully', false);
+          this.setState({ isEditing: false }); // Reset isEditing flag after successful update
         })
         .catch((error) => {
           if (error) {
@@ -146,18 +181,27 @@ class BalanceSheetInput extends React.Component {
   };
 
   // Handle year change
-  handleYearChange = (e, { value }) => this.setState({ selectedYear: value });
+  handleYearChange = (e, { value }) => {
+    console.log('handleYearChange - Selected Year:', value);
+    this.setState({ selectedYear: value });
+  };
 
   // Handle snackbar
   handleSnackBar = (isOpen, message, isError) => {
     this.setState({ snackBar: { isOpen: isOpen, message: message, isError: isError } });
   };
 
-  // Render the component
   render() {
     const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions } = this.state;
     const username = Meteor.user()?.username;
     const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
+    console.log('Form Data being passed to CashAndCashEquivalents:', record[0]);
+
+    // Access uploadedData from the context
+    const { uploadedData } = this.context;
+
+    // Log the uploaded data to see if it's being passed
+    console.log('Uploaded Data:', uploadedData);
 
     if (isLoading) {
       return (

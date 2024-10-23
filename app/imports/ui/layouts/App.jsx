@@ -32,6 +32,9 @@ import UploadFile from '../pages/UploadFile';
 import FinancialStatement from '../pages/FinancialStatement';
 import EditFinancialProfile from '../pages/EditFinancialProfile';
 
+// Import DataContext to provide data across components
+import { DataProvider } from '../utilities/DataContext'; // Make sure to import this correctly
+
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
   const { ready } = useTracker(() => {
@@ -40,40 +43,43 @@ const App = () => {
       ready: rdy,
     };
   });
+
   return (
-    <Router>
-      <div className="d-flex flex-column min-vh-100">
-        <NewNav />
-        <Routes>
-          <Route exact path="/" element={<Landing />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/signout" element={<SignOut />} />
-          <Route path="/aboutus" element={<AboutUs />} />
-          <Route path="/contactus" element={<ContactUs />} />
-          <Route path="/userguide" element={<UserGuide />} />
-          <Route path="/About" element={<AboutUs />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/home" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
-          <Route path="/list" element={<ProtectedRoute><ListStuff /></ProtectedRoute>} />
-          <Route path="/add" element={<ProtectedRoute><AddStuff /></ProtectedRoute>} />
-          <Route path="/edit/:_id" element={<ProtectedRoute><EditStuff /></ProtectedRoute>} />
-          <Route path="/financial-profiles/" element={<ProtectedRoute><FinancialProfilesPage /></ProtectedRoute>} />
-          <Route path="/edit-financial-profile/:profileId" element={<ProtectedRoute><EditFinancialProfile /></ProtectedRoute>} />
-          <Route path="/add-financial-profile/" element={<ProtectedRoute><AddFinancialProfile /></ProtectedRoute>} />
-          <Route path="/admin" element={<AdminProtectedRoute ready={ready}><ListStuffAdmin /></AdminProtectedRoute>} />
-          <Route path="/manage-database" element={<AdminProtectedRoute ready={ready}><ManageDatabase /></AdminProtectedRoute>} />
-          <Route path="/notauthorized" element={<NotAuthorized />} />
-          <Route path="*" element={<NotFound />} />
-          <Route path="/balance-sheet" element={<ProtectedRoute><BalanceSheetInput /></ProtectedRoute>} />
-          <Route path="/audited-fs" element={<ProtectedRoute><FinancialStatement /></ProtectedRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/budget-form" element={<ProtectedRoute><BudgetForm /></ProtectedRoute>} />
-          <Route path="/upload-file" element={<ProtectedRoute><UploadFile /></ProtectedRoute>} />
-        </Routes>
-        <Footer />
-      </div>
-    </Router>
+    <DataProvider>  {/* Wrap the whole app with DataProvider */}
+      <Router>
+        <div className="d-flex flex-column min-vh-100">
+          <NewNav />
+          <Routes>
+            <Route exact path="/" element={<Landing />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/signout" element={<SignOut />} />
+            <Route path="/aboutus" element={<AboutUs />} />
+            <Route path="/contactus" element={<ContactUs />} />
+            <Route path="/userguide" element={<UserGuide />} />
+            <Route path="/About" element={<AboutUs />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/home" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
+            <Route path="/list" element={<ProtectedRoute><ListStuff /></ProtectedRoute>} />
+            <Route path="/add" element={<ProtectedRoute><AddStuff /></ProtectedRoute>} />
+            <Route path="/edit/:_id" element={<ProtectedRoute><EditStuff /></ProtectedRoute>} />
+            <Route path="/financial-profiles/" element={<ProtectedRoute><FinancialProfilesPage /></ProtectedRoute>} />
+            <Route path="/edit-financial-profile/:profileId" element={<ProtectedRoute><EditFinancialProfile /></ProtectedRoute>} />
+            <Route path="/add-financial-profile/" element={<ProtectedRoute><AddFinancialProfile /></ProtectedRoute>} />
+            <Route path="/admin" element={<AdminProtectedRoute ready={ready}><ListStuffAdmin /></AdminProtectedRoute>} />
+            <Route path="/manage-database" element={<AdminProtectedRoute ready={ready}><ManageDatabase /></AdminProtectedRoute>} />
+            <Route path="/notauthorized" element={<NotAuthorized />} />
+            <Route path="*" element={<NotFound />} />
+            <Route path="/balance-sheet" element={<ProtectedRoute><BalanceSheetInput /></ProtectedRoute>} />
+            <Route path="/audited-fs" element={<ProtectedRoute><FinancialStatement /></ProtectedRoute>} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/budget-form" element={<ProtectedRoute><BudgetForm /></ProtectedRoute>} />
+            <Route path="/upload-file" element={<ProtectedRoute><UploadFile /></ProtectedRoute>} />
+          </Routes>
+          <Footer />
+        </div>
+      </Router>
+    </DataProvider>
   );
 };
 

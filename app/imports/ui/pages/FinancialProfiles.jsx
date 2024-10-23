@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
-import { Container, Row, Card, CardHeader, Spinner, Button, Col } from 'react-bootstrap';
+import { Container, Row, Spinner, Button } from 'react-bootstrap';
 import { BsBookmarkPlusFill } from 'react-icons/bs';
 import swal from 'sweetalert';
 import FinancialProfileCard from '../components/Financial Profiles/FinancialProfileCard';
@@ -102,27 +102,6 @@ const FinancialProfilesPage = () => {
         ) : (
           <p>No financial scenarios found.</p>
         )}
-
-        {/* Hard-Coded Add New Profile Card */}
-        <Container
-          className="flex-card py-3 d-flex"
-          style={{ flex: '0 1 30%', margin: '10px', cursor: 'pointer' }}
-          onClick={handleAddNewProfile} // Make the card clickable
-        >
-          <Card id="Financial-Card" className="d-flex flex-column h-100">
-            <CardHeader className="d-flex justify-content-center" id="browse-financial-card-name">
-              <h2>Create New Financial Scenario</h2>
-            </CardHeader>
-            <Row className="flex-grow-1 d-flex">
-              <img
-                src="/images/AddButton.png"
-                alt="Add New Profile"
-                className="img-thumbnail m-4 p-4"
-                style={{ width: '80%', objectFit: 'contain' }}
-              />
-            </Row>
-          </Card>
-        </Container>
       </Container>
     </Container>
   );

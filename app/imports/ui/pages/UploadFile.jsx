@@ -108,7 +108,17 @@ const UploadFile = () => {
       {/* Image added below the table */}
       <div style={{ marginTop: '30px', textAlign: 'center' }}>
         <h2>Download Template and Edit Values</h2>
-        <Image src="/images/Upload3.png" fluid rounded />
+        {/* GitHub raw link */}
+        <a href="https://raw.githubusercontent.com/bobbyir/bobbyir.github.io/main/financemodeltest.xlsx
+"
+        >
+          <Button primary icon labelPosition="left">
+            <Icon name="download" />
+            Download Template
+          </Button>
+        </a>
+
+        <Image src="/images/Upload3.png" fluid rounded className="mt-3" />
         <h2>Upload The File</h2>
         <Image src="/images/Upload1.png" fluid rounded />
         <h2>Uploaded File Will be Added to Forms</h2>

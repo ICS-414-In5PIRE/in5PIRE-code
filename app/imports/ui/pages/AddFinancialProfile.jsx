@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
-import { AutoForm, ErrorsField, SubmitField, TextField, SelectField } from 'uniforms-bootstrap5';
+import { AutoForm, ErrorsField, SubmitField, TextField, SelectField, LongTextField } from 'uniforms-bootstrap5';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
@@ -97,8 +97,8 @@ const AddFinancialProfile = () => {
               <Card.Body>
                 <TextField name="title" />
                 <SelectField name="type" />
-                <TextField name="description" placeholder="Enter scenerio description (optional)" />
-                <TextField name="image" placeholder="Enter image URL (optional)" />
+                <LongTextField name="description" placeholder="Enter scenerio description (optional)" />
+                <LongTextField name="image" placeholder="Enter image URL (optional)" />
                 <SubmitField value="Submit" />
                 <Row>
                   <Col className="pt-1">

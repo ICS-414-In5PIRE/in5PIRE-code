@@ -67,7 +67,8 @@ const FinancialProfilesPage = () => {
           <Grid>
             <Grid.Row columns={2} verticalAlign="middle">
               <Grid.Column floated="left">
-                <Header as="h2">User&apos;s Financial Scenarios</Header>
+                <br />
+                <Header as="h2">Your Financial Scenarios</Header>
               </Grid.Column>
               {profiles.length > 0 && (
                 <Grid.Column floated="right" textAlign="right">
@@ -79,6 +80,7 @@ const FinancialProfilesPage = () => {
               )}
             </Grid.Row>
           </Grid>
+          <hr />
 
           {/* Grid Container for Cards */}
           <Grid stackable columns={3} className="py-3">

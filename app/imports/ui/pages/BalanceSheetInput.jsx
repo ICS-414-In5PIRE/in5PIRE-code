@@ -2,7 +2,6 @@ import React from 'react';
 import { Form, Segment, Container, Grid, Button, Menu, Dropdown } from 'semantic-ui-react';
 import { Tracker } from 'meteor/tracker';
 import { Meteor } from 'meteor/meteor';
-import PropTypes from 'prop-types';
 import OtherAssets from '../components/BalanceSheetComponents/OtherAssets';
 import CashAndCashEquivalents from '../components/BalanceSheetComponents/CashAndCashEquivalents';
 import Liabilities from '../components/BalanceSheetComponents/Liabilities';
@@ -12,10 +11,10 @@ import Loader from '../components/Loader';
 import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputsCollection';
 import { defineMethod, removeItMethod, updateMethod } from '../../api/base/BaseCollection.methods';
 import InputSheetMessage from '../components/InputSheetMessage';
-import { generateYears } from '../utilities/ComboBox';
+import { generateYears, generateProfiles } from '../utilities/ComboBox';
 
 /**
- * BalanceSheetInput class component for entering balance sheet data using Semantic UI React Form.
+ * BalanceSheetInput class component for entering balance sheet data.
  */
 class BalanceSheetInput extends React.Component {
   constructor(props) {
@@ -31,41 +30,30 @@ class BalanceSheetInput extends React.Component {
       selectedYear: 2024,
       record: [],
       dropdownOptions: {},
+      profileId: null,
+      hasSubmitted: false,
     };
     this.tracker = null;
-    // this.navigate = null;
   }
 
   // Fires when the component mounts
   componentDidMount() {
-    const { profileId } = this.props;
     this.tracker = Tracker.autorun(() => {
-      const { selectedYear } = this.state;
-      const subscription = BalanceSheetInputs.subscribeBalanceSheet();
-      const rdy = subscription.ready();
-      const username = Meteor.user()?.username;
-      // added profileId here
-      const balanceSheetData = BalanceSheetInputs.find({ owner: username, profileId, year: selectedYear }).fetch();
-      this.setState({ isLoading: !rdy, record: balanceSheetData });
+      this.populateDropdowns();
+      this.grabRecords();
     });
-
-    const options = {};
-    const yearOptions = generateYears();
-    options.yearOptions = yearOptions;
-    this.setState({ dropdownOptions: options });
   }
 
+  // Fires when the component updates
   componentDidUpdate(prevProps, prevState) {
-    const { selectedYear } = this.state;
-    const { profileId } = this.props;
-    if (prevState.selectedYear !== selectedYear || prevProps.profileId !== profileId) {
+    const { selectedYear, profileId } = this.state;
+    if (prevState.selectedYear !== selectedYear || prevState.profileId !== profileId) {
       const username = Meteor.user()?.username;
       const balanceSheetData = BalanceSheetInputs.find({
         owner: username,
         profileId,
         year: selectedYear,
       }).fetch();
-      // Check if a record exists for the selected year
       const isExistingRecord = balanceSheetData.length > 0;
       this.setState({ record: isExistingRecord ? balanceSheetData : [] });
       this.handleSnackBar(false, '', false);
@@ -79,14 +67,30 @@ class BalanceSheetInput extends React.Component {
     }
   }
 
-  handleViewOverview = () => {
-    const { profileId, navigate } = this.props;
-    navigate(`/profile-balance-sheet/${profileId}`);
+  // Populates the dropdowns
+  populateDropdowns = () => {
+    const handler = Meteor.subscribe('FinancialProfiles');
+    const isFinancialProfilesReady = handler.ready();
+    const options = {};
+    const yearOptions = generateYears();
+    const profiles = generateProfiles(Meteor.user()?.username, Meteor.userId());
+    options.yearOptions = yearOptions;
+    options.profileOptions = profiles;
+    this.setState({ dropdownOptions: options, profileId: profiles[0]?.value, isLoading: !isFinancialProfilesReady });
   };
 
-  handleBackToScenarios = () => {
-    const { navigate } = this.props;
-    navigate('/financial-profiles');
+  // Fetches the records
+  grabRecords = () => {
+    const { selectedYear, profileId } = this.state;
+    const subscription = BalanceSheetInputs.subscribeBalanceSheet();
+    const username = Meteor.user()?.username;
+    const isBalanceSheetReady = subscription.ready();
+    const balanceSheetData = BalanceSheetInputs.find({
+      owner: username,
+      profileId,
+      year: selectedYear,
+    }).fetch();
+    this.setState({ isLoading: !isBalanceSheetReady, record: balanceSheetData, hasSubmitted: balanceSheetData.length > 0 });
   };
 
   // Handle input changes
@@ -97,7 +101,7 @@ class BalanceSheetInput extends React.Component {
       updatedFormData.push({});
     }
     updatedFormData[0][name] = value;
-    this.setState({ record: updatedFormData }, () => {
+    this.setState({ record: updatedFormData, hasSubmitted: false }, () => {
     });
   };
 
@@ -106,9 +110,9 @@ class BalanceSheetInput extends React.Component {
     this.setState({ activeItem: name });
   };
 
+  // Handles form submission
   handleSubmit = () => {
-    const { record, selectedYear } = this.state;
-    const { profileId } = this.props; // Ensure profileId is obtained from props
+    const { record, selectedYear, profileId } = this.state;
     const collectionName = BalanceSheetInputs.getCollectionName();
     const data = JSON.parse(JSON.stringify(record));
 
@@ -117,18 +121,16 @@ class BalanceSheetInput extends React.Component {
     }
 
     const owner = Meteor.user()?.username;
-    // Check if a record exists for this specific profileId and year
     const balanceSheetData = BalanceSheetInputs.find({
       owner,
-      profileId, // Ensure profileId is part of the check
+      profileId,
       year: selectedYear,
     }).fetch();
 
     if (balanceSheetData.length === 0) {
-      // When inserting a new record, include profileId
       data[0].year = selectedYear;
       data[0].owner = owner;
-      data[0].profileId = profileId; // Make sure to set profileId here
+      data[0].profileId = profileId;
 
       defineMethod.callPromise({ collectionName: collectionName, definitionData: data[0] })
         .then((response) => {
@@ -143,7 +145,7 @@ class BalanceSheetInput extends React.Component {
         });
     } else {
       data[0].id = record[0]._id;
-      data[0].profileId = profileId; // Ensure profileId is present during updates
+      data[0].profileId = profileId;
 
       updateMethod.callPromise({ collectionName, updateData: data[0] })
         .then(() => {
@@ -155,15 +157,18 @@ class BalanceSheetInput extends React.Component {
           }
         });
     }
+
+    this.tracker = Tracker.autorun(() => {
+      this.setState({ hasSubmitted: true });
+      this.grabRecords();
+    });
   };
 
   handleDelete = () => {
-    const { selectedYear } = this.state;
-    const { profileId } = this.props; // Ensure profileId is obtained from props
+    const { selectedYear, profileId } = this.state;
     const collectionName = BalanceSheetInputs.getCollectionName();
     const owner = Meteor.user()?.username;
 
-    // Find record matching owner, profileId, and selected year
     const balanceSheetData = BalanceSheetInputs.find({
       owner,
       profileId,
@@ -176,7 +181,6 @@ class BalanceSheetInput extends React.Component {
     }
 
     const recordId = balanceSheetData[0]._id;
-
     removeItMethod.callPromise({ collectionName, instance: recordId })
       .then(() => {
         this.handleSnackBar(true, 'Record has been deleted successfully!', false);
@@ -189,8 +193,10 @@ class BalanceSheetInput extends React.Component {
       });
   };
 
-  // Handle year change
-  handleYearChange = (e, { value }) => this.setState({ selectedYear: value });
+  // Handle dropdown
+  handleDropdown = (e, data) => {
+    this.setState({ [data.name]: data.value });
+  };
 
   // Handle snackbar
   handleSnackBar = (isOpen, message, isError) => {
@@ -199,9 +205,7 @@ class BalanceSheetInput extends React.Component {
 
   // Render the component
   render() {
-    const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions } = this.state;
-    // const username = Meteor.user()?.username;
-    // const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
+    const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions, profileId, hasSubmitted } = this.state;
 
     if (isLoading) {
       return (
@@ -211,95 +215,105 @@ class BalanceSheetInput extends React.Component {
 
     return (
       <Container id={PAGE_IDS.BALANCE_SHEET_INPUT}>
-        <Grid.Column textAlign="left">
-          <Button primary onClick={this.handleBackToScenarios}>
-            Back to Scenarios
-          </Button>
-          <Button primary onClick={this.handleViewOverview}>
-            View Overview
-          </Button>
-        </Grid.Column>
-
         <Grid centered>
           <Grid.Column>
             <h2>Balance Sheet Input</h2>
-            <Form>
-              <Form.Field>
-                Select Year
-                <Dropdown
-                  placeholder="Select Year"
-                  selection
-                  options={dropdownOptions.yearOptions}
-                  value={selectedYear}
-                  onChange={this.handleYearChange}
-                />
-              </Form.Field>
-              <div>
-                <Menu pointing secondary>
-                  <Menu.Item
-                    name="Cash And Equivalents"
-                    active={activeItem === 'Cash And Equivalents'}
-                    onClick={this.handleItemClick}
-                  />
-                  <Menu.Item
-                    name="Other Assets"
-                    active={activeItem === 'Other Assets'}
-                    onClick={this.handleItemClick}
-                  />
-                  <Menu.Item
-                    name="Liabilities"
-                    active={activeItem === 'Liabilities'}
-                    onClick={this.handleItemClick}
-                  />
-                  <Menu.Item
-                    name="Commitments And Contingencies"
-                    active={activeItem === 'Commitments And Contingencies'}
-                    onClick={this.handleItemClick}
-                  />
-                </Menu>
+            {
+              dropdownOptions.profileOptions?.length < 0 || profileId == null ? (
+                <div style={{ color: 'gray', textAlign: 'center', marginTop: '20px' }}>
+                  <h3>
+                    No profiles have been created for this user. Please create a profile
+                    <a href="/add-financial-profile" style={{ marginLeft: '5px' }}>
+                      here.
+                    </a>
+                  </h3>
+                </div>
+              ) : (
+                <Form>
+                  <Form.Field>
+                    Select Year
+                    <Dropdown
+                      placeholder="Select Year"
+                      selection
+                      options={dropdownOptions.yearOptions}
+                      value={selectedYear}
+                      name="selectedYear"
+                      onChange={(event, data) => this.handleDropdown(event, data)}
+                    />
+                  </Form.Field>
+                  <Form.Field>
+                    Select Profile
+                    <Dropdown
+                      placeholder="Select Profile"
+                      selection
+                      options={dropdownOptions.profileOptions}
+                      value={profileId}
+                      name="profileId"
+                      onChange={(event, data) => this.handleDropdown(event, data)}
+                    />
+                  </Form.Field>
+                  <div>
+                    <Menu pointing secondary>
+                      <Menu.Item
+                        name="Cash And Equivalents"
+                        active={activeItem === 'Cash And Equivalents'}
+                        onClick={this.handleItemClick}
+                      />
+                      <Menu.Item
+                        name="Other Assets"
+                        active={activeItem === 'Other Assets'}
+                        onClick={this.handleItemClick}
+                      />
+                      <Menu.Item
+                        name="Liabilities"
+                        active={activeItem === 'Liabilities'}
+                        onClick={this.handleItemClick}
+                      />
+                      <Menu.Item
+                        name="Commitments And Contingencies"
+                        active={activeItem === 'Commitments And Contingencies'}
+                        onClick={this.handleItemClick}
+                      />
+                    </Menu>
 
-                <Segment>
-                  {activeItem === 'Cash And Equivalents' && (
-                    <CashAndCashEquivalents formData={record[0]} handleChange={this.handleChange} />
-                  )}
-                  {activeItem === 'Other Assets' && (
-                    <OtherAssets formData={record[0]} handleChange={this.handleChange} />
-                  )}
-                  {activeItem === 'Liabilities' && (
-                    <Liabilities formData={record[0]} handleChange={this.handleChange} />
-                  )}
-                  {activeItem === 'Commitments And Contingencies' && (
-                    <CommitmentsAndContingencies formData={record[0]} handleChange={this.handleChange} />
-                  )}
-                </Segment>
-              </div>
-              <InputSheetMessage snackBar={snackBar} handleSnackBar={this.handleSnackBar} />
-              <Grid className="py-3">
-                <Grid.Column textAlign="right">
-                  <Button primary type="submit" onClick={this.handleSubmit}>
-                    {record.length > 0 ? 'Update' : 'Submit'}
-                  </Button>
-                  {
-                    record.length > 0 && (
-                      <Button color="red" onClick={this.handleDelete}>
-                        Delete
+                    <Segment>
+                      {activeItem === 'Cash And Equivalents' && (
+                        <CashAndCashEquivalents formData={record[0]} handleChange={this.handleChange} />
+                      )}
+                      {activeItem === 'Other Assets' && (
+                        <OtherAssets formData={record[0]} handleChange={this.handleChange} />
+                      )}
+                      {activeItem === 'Liabilities' && (
+                        <Liabilities formData={record[0]} handleChange={this.handleChange} />
+                      )}
+                      {activeItem === 'Commitments And Contingencies' && (
+                        <CommitmentsAndContingencies formData={record[0]} handleChange={this.handleChange} />
+                      )}
+                    </Segment>
+                  </div>
+                  <InputSheetMessage snackBar={snackBar} handleSnackBar={this.handleSnackBar} />
+                  <Grid className="py-3">
+                    <Grid.Column textAlign="right">
+                      <Button primary type="submit" onClick={this.handleSubmit}>
+                        {record.length > 0 && hasSubmitted ? 'Update' : 'Submit'}
                       </Button>
-                    )
-                  }
-                </Grid.Column>
-              </Grid>
-
-            </Form>
+                      {
+                        record.length > 0 && hasSubmitted > 0 && (
+                          <Button color="red" onClick={this.handleDelete}>
+                            Delete
+                          </Button>
+                        )
+                      }
+                    </Grid.Column>
+                  </Grid>
+                </Form>
+              )
+            }
           </Grid.Column>
         </Grid>
       </Container>
     );
   }
 }
-
-BalanceSheetInput.propTypes = {
-  profileId: PropTypes.string.isRequired,
-  navigate: PropTypes.string.isRequired,
-};
 
 export default BalanceSheetInput;

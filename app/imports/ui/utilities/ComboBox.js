@@ -1,3 +1,5 @@
+import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection';
+
 /**
  * Generates an array of year options for the dropdown menu.
  */
@@ -9,4 +11,28 @@ export const generateYears = () => {
     return { key: year, value: year, text: year };
   });
   return years;
+};
+
+/**
+ * Generates profiles for the current user.
+ */
+export const generateProfiles = (owner, members) => {
+  const profiles = FinancialProfiles.find({
+    $or: [
+      { owner: owner }, // Owner
+      { 'members.userId': members }, // Members
+    ],
+  }).fetch();
+
+  const profilesWithKeys = profiles.map((profile) => {
+    const { createdAt, ...rest } = profile;
+    return {
+      ...rest,
+      key: profile._id,
+      value: profile.title,
+      text: profile.title,
+    };
+  });
+
+  return profilesWithKeys;
 };

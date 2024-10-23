@@ -31,7 +31,6 @@ import UserGuide from '../pages/UserGuide';
 import UploadFile from '../pages/UploadFile';
 import FinancialStatement from '../pages/FinancialStatement';
 import EditFinancialProfile from '../pages/EditFinancialProfile';
-import BalanceSheetInputWrapper from '../components/BalanceSheetComponents/BalanceSheetWrapper';
 import ProfileBalanceSheetOverview from '../pages/ProfileBalanceSheetOverview';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
@@ -69,7 +68,6 @@ const App = () => {
           <Route path="/notauthorized" element={<NotAuthorized />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/balance-sheet" element={<ProtectedRoute><BalanceSheetInput /></ProtectedRoute>} />
-          <Route path="/balance-sheet/:profileId" element={<ProtectedRoute><BalanceSheetInputWrapper /></ProtectedRoute>} />
           <Route path="/audited-fs" element={<ProtectedRoute><FinancialStatement /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/budget-form" element={<ProtectedRoute><BudgetForm /></ProtectedRoute>} />

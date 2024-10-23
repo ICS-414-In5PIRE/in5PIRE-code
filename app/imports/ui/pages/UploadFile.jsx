@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
-import { Table, Header, Container, Button, Icon, Grid, Dropdown } from 'semantic-ui-react';
+import { Table, Header, Container, Button, Icon, Grid, Dropdown, GridRow, GridColumn, Divider, Segment } from 'semantic-ui-react';
 import { Image } from 'react-bootstrap';
 import { PAGE_IDS } from '../utilities/PageIDs';
 
@@ -98,29 +98,50 @@ const UploadFile = () => {
     </Table>
   );
 
+  function download(url, name) {
+    const link = document.createElement('a');
+    link.download = name;
+    link.href = url;
+    link.click();
+  }
+
   return (
     <Container id={PAGE_IDS.UPLOAD_FILE} style={{ marginTop: '20px' }}>
       <br />
-      <Header as="h2" icon textAlign="center">
-        <Icon name="file excel outline" />
-        <Header.Content>Upload Files</Header.Content>
-      </Header>
-
-      <h3>Import your data from your excel spreadsheets or CSV files by uploading them here. The data will show on a table below.</h3>
-      <p>Current accepted formats: .xls, .xlsx, .xlsm, .csv</p>
-
-      <Grid>
-        <Grid.Column textAlign="center">
-          <Button as="label" htmlFor="fileInput" primary icon="upload" content="Upload File" />
-          <input
-            id="fileInput"
-            type="file"
-            accept=".xlsx, .xls, .xlsm, .csv"
-            onChange={handleFileUpload}
-            style={{ display: 'none' }}
-          />
-        </Grid.Column>
-      </Grid>
+      <Segment>
+        <Grid columns={2} relaxed="very" stackable>
+          <Grid.Column textAlign="center">
+            <Header as="h2" icon textAlign="center">
+              <Icon name="file excel outline" />
+              <Header.Content>Upload Files</Header.Content>
+            </Header>
+            <p>Upload your files and import your data. </p>
+            <p>Current accepted formats: .xls, .xlsx, .xlsm, .csv</p>
+            <Button as="label" htmlFor="fileInput" primary icon="upload" content="Upload File" />
+            <input
+              id="fileInput"
+              type="file"
+              accept=".xlsx, .xls, .xlsm, .csv"
+              onChange={handleFileUpload}
+              style={{ display: 'none' }}
+            />
+          </Grid.Column>
+          <GridColumn textAlign="center">
+            <Header as="h2" icon textAlign="center">
+              <Icon name="file alternate outline" />
+              <Header.Content>Download Template</Header.Content>
+            </Header>
+            <p>Download our template and enter your data in an easily readable and accessible format.</p>
+            <a href="https://raw.githubusercontent.com/bobbyir/bobbyir.github.io/main/financemodeltest.xlsx" target="_blank" rel="noopener noreferrer">
+              <Button primary icon labelPosition="left">
+                <Icon name="download" />
+                Download Template
+              </Button>
+            </a>
+          </GridColumn>
+        </Grid>
+        <Divider vertical>OR</Divider>
+      </Segment>
 
       {/* Sheet selection dropdown if multiple sheets are available */}
       {sheetNames.length > 0 && (
@@ -146,29 +167,38 @@ const UploadFile = () => {
         </div>
       )}
 
-      {/* Image added below the table */}
-      <div style={{ marginTop: '30px', textAlign: 'center' }}>
-        <h2>Download Template and Edit Values</h2>
-        {/* GitHub raw link */}
-        <a href="https://raw.githubusercontent.com/bobbyir/bobbyir.github.io/main/financemodeltest.xlsx
-"
-        >
-          <Button primary icon labelPosition="left">
-            <Icon name="download" />
-            Download Template
-          </Button>
-        </a>
-
-        <Image src="/images/Upload3.png" fluid rounded className="mt-3" />
-        <h2>Upload The File</h2>
-        <Image src="/images/Upload1.png" fluid rounded />
-        <Image src="/images/Upload5.png" fluid rounded />
-        <h2>Uploaded File Will be Added to Forms</h2>
-        <Image src="/images/Upload2.png" fluid rounded />
-        <h2>Values Will be Shown and Can Be Manually Changed Before Submitting</h2>
-        <Image src="/images/Upload4.png" fluid rounded />
-
-      </div>
+      <Image src="/images/Upload3.png" fluid rounded className="mt-3" />
+      <Grid>
+        <Divider />
+        <GridRow columns={2}>
+          <GridColumn>
+            <Image src="/images/Upload1.png" fluid rounded />
+          </GridColumn>
+          <GridColumn>
+            <h2>Upload the File</h2>
+            <h4>Upload and import your data from your excel spreadsheets or CSV files by uploading them here. The data will show on a table below.</h4>
+          </GridColumn>
+        </GridRow>
+        <Divider />
+        <GridRow columns={2}>
+          <GridColumn>
+            <Image src="/images/Upload5.png" fluid rounded />
+          </GridColumn>
+          <GridColumn>
+            <h2>Uploaded File Will be Added to Forms</h2>
+          </GridColumn>
+        </GridRow>
+        <Divider />
+        <GridRow columns={2}>
+          <GridColumn>
+            <Image src="/images/Upload4.png" fluid rounded />
+          </GridColumn>
+          <GridColumn>
+            <h2>Values Will be Shown and Can Be Manually Changed Before Submitting</h2>
+          </GridColumn>
+        </GridRow>
+        <Divider />
+      </Grid>
     </Container>
   );
 };

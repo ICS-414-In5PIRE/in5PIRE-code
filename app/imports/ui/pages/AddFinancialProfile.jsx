@@ -100,6 +100,13 @@ const AddFinancialProfile = () => {
                 <TextField name="description" placeholder="Enter scenerio description (optional)" />
                 <TextField name="image" placeholder="Enter image URL (optional)" />
                 <SubmitField value="Submit" />
+                <Row>
+                  <Col className="pt-1">
+                    <Button variant="secondary" onClick={() => navigate('/financial-profiles')}>
+                      Back to Financial Profiles
+                    </Button>
+                  </Col>
+                </Row>
                 <ErrorsField />
               </Card.Body>
             </Card>

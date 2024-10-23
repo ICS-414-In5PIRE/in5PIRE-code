@@ -398,6 +398,8 @@ body{
 
 /* Balance Sheet Styles */
 #balance-sheet-input, #budget-form, #audited-fs {
+  padding-top: 1em;
+
   & h3, & h2 {
     text-align: start;
   }
@@ -410,5 +412,13 @@ body{
     border: 2px dashed rgba(34, 36, 38, 0.15);
     border-radius: 4px;
     box-shadow: none;
+  }
+}
+
+#financial-profiles {
+  padding-top: 1em;
+
+  h2 {
+    text-align: start;
   }
 }

@@ -133,28 +133,31 @@ const EditFinancialProfile = () => {
                   <LongTextField name="description" />
                   <LongTextField name="image" placeholder="Enter image URL (optional)" />
                   <SubmitField value="Update Profile" />
+                  <Row>
+                    <Col className="pt-1">
+                      <Button variant="danger" onClick={handleDelete}>
+                        Delete Financial Profile
+                      </Button>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col className="pt-1">
+                      <Button variant="secondary" onClick={() => navigate('/financial-profiles')}>
+                        Back to Financial Profiles
+                      </Button>
+                    </Col>
+                  </Row>
                   <ErrorsField />
                 </Card.Body>
               </Card>
             </AutoForm>
           )}
           {/* List the members */}
-          <br />
-          <h2>Manage Members</h2>
-          <hr />
           <MemberListDropdown members={members} />
           {/* invite new members */}
           <InviteUsers profileId={profileId} />
           {/* change roles or delete members */}
           <ManageMembers profileId={profileId} members={members} />
-
-          <br />
-          {/* Delete the profile */}
-          <Row className="px-4">
-            <Button variant="danger" onClick={handleDelete}>
-              Delete This Financial Scenario
-            </Button>
-          </Row>
         </Col>
       </Row>
     </Container>

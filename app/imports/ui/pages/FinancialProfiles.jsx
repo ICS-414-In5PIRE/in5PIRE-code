@@ -2,12 +2,12 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
-import { Container, Spinner } from 'react-bootstrap';
 import swal from 'sweetalert';
+import { Container, Grid, Card, Button, Icon, Header } from 'semantic-ui-react';
 import FinancialProfileCard from '../components/Financial Profiles/FinancialProfileCard';
 import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection';
 import { PAGE_IDS } from '../utilities/PageIDs';
-import AddNewFinancialProfileCard from '../components/Financial Profiles/AddNewFinancialProfileCard';
+import Loader from '../components/Loader';
 
 // FinancialProfiles page
 const FinancialProfilesPage = () => {
@@ -56,55 +56,69 @@ const FinancialProfilesPage = () => {
 
   if (isLoading) {
     return (
-      <Container className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
-        <div className="text-center">
-          <Spinner animation="border" role="status" />
-          <h2 style={{ marginTop: '1rem' }}>Loading your financial profiles...</h2>
-        </div>
-      </Container>
+      <Loader text="Loading your financial profiles..." />
     );
   }
 
   return (
     <Container id={PAGE_IDS.FINANCIAL_PROFILES}>
-      <Container className="profile-container">
-        <br />
-        <h1>Your Financial Scenarios</h1>
-        <hr />
-      </Container>
+      <Grid centered>
+        <Grid.Column>
+          <Grid>
+            <Grid.Row columns={2} verticalAlign="middle">
+              <Grid.Column floated="left">
+                <Header as="h2">User&apos;s Financial Scenarios</Header>
+              </Grid.Column>
+              {profiles.length > 0 && (
+                <Grid.Column floated="right" textAlign="right">
+                  <Button color="blue" icon labelPosition="left" onClick={handleAddNewProfile}>
+                    <Icon name="plus" />
+                    Add New Profile
+                  </Button>
+                </Grid.Column>
+              )}
+            </Grid.Row>
+          </Grid>
 
-      {/* Flexbox Container for Cards */}
-      <Container className="d-flex justify-content-around flex-wrap py-3">
-        {profiles.length > 0 ? (
-          profiles.map((profile) => {
-            const isOwner = profile.owner === Meteor.user()?.username;
-            const userRole = profile.members?.find(member => member.userId === Meteor.userId())?.role || (isOwner ? 'admin' : 'viewer');
+          {/* Grid Container for Cards */}
+          <Grid stackable columns={3} className="py-3">
+            {profiles.length > 0 ? (
+              profiles.map((profile) => {
+                const isOwner = profile.owner === Meteor.user()?.username;
+                const userRole = profile.members?.find(member => member.userId === Meteor.userId())?.role || (isOwner ? 'admin' : 'viewer');
 
-            return (
-              <Container key={profile._id} className="flex-card py-3 d-flex" style={{ flex: '0 1 30%', margin: '10px' }}>
-                <FinancialProfileCard
-                  title={profile.title}
-                  imgSrc={profile.image || '/images/GraphPlaceholder.png'}
-                  profileType={profile.type}
-                  description={profile.description || 'No description available.'}
-                  createdDate={profile.createdAt?.toLocaleDateString() || 'Not available'}
-                  editedDate={profile.lastEditedAt?.toLocaleDateString() || 'Not available'}
-                  onDelete={isOwner ? () => handleDeleteProfile(profile) : null}
-                  userRole={userRole}
-                  profileId={profile._id}
-                  members={profile.members}
-                />
-              </Container>
-            );
-          })
-        ) : (
-          <p>No financial scenarios found.</p>
-        )}
-
-        {/* Add New Profile Card */}
-        <AddNewFinancialProfileCard onClick={handleAddNewProfile} />
-
-      </Container>
+                return (
+                  <Grid.Column key={profile._id} style={{ marginBottom: '20px' }}>
+                    <Card fluid>
+                      <FinancialProfileCard
+                        title={profile.title}
+                        imgSrc={profile.image || '/images/GraphPlaceholder.png'}
+                        profileType={profile.type}
+                        description={profile.description || 'No description available.'}
+                        createdDate={profile.createdAt?.toLocaleDateString() || 'Not available'}
+                        editedDate={profile.lastEditedAt?.toLocaleDateString() || 'Not available'}
+                        onDelete={isOwner ? () => handleDeleteProfile(profile) : null}
+                        userRole={userRole}
+                        profileId={profile._id}
+                        members={profile.members}
+                      />
+                    </Card>
+                  </Grid.Column>
+                );
+              })
+            ) : (
+              <div style={{ color: 'gray', textAlign: 'center' }}>
+                <h3>
+                  No profiles have been created for this user. Please create a profile
+                  <a href="/add-financial-profile" style={{ marginLeft: '5px' }}>
+                    here.
+                  </a>
+                </h3>
+              </div>
+            )}
+          </Grid>
+        </Grid.Column>
+      </Grid>
     </Container>
   );
 };

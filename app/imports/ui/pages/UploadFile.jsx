@@ -122,6 +122,7 @@ const UploadFile = () => {
         <Image src="/images/Upload3.png" fluid rounded className="mt-3" />
         <h2>Upload The File</h2>
         <Image src="/images/Upload1.png" fluid rounded />
+        <Image src="/images/Upload5.png" fluid rounded />
         <h2>Uploaded File Will be Added to Forms</h2>
         <Image src="/images/Upload2.png" fluid rounded />
         <h2>Values Will be Shown and Can Be Manually Changed Before Submitting</h2>

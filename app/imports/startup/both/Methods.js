@@ -103,8 +103,8 @@ Meteor.methods({
 
     const memberField = `members.${memberIndex}.role`;
     const updateResult = FinancialProfiles._collection.update(
-        { _id: profileId },
-        { $set: { [memberField]: newRole } },
+      { _id: profileId },
+      { $set: { [memberField]: newRole } },
     );
 
     if (updateResult === 0) {

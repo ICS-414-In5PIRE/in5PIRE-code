@@ -7,6 +7,7 @@ import { PAGE_IDS } from '../utilities/PageIDs';
 /**
  * UploadFile: Allows the user to upload a spreadsheet or .csv file
  * and import the data into a table.
+ *
  */
 
 const UploadFile = () => {
@@ -26,7 +27,7 @@ const UploadFile = () => {
         const arrayBuffer = event.target.result;
         const data = new Uint8Array(arrayBuffer); // Create a Uint8Array from the buffer
 
-        // If the file is an Excel file (.xlsx, .xls, .xlsm
+        // If the file is an Excel file (.xlsx, .xls, .xlsm)
         if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls") || fileName.endsWith(".xlsm")) {
           const workbook = XLSX.read(data, { type: "array" }); // Read as ArrayBuffer
 
@@ -77,6 +78,7 @@ const UploadFile = () => {
   };
 
   // Render table from the tableData array using Semantic UI
+  // TODO?: Make table render prettier.
   const renderTable = () => (
     <Table celled striped>
       <Table.Header>
@@ -97,13 +99,6 @@ const UploadFile = () => {
       </Table.Body>
     </Table>
   );
-
-  function download(url, name) {
-    const link = document.createElement('a');
-    link.download = name;
-    link.href = url;
-    link.click();
-  }
 
   return (
     <Container id={PAGE_IDS.UPLOAD_FILE} style={{ marginTop: '20px' }}>
@@ -160,6 +155,7 @@ const UploadFile = () => {
         />
       )}
 
+      {/* TODO: Allow horizontal scroll */}
       {tableData.length > 0 && (
         <div style={{ marginTop: "20px" }}>
           <Header as="h3">Data from the {selectedSheet ? selectedSheet : "Excel/CSV"} Sheet:</Header>
@@ -167,6 +163,7 @@ const UploadFile = () => {
         </div>
       )}
 
+      {/* Bottom footer section (needs cleanup) */}
       <Image src="/images/Upload3.png" fluid rounded className="mt-3" />
       <Grid>
         <Divider />

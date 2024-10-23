@@ -102,11 +102,13 @@ const Dashboard = () => {
 
   return (
     <Container id={PAGE_IDS.DASHBOARD} style={{ marginTop: '2em' }}>
+      <br />
       <Grid centered>
         <Grid.Column width={16}>
           <Header as="h2" textAlign="center">
             Dashboard
           </Header>
+          <hr />
           <Menu pointing secondary>
             <Menu.Item
               name="Snapshot"

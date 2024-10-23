@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Col, Container, Row, Button } from 'react-bootstrap';
-import { AutoForm, ErrorsField, SubmitField, TextField, SelectField } from 'uniforms-bootstrap5';
+import { AutoForm, ErrorsField, SubmitField, TextField, SelectField, LongTextField } from 'uniforms-bootstrap5';
 import swal from 'sweetalert';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
@@ -123,15 +123,30 @@ const EditFinancialProfile = () => {
       <Row className="justify-content-center">
         <Col xs={5}>
           <Col className="text-center"><h2>Edit Financial Profile</h2></Col>
+          <hr />
           {formData && (
             <AutoForm ref={ref => { fRef = ref; }} schema={bridge} model={formData} onSubmit={data => submit(data, fRef)}>
               <Card>
                 <Card.Body>
                   <TextField name="title" />
                   <SelectField name="type" />
-                  <TextField name="description" />
-                  <TextField name="image" placeholder="Enter image URL (optional)" />
+                  <LongTextField name="description" />
+                  <LongTextField name="image" placeholder="Enter image URL (optional)" />
                   <SubmitField value="Update Profile" />
+                  <Row>
+                    <Col className="pt-1">
+                      <Button variant="danger" onClick={handleDelete}>
+                        Delete Financial Profile
+                      </Button>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col className="pt-1">
+                      <Button variant="secondary" onClick={() => navigate('/financial-profiles')}>
+                        Back to Financial Profiles
+                      </Button>
+                    </Col>
+                  </Row>
                   <ErrorsField />
                 </Card.Body>
               </Card>
@@ -143,13 +158,6 @@ const EditFinancialProfile = () => {
           <InviteUsers profileId={profileId} />
           {/* change roles or delete members */}
           <ManageMembers profileId={profileId} members={members} />
-
-          {/* Delete the profile */}
-          <Row className="pt-4">
-            <Button variant="danger" onClick={handleDelete}>
-              Delete Financial Profile
-            </Button>
-          </Row>
         </Col>
       </Row>
     </Container>

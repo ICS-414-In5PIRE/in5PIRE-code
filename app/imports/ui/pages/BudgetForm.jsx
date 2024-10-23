@@ -168,7 +168,9 @@ class BudgetForm extends React.Component {
       <Container id={PAGE_IDS.BUDGET_FORM}>
         <Grid centered>
           <Grid.Column>
+            <br />
             <h2>Budget Form</h2>
+            <hr />
             <Form>
               <Form.Field>
                 Select Year

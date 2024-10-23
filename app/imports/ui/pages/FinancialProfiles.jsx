@@ -4,7 +4,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Container, Spinner } from 'react-bootstrap';
 import swal from 'sweetalert';
-import FinancialProfileCard from '../components/Financial Profiles/FinancialprofileCard';
+import FinancialProfileCard from '../components/Financial Profiles/FinancialProfileCard';
 import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import AddNewFinancialProfileCard from '../components/Financial Profiles/AddNewFinancialProfileCard';
@@ -68,7 +68,9 @@ const FinancialProfilesPage = () => {
   return (
     <Container id={PAGE_IDS.FINANCIAL_PROFILES}>
       <Container className="profile-container">
-        <h1>User&apos;s Financial Scenarios</h1>
+        <br />
+        <h1>Your Financial Scenarios</h1>
+        <hr />
       </Container>
 
       {/* Flexbox Container for Cards */}

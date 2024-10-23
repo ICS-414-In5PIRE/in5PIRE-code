@@ -78,7 +78,7 @@ const AddFinancialProfile = () => {
   let fRef = null;
   return (
     <Container id={PAGE_IDS.ADD_FINANCIAL_PROFILE} className="py-3">
-
+      <br />
       {/* Go back to financial Profile Page */}
       <Row>
         <Col xs="auto" className="px-3">
@@ -91,12 +91,13 @@ const AddFinancialProfile = () => {
       <Row className="justify-content-center">
         <Col xs={5}>
           <Col className="text-center"><h2>Add Financial Profile</h2></Col>
+          <hr />
           <AutoForm ref={ref => { fRef = ref; }} schema={bridge} onSubmit={data => submit(data, fRef)}>
             <Card>
               <Card.Body>
                 <TextField name="title" />
                 <SelectField name="type" />
-                <TextField name="description" />
+                <TextField name="description" placeholder="Enter scenerio description (optional)" />
                 <TextField name="image" placeholder="Enter image URL (optional)" />
                 <SubmitField value="Submit" />
                 <ErrorsField />

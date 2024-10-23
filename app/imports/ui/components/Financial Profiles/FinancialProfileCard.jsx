@@ -48,8 +48,8 @@ const FinancialProfileCard = ({
         <img
           src={imgSrc}
           alt="Graph"
-          className="img-fluid m-4 p-4"
-          style={{ width: '80%', objectFit: 'contain' }}
+          className="img-fluid m-4"
+          style={{ width: '80%', objectFit: 'contain', paddingLeft: '35px' }}
         />
       </Row>
       <Row className="flex-grow-1 d-flex">

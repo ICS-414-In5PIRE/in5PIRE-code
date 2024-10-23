@@ -28,11 +28,11 @@ const UploadFile = () => {
         const data = new Uint8Array(arrayBuffer); // Create a Uint8Array from the buffer
 
         // If the file is an Excel file (.xlsx, .xls, .xlsm)
-        if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls") || fileName.endsWith(".xlsm")) {
-          const workbook = XLSX.read(data, { type: "array" }); // Read as ArrayBuffer
+        if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls') || fileName.endsWith('.xlsm')) {
+          let workbook = XLSX.read(data, { type: 'array' }); // Read as ArrayBuffer
 
           // Get sheet names
-          const sheetNames = workbook.SheetNames;
+          let sheetNames = workbook.SheetNames;
           setSheetNames(sheetNames);
           setWorkbook(workbook); // Store workbook in state for future access
 
@@ -43,10 +43,8 @@ const UploadFile = () => {
           const firstSheet = workbook.Sheets[sheetNames[0]];
           const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
           setTableData(jsonData);
-        }
-        // If the file is a CSV file
-        else if (fileName.endsWith(".csv")) {
-          const workbook = XLSX.read(data, { type: "array" }); // Read as ArrayBuffer for CSV as well
+        } else if (fileName.endsWith('.csv')) { // If the file is a CSV file
+          const workbook = XLSX.read(data, { type: 'array' }); // Read as ArrayBuffer for CSV as well
 
           // CSV will only have one "sheet"
           const csvSheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -56,7 +54,7 @@ const UploadFile = () => {
           setSelectedSheet(null);
           setWorkbook(null);
         } else {
-          alert("Unsupported file type! Please upload a supported file type.");
+          alert('Unsupported file type! Please upload a supported file type.');
         }
       };
       reader.readAsArrayBuffer(file); // Use readAsArrayBuffer for both Excel and CSV
@@ -69,11 +67,11 @@ const UploadFile = () => {
 
     // Access the workbook stored in the state
     if (workbook) {
-      const selectedSheet = workbook.Sheets[value];
+      let selectedSheet = workbook.Sheets[value];
       const jsonData = XLSX.utils.sheet_to_json(selectedSheet, { header: 1 });
       setTableData(jsonData);
     } else {
-      alert("Workbook not found. Please upload the file again.");
+      alert('Workbook not found. Please upload the file again.');
     }
   };
 
@@ -147,18 +145,18 @@ const UploadFile = () => {
           options={sheetNames.map((sheetName) => ({
             key: sheetName,
             text: sheetName,
-            value: sheetName
+            value: sheetName,
           }))}
           onChange={handleSheetChange}
           value={selectedSheet}
-          style={{ marginTop: "20px" }}
+          style={{ marginTop: '20px' }}
         />
       )}
 
       {/* TODO: Allow horizontal scroll */}
       {tableData.length > 0 && (
-        <div style={{ marginTop: "20px" }}>
-          <Header as="h3">Data from the {selectedSheet ? selectedSheet : "Excel/CSV"} Sheet:</Header>
+        <div style={{ marginTop: '20px' }}>
+          <Header as="h3">Data from the {selectedSheet ? selectedSheet : 'Excel/CSV'} Sheet:</Header>
           {renderTable()}
         </div>
       )}

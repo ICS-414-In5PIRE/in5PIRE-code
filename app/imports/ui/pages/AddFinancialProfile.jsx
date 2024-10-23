@@ -78,16 +78,6 @@ const AddFinancialProfile = () => {
   let fRef = null;
   return (
     <Container id={PAGE_IDS.ADD_FINANCIAL_PROFILE} className="py-3">
-
-      {/* Go back to financial Profile Page */}
-      <Row>
-        <Col xs="auto" className="px-3">
-          <Button variant="secondary" onClick={() => navigate('/financial-profiles')}>
-            Back to Financial Profiles
-          </Button>
-        </Col>
-      </Row>
-
       <Row className="justify-content-center">
         <Col xs={5}>
           <Col className="text-center"><h2>Add Financial Profile</h2></Col>
@@ -99,6 +89,13 @@ const AddFinancialProfile = () => {
                 <TextField name="description" />
                 <TextField name="image" placeholder="Enter image URL (optional)" />
                 <SubmitField value="Submit" />
+                <Row>
+                  <Col className="pt-1">
+                    <Button variant="secondary" onClick={() => navigate('/financial-profiles')}>
+                      Back to Financial Profiles
+                    </Button>
+                  </Col>
+                </Row>
                 <ErrorsField />
               </Card.Body>
             </Card>

@@ -110,15 +110,6 @@ const EditFinancialProfile = () => {
   return (
     <Container id={PAGE_IDS.EDIT_FINANCIAL_PROFILE} className="py-3">
 
-      {/* Go back to financial Profile Page */}
-      <Row>
-        <Col xs="auto" className="px-3">
-          <Button variant="secondary" onClick={() => navigate('/financial-profiles')}>
-            Back to Financial Profiles
-          </Button>
-        </Col>
-      </Row>
-
       {/* Edit Profile Information Card */}
       <Row className="justify-content-center">
         <Col xs={5}>
@@ -132,6 +123,20 @@ const EditFinancialProfile = () => {
                   <TextField name="description" />
                   <TextField name="image" placeholder="Enter image URL (optional)" />
                   <SubmitField value="Update Profile" />
+                  <Row>
+                    <Col className="pt-1">
+                      <Button variant="danger" onClick={handleDelete}>
+                        Delete Financial Profile
+                      </Button>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col className="pt-1">
+                      <Button variant="secondary" onClick={() => navigate('/financial-profiles')}>
+                        Back to Financial Profiles
+                      </Button>
+                    </Col>
+                  </Row>
                   <ErrorsField />
                 </Card.Body>
               </Card>
@@ -143,13 +148,6 @@ const EditFinancialProfile = () => {
           <InviteUsers profileId={profileId} />
           {/* change roles or delete members */}
           <ManageMembers profileId={profileId} members={members} />
-
-          {/* Delete the profile */}
-          <Row className="pt-4">
-            <Button variant="danger" onClick={handleDelete}>
-              Delete Financial Profile
-            </Button>
-          </Row>
         </Col>
       </Row>
     </Container>

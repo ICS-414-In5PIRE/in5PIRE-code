@@ -167,9 +167,7 @@ class FinancialStatement extends React.Component {
       <Container id={PAGE_IDS.AUDITED_FS}>
         <Grid centered>
           <Grid.Column>
-            <br />
             <h2>Audited Financial Statement</h2>
-            <hr />
             <Form>
               <Form.Field>
                 Select Year

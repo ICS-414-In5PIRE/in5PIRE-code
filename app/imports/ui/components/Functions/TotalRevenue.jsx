@@ -1,5 +1,5 @@
-function totalRevenue(fivePercentInvestment, revenues, generalFund, coreOperatingBudgetNotAuthorized) {
-  return fivePercentInvestment + revenues + generalFund + coreOperatingBudgetNotAuthorized;
+function totalRevenue(fivePercentInvestment,revenues,generalFund,coreOperatingBudgetNotAuthorized){
+  return fivePercentInvestment+revenues+generalFund+coreOperatingBudgetNotAuthorized;
 }
 
-export default totalRevenue;
+export const totalRevenue;

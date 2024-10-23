@@ -31,7 +31,7 @@ const MemberListDropdown = ({ members }) => {
           onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#e2e6ea'; }} // Hover effect
           onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#f8f9fa'; }}
         >
-          {dropdownEnabled ? 'Hide Member List' : 'Show Member List'}{' '}
+          {dropdownEnabled ? 'Hide Member List' : 'Show Member List'}
           {dropdownEnabled ? <FaChevronUp /> : <FaChevronDown />}
         </Button>
       </Row>

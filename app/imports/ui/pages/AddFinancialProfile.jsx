@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
-import { AutoForm, ErrorsField, SubmitField, TextField, SelectField, LongTextField } from 'uniforms-bootstrap5';
+import { AutoForm, ErrorsField, SubmitField, TextField, SelectField } from 'uniforms-bootstrap5';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
@@ -78,7 +78,7 @@ const AddFinancialProfile = () => {
   let fRef = null;
   return (
     <Container id={PAGE_IDS.ADD_FINANCIAL_PROFILE} className="py-3">
-      <br />
+
       {/* Go back to financial Profile Page */}
       <Row>
         <Col xs="auto" className="px-3">
@@ -91,22 +91,14 @@ const AddFinancialProfile = () => {
       <Row className="justify-content-center">
         <Col xs={5}>
           <Col className="text-center"><h2>Add Financial Profile</h2></Col>
-          <hr />
           <AutoForm ref={ref => { fRef = ref; }} schema={bridge} onSubmit={data => submit(data, fRef)}>
             <Card>
               <Card.Body>
                 <TextField name="title" />
                 <SelectField name="type" />
-                <LongTextField name="description" placeholder="Enter scenerio description (optional)" />
-                <LongTextField name="image" placeholder="Enter image URL (optional)" />
+                <TextField name="description" />
+                <TextField name="image" placeholder="Enter image URL (optional)" />
                 <SubmitField value="Submit" />
-                <Row>
-                  <Col className="pt-1">
-                    <Button variant="secondary" onClick={() => navigate('/financial-profiles')}>
-                      Back to Financial Profiles
-                    </Button>
-                  </Col>
-                </Row>
                 <ErrorsField />
               </Card.Body>
             </Card>

@@ -1,10 +1,13 @@
+// import React from 'react';
+// import PropTypes from 'prop-types';
+// import { Card, CardHeader, Row, Col, Button } from 'react-bootstrap';
 import React, { useEffect } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
+import { Card, CardHeader, Row, Col, Button } from 'react-bootstrap';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
-import { Card, Image, Button, Header, Grid, Icon } from 'semantic-ui-react';
 import { FinancialProfiles } from '../../../api/FinancialProfiles/FinancialProfilesCollection';
 import MemberListDropdown from './ListMembers';
 
@@ -28,10 +31,6 @@ const FinancialProfileCard = ({
     navigate(`/edit-financial-profile/${profileId}`);
   };
 
-  const handleViewDashboard = () => {
-    navigate('/dashboard');
-  };
-
   useEffect(() => {
     // Subscribe to userEmails to get access to users' emails
     const userEmailSubscription = Meteor.subscribe('userEmails');
@@ -41,50 +40,47 @@ const FinancialProfileCard = ({
   }, []);
 
   return (
-    <Card fluid>
-      <Image src={imgSrc || '/images/GraphPlaceholder.png'} />
-      <Card.Content>
-        <Header as="h1" textAlign="center" style={{ marginBottom: '20px' }}>
-          {title}
-        </Header>
-        <Grid textAlign="center">
-          <Grid.Row>
-            <p><strong>Profile Type: </strong>{profileType}</p>
-          </Grid.Row>
-          <Grid.Row>
-            <p>{description}</p>
-          </Grid.Row>
-          <Grid.Row>
-            <p style={{ fontSize: '0.8em', color: 'gray' }}>Created: {createdDate}</p>
-            <p style={{ fontSize: '0.8em', color: 'gray' }}>Last Edited: {editedDate}</p>
-          </Grid.Row>
-        </Grid>
-      </Card.Content>
-      <Card.Content extra>
-        <Grid columns={1}>
+    <Card id="Financial-Card" className="d-flex flex-column h-100">
+      <CardHeader className="d-flex justify-content-center" id="browse-financial-card-name">
+        <h1>{title}</h1>
+      </CardHeader>
+      <Row className="flex-grow-1 d-flex">
+        <img
+          src={imgSrc}
+          alt="Graph"
+          className="img-fluid m-4 p-4"
+          style={{ width: '80%', objectFit: 'contain' }}
+        />
+      </Row>
+      <Row className="flex-grow-1 d-flex">
+        <Col className="d-flex flex-column">
+          <Row className="px-4 pt-4 justify-content-center" style={{ textAlign: 'center' }}>
+            <div>
+              <strong style={{ fontSize: '1.2rem' }}>Profile Type: </strong>
+              <span style={{ fontSize: '1.2rem' }}>{profileType}</span>
+            </div>
+          </Row>
+
           {userRole === 'admin' && (
-            <Grid.Column>
-              <Button fluid color="blue" onClick={handleEditProfile}>
-                <Icon name="edit" /> Edit Profile
-              </Button>
-            </Grid.Column>
+            <Row className="px-4">
+              {/* Navigate to the edit profile page */}
+              <Button variant="primary" onClick={handleEditProfile}>Edit Profile</Button>
+            </Row>
           )}
-          <Grid.Column>
-            <Button fluid color="teal" onClick={handleViewDashboard}>
-              <Icon name="dashboard" /> View Dashboard
-            </Button>
-          </Grid.Column>
-        </Grid>
-      </Card.Content>
-      <Card.Content extra>
-        {/* Members Dropdown */}
-        <MemberListDropdown members={members} />
-      </Card.Content>
+          {/* List the Members */}
+          <MemberListDropdown members={members} />
+
+        </Col>
+      </Row>
+      <Row className="px-4">
+        <h3>Profile Description</h3>
+        <p>{description}</p>
+      </Row>
+
       {userRole !== 'admin' && (
-        <Card.Content extra>
+        <Row className="px-4 pt-4">
           <Button
-            color="red"
-            fluid
+            variant="danger"
             onClick={() => {
               swal({
                 title: 'Are you sure?',
@@ -108,8 +104,13 @@ const FinancialProfileCard = ({
           >
             Leave Profile
           </Button>
-        </Card.Content>
+        </Row>
       )}
+
+      <Row className="px-4">
+        <p style={{ fontSize: '0.8em', color: 'gray', marginBottom: '2px' }}>Created: {createdDate}</p>
+        <p style={{ fontSize: '0.8em', color: 'gray', marginTop: '2px' }}>Last edited: {editedDate}</p>
+      </Row>
     </Card>
   );
 };

@@ -5,6 +5,7 @@ import ProgramRevenues from './ProgramRevenues';
 import GeneralRevenues from './GeneralRevenues';
 import Expenditures from './Expenditures';
 import FundBalances from './FundBalances';
+import NetPosition from "./NetPosition";
 
 const Revenues = ({ formData, handleChange }) => {
   const panes = [

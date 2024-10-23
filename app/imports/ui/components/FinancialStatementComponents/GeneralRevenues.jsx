@@ -83,15 +83,15 @@ const GeneralRevenues = ({ formData, handleChange }) => (
 
 GeneralRevenues.propTypes = {
   formData: PropTypes.shape({
-    appropriationsNetLapses: PropTypes.number,
-    trust: PropTypes.number,
-    interestAndInvestmentLosses: PropTypes.number,
-    newspaperAds: PropTypes.number,
-    donationsAndOther: PropTypes.number,
-    nonImposedFringeBenefits: PropTypes.number,
-    llcBRevenues: PropTypes.number,
-    totalGeneralRevenues: PropTypes.number,
-    totalRevenues: PropTypes.number,
+    appropriationsNetLapses: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    trust: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    interestAndInvestmentLosses: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    newspaperAds: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    donationsAndOther: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    nonImposedFringeBenefits: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    llcBRevenues: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    totalGeneralRevenues: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    totalRevenues: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
 };

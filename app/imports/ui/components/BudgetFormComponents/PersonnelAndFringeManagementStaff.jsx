@@ -7,7 +7,7 @@ const PersonnelAndFringeManagementStaff = ({ formData, handleChange }) => (
     <Form.Input
       width={4}
       label="Salary"
-      name="salary"
+      name="salaryStaff"
       value={formData.salaryStaff ?? ''}
       onChange={handleChange}
       type="number"
@@ -16,28 +16,28 @@ const PersonnelAndFringeManagementStaff = ({ formData, handleChange }) => (
     <Form.Group widths="equal">
       <Form.Input
         label="Pension Accumulation"
-        name="pensionAccumulation"
+        name="pensionAccumulationStaff"
         value={formData.pensionAccumulationStaff ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Retiree Health Insurance"
-        name="retireeHealthInsurance"
+        name="retireeHealthInsuranceStaff"
         value={formData.retireeHealthInsuranceStaff ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Other Post-Employment Benefits"
-        name="postEmploymentBenefits"
+        name="postEmploymentBenefitsStaff"
         value={formData.postEmploymentBenefitsStaff ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Employees Health Fund"
-        name="employeesHealthFund"
+        name="employeesHealthFundStaff"
         value={formData.employeesHealthFundStaff ?? ''}
         onChange={handleChange}
         type="number"
@@ -46,35 +46,35 @@ const PersonnelAndFringeManagementStaff = ({ formData, handleChange }) => (
     <Form.Group widths="equal">
       <Form.Input
         label="Social Security"
-        name="socialSecurity"
+        name="socialSecurityStaff"
         value={formData.socialSecurityStaff ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Medicare"
-        name="medicare"
+        name="medicareStaff"
         value={formData.medicareStaff ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Workers Compensation"
-        name="workersCompensation"
+        name="workersCompensationStaff"
         value={formData.workersCompensationStaff ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Unemployment Compensation"
-        name="unemploymentCompensation"
+        name="unemploymentCompensationStaff"
         value={formData.unemploymentCompensationStaff ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Pension Administration"
-        name="pensionAdministration"
+        name="pensionAdministrationStaff"
         value={formData.pensionAdministrationStaff ?? ''}
         onChange={handleChange}
         type="number"
@@ -85,16 +85,16 @@ const PersonnelAndFringeManagementStaff = ({ formData, handleChange }) => (
 
 PersonnelAndFringeManagementStaff.propTypes = {
   formData: PropTypes.shape({
-    salaryStaff: PropTypes.number,
-    pensionAccumulationStaff: PropTypes.number,
-    retireeHealthInsuranceStaff: PropTypes.number,
-    postEmploymentBenefitsStaff: PropTypes.number,
-    employeesHealthFundStaff: PropTypes.number,
-    socialSecurityStaff: PropTypes.number,
-    medicareStaff: PropTypes.number,
-    workersCompensationStaff: PropTypes.number,
-    unemploymentCompensationStaff: PropTypes.number,
-    pensionAdministrationStaff: PropTypes.number,
+    salaryStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    pensionAccumulationStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    retireeHealthInsuranceStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    postEmploymentBenefitsStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    employeesHealthFundStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    socialSecurityStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    medicareStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    workersCompensationStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    unemploymentCompensationStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    pensionAdministrationStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
 };

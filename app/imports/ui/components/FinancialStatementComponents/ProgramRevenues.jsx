@@ -39,10 +39,10 @@ const ProgramRevenues = ({ formData, handleChange }) => (
 
 ProgramRevenues.propTypes = {
   formData: PropTypes.shape({
-    chargesForService: PropTypes.number,
-    operatingGrants: PropTypes.number,
-    interestAndInvestmentEarnings: PropTypes.number,
-    totalProgramRevenues: PropTypes.number,
+    chargesForService: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    operatingGrants: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    interestAndInvestmentEarnings: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    totalProgramRevenues: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
 };

@@ -58,12 +58,12 @@ const CashAndCashEquivalentsFS = ({ formData, handleChange }) => (
 
 CashAndCashEquivalentsFS.propTypes = {
   formData: PropTypes.shape({
-    pettyCash: PropTypes.number,
-    cash: PropTypes.number,
-    cashInBanks: PropTypes.number,
-    cashByInvestmentManager: PropTypes.number,
-    restrictedCash: PropTypes.number,
-    totalCashAndCashEquivalents: PropTypes.number,
+    pettyCash: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    cash: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    cashInBanks: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    cashByInvestmentManager: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    restrictedCash: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    totalCashAndCashEquivalents: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
 };

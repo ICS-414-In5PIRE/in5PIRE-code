@@ -21,7 +21,7 @@ const OtherAssetsFS = ({ formData, handleChange }) => (
       />
       <Form.Input
         label="Interest and Dividends Receivable"
-        name="interstAndDividends"
+        name="interestAndDividends"
         value={formData.interestAndDividends}
         onChange={handleChange}
         type="number"
@@ -111,18 +111,18 @@ const OtherAssetsFS = ({ formData, handleChange }) => (
 
 OtherAssetsFS.propTypes = {
   formData: PropTypes.shape({
-    accountsReceivable: PropTypes.number,
-    dueFromOtherFund: PropTypes.number,
-    interestAndDividends: PropTypes.number,
-    inventoryPrepaidAndOthers: PropTypes.number,
-    notesReceivableWithinOneYear: PropTypes.number,
-    notesReceivableAfterOneYear: PropTypes.number,
-    securityDeposits: PropTypes.number,
-    investments: PropTypes.number,
-    netCapitalAssets: PropTypes.number,
-    totalOtherAssets: PropTypes.number,
-    deferredOutflowsOfResources: PropTypes.number,
-    totalAssetsDeferredOutflows: PropTypes.number,
+    accountsReceivable: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    dueFromOtherFund: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    interestAndDividends: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    inventoryPrepaidAndOthers: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    notesReceivableWithinOneYear: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    notesReceivableAfterOneYear: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    securityDeposits: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    investments: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    netCapitalAssets: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    totalOtherAssets: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    deferredOutflowsOfResources: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    totalAssetsDeferredOutflows: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
 };

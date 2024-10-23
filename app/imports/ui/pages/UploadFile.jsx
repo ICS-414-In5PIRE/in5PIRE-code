@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import { Table, Header, Container, Button, Icon, Grid } from 'semantic-ui-react';
+import { Image } from 'react-bootstrap';
 import { PAGE_IDS } from '../utilities/PageIDs';
 
 /**
@@ -103,6 +104,19 @@ const UploadFile = () => {
           {renderTable()}
         </div>
       )}
+
+      {/* Image added below the table */}
+      <div style={{ marginTop: '30px', textAlign: 'center' }}>
+        <h2>Download Template and Edit Values</h2>
+        <Image src="/images/Upload3.png" fluid rounded />
+        <h2>Upload The File</h2>
+        <Image src="/images/Upload1.png" fluid rounded />
+        <h2>Uploaded File Will be Added to Forms</h2>
+        <Image src="/images/Upload2.png" fluid rounded />
+        <h2>Values Will be Shown and Can Be Manually Changed Before Submitting</h2>
+        <Image src="/images/Upload4.png" fluid rounded />
+
+      </div>
     </Container>
   );
 };

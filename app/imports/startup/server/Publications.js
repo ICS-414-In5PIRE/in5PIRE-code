@@ -1,9 +1,10 @@
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
+import { check } from 'meteor/check';
 import { MATPCollections } from '../../api/matp/MATPCollections';
 import { StaticFinancials } from '../../api/financial/StaticFinancialsCollection';
 import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputsCollection';
-
+import { BudgetFormInput } from '../../api/BudgetFormInput/BudgetFormInputCollection';
 // Call publish for all the collections.
 MATPCollections.collections.forEach(c => c.publish());
 
@@ -47,10 +48,24 @@ Meteor.publish('balanceSheet', function publishBalanceSheet(profileId) {
     return this.ready();
   }
 
-  // Ensure profileId is provided
+  check(profileId, String);
   if (!profileId) {
     throw new Meteor.Error('profileId-required', 'A profileId is required to publish balance sheet inputs.');
   }
 
   return BalanceSheetInputs.find({ profileId });
+});
+
+Meteor.publish('budgetform', function publishBudgetForm(profileId) {
+  if (!this.userId) {
+    return this.ready();
+  }
+
+  check(profileId, String);
+
+  if (!profileId) {
+    throw new Meteor.Error('profileId-required', 'A profileId is required to publish budget form inputs.');
+  }
+
+  return BudgetFormInput.find({ profileId });
 });

@@ -108,7 +108,7 @@ class BalanceSheetInput extends React.Component {
 
   handleSubmit = () => {
     const { record, selectedYear } = this.state;
-    const { profileId } = this.props; // Ensure profileId is obtained from props
+    const { profileId } = this.props;
     const collectionName = BalanceSheetInputs.getCollectionName();
     const data = JSON.parse(JSON.stringify(record));
 
@@ -117,18 +117,16 @@ class BalanceSheetInput extends React.Component {
     }
 
     const owner = Meteor.user()?.username;
-    // Check if a record exists for this specific profileId and year
     const balanceSheetData = BalanceSheetInputs.find({
       owner,
-      profileId, // Ensure profileId is part of the check
+      profileId,
       year: selectedYear,
     }).fetch();
 
     if (balanceSheetData.length === 0) {
-      // When inserting a new record, include profileId
       data[0].year = selectedYear;
       data[0].owner = owner;
-      data[0].profileId = profileId; // Make sure to set profileId here
+      data[0].profileId = profileId;
 
       defineMethod.callPromise({ collectionName: collectionName, definitionData: data[0] })
         .then((response) => {
@@ -143,7 +141,7 @@ class BalanceSheetInput extends React.Component {
         });
     } else {
       data[0].id = record[0]._id;
-      data[0].profileId = profileId; // Ensure profileId is present during updates
+      data[0].profileId = profileId;
 
       updateMethod.callPromise({ collectionName, updateData: data[0] })
         .then(() => {
@@ -159,11 +157,10 @@ class BalanceSheetInput extends React.Component {
 
   handleDelete = () => {
     const { selectedYear } = this.state;
-    const { profileId } = this.props; // Ensure profileId is obtained from props
+    const { profileId } = this.props;
     const collectionName = BalanceSheetInputs.getCollectionName();
     const owner = Meteor.user()?.username;
 
-    // Find record matching owner, profileId, and selected year
     const balanceSheetData = BalanceSheetInputs.find({
       owner,
       profileId,

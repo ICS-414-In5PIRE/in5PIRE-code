@@ -54,7 +54,6 @@ const InviteUsers = ({ profileId }) => {
           {showInviteForm ? 'Cancel Invite' : 'Invite Members'}{' '}
           {showInviteForm ? <FaChevronUp /> : <FaChevronDown />}
         </Button>
-
       </Row>
 
       {showInviteForm && (

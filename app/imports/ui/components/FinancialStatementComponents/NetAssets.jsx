@@ -52,11 +52,11 @@ const NetAssets = ({ formData, handleChange }) => (
 
 NetAssets.propTypes = {
   formData: PropTypes.shape({
-    capitalAssetsRelatedDebt: PropTypes.number,
-    restrictedFederalFunds: PropTypes.number,
-    unrestricted: PropTypes.number,
-    totalNetAssets: PropTypes.number,
-    totalLiabilitiesNetAssets: PropTypes.number,
+    capitalAssetsRelatedDebt: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    restrictedFederalFunds: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    unrestricted: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    totalNetAssets: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    totalLiabilitiesNetAssets: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
 };

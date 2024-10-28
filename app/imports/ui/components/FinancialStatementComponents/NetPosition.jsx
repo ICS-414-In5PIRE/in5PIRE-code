@@ -46,9 +46,14 @@ const NetPosition = ({ formData, handleChange }) => {
   );
 };
 
-NetPosition.defaultProps = {
-  formData: [],
+NetPosition.propTypes = {
+  formData: {},
   handleChange: PropTypes.func,
+};
+
+NetPosition.defaultProps = {
+  formData: {},
+  handleChange: () => {},
 };
 
 export default NetPosition;

@@ -222,7 +222,9 @@ class BalanceSheetInput extends React.Component {
 
         <Grid centered>
           <Grid.Column>
+            <br />
             <h2>Balance Sheet Input</h2>
+            <hr />
             <Form>
               <Form.Field>
                 Select Year

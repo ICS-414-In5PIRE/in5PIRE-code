@@ -7,7 +7,7 @@ const PersonnelAndFringeManagement = ({ formData, handleChange }) => (
     <Form.Input
       width={4}
       label="Salary"
-      name="salary"
+      name="salaryManagement"
       value={formData.salaryManagement ?? ''}
       onChange={handleChange}
       type="number"
@@ -16,28 +16,28 @@ const PersonnelAndFringeManagement = ({ formData, handleChange }) => (
     <Form.Group widths="equal">
       <Form.Input
         label="Pension Accumulation"
-        name="pensionAccumulation"
+        name="pensionAccumulationManagement"
         value={formData.pensionAccumulationManagement ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Retiree Health Insurance"
-        name="retireeHealthInsurance"
+        name="retireeHealthInsuranceManagement"
         value={formData.retireeHealthInsuranceManagement ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Other Post-Employment Benefits"
-        name="postEmploymentBenefits"
+        name="postEmploymentBenefitsManagement"
         value={formData.postEmploymentBenefitsManagement ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Employees Health Fund"
-        name="employeesHealthFund"
+        name="employeesHealthFundManagement"
         value={formData.employeesHealthFundManagement ?? ''}
         onChange={handleChange}
         type="number"
@@ -46,35 +46,35 @@ const PersonnelAndFringeManagement = ({ formData, handleChange }) => (
     <Form.Group widths="equal">
       <Form.Input
         label="Social Security"
-        name="socialSecurity"
+        name="socialSecurityManagement"
         value={formData.socialSecurityManagement ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Medicare"
-        name="medicare"
+        name="medicareManagement"
         value={formData.medicareManagement ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Workers Compensation"
-        name="workersCompensation"
+        name="workersCompensationManagement"
         value={formData.workersCompensationManagement ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Unemployment Compensation"
-        name="unemploymentCompensation"
+        name="unemploymentCompensationManagement"
         value={formData.unemploymentCompensationManagement ?? ''}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Pension Administration"
-        name="pensionAdministration"
+        name="pensionAdministrationManagement"
         value={formData.pensionAdministrationManagement ?? ''}
         onChange={handleChange}
         type="number"
@@ -85,16 +85,16 @@ const PersonnelAndFringeManagement = ({ formData, handleChange }) => (
 
 PersonnelAndFringeManagement.propTypes = {
   formData: PropTypes.shape({
-    salaryManagement: PropTypes.number,
-    pensionAccumulationManagement: PropTypes.number,
-    retireeHealthInsuranceManagement: PropTypes.number,
-    postEmploymentBenefitsManagement: PropTypes.number,
-    employeesHealthFundManagement: PropTypes.number,
-    socialSecurityManagement: PropTypes.number,
-    medicareManagement: PropTypes.number,
-    workersCompensationManagement: PropTypes.number,
-    unemploymentCompensationManagement: PropTypes.number,
-    pensionAdministrationManagement: PropTypes.number,
+    salaryManagement: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    pensionAccumulationManagement: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    retireeHealthInsuranceManagement: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    postEmploymentBenefitsManagement: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    employeesHealthFundManagement: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    socialSecurityManagement: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    medicareManagement: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    workersCompensationManagement: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    unemploymentCompensationManagement: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    pensionAdministrationManagement: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
 };

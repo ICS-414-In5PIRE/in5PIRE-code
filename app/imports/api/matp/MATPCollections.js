@@ -6,6 +6,7 @@ import { FinancialProfiles } from '../FinancialProfiles/FinancialProfilesCollect
 import { BalanceSheetInputs } from '../BalanceSheetInput/BalanceSheetInputsCollection';
 import { StaticFinancials } from '../financial/StaticFinancialsCollection';
 import { BudgetFormInput } from '../BudgetFormInput/BudgetFormInputCollection';
+import { FinancialStatementInput } from '../FinancialStatementInput/FinancialStatementInputCollection';
 
 class MATPClass {
   collections;
@@ -24,6 +25,7 @@ class MATPClass {
       BalanceSheetInputs,
       StaticFinancials,
       BudgetFormInput,
+      FinancialStatementInput,
     ];
     /*
      * A list of collection class instances in the order required for them to be sequentially loaded from a file.
@@ -36,6 +38,7 @@ class MATPClass {
       BalanceSheetInputs,
       StaticFinancials,
       BudgetFormInput,
+      FinancialStatementInput,
     ];
 
     /*

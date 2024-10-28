@@ -14,14 +14,14 @@ const LiabilitiesFS = ({ formData, handleChange }) => (
       />
       <Form.Input
         label="Due to Fund"
-        name="dueTofund"
+        name="dueToFund"
         value={formData.dueToFund}
         onChange={handleChange}
         type="number"
       />
       <Form.Input
         label="Due to Other Funds"
-        name="Due to Other Funds"
+        name="dueToOtherFunds"
         value={formData.dueToOtherFunds}
         onChange={handleChange}
         type="number"
@@ -87,15 +87,15 @@ const LiabilitiesFS = ({ formData, handleChange }) => (
 
 LiabilitiesFS.propTypes = {
   formData: PropTypes.shape({
-    accountsPayableAndAccruedLiabilities: PropTypes.number,
-    dueToFund: PropTypes.number,
-    dueToOtherFunds: PropTypes.number,
-    longTermLiabilitiesWithinOneYear: PropTypes.number,
-    longTermLiabilitiesAfterOneYear: PropTypes.number,
-    totalLiabilities: PropTypes.number,
-    deferredInflowsResources: PropTypes.number,
-    deferredInflowsOPEB: PropTypes.number,
-    totalLiabilitiesDeferredInflows: PropTypes.number,
+    accountsPayableAndAccruedLiabilities: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    dueToFund: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    dueToOtherFunds: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    longTermLiabilitiesWithinOneYear: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    longTermLiabilitiesAfterOneYear: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    totalLiabilities: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    deferredInflowsResources: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    deferredInflowsOPEB: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    totalLiabilitiesDeferredInflows: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
 };

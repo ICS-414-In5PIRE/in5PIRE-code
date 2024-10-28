@@ -9,6 +9,10 @@ export const BudgetFormInputSchema = new SimpleSchema({
     type: String,
     optional: false,
   },
+  profileId: {
+    type: String,
+    optional: false,
+  },
   // Revenue fields
   fivePercent: {
     type: Number,

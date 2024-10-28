@@ -21,7 +21,7 @@ class BudgetFormInputCollection extends BaseCollection {
    * @return {String} The document ID of the new BudgetFormInput.
    */
   define({
-    year, owner,
+    year, owner, profileId,
     fivePercent, revenues, generalFund, coreOperatingBudget,
     personnel, program, contracts, grants, travel, equipment, overhead, debtService, other,
     salaryAdmin, pensionAccumulationAdmin, retireeHealthInsuranceAdmin, postEmploymentBenefitsAdmin, employeesHealthFundAdmin,
@@ -33,7 +33,7 @@ class BudgetFormInputCollection extends BaseCollection {
     management, supportServices, beneficiaryAdvocacy,
   }) {
     try {
-      const existingDocument = this._collection.findOne({ owner, year });
+      const existingDocument = this._collection.findOne({ owner, year, profileId });
 
       if (existingDocument) {
         return {
@@ -64,7 +64,7 @@ class BudgetFormInputCollection extends BaseCollection {
 
       // Insert a new document
       const docID = this._collection.insert({
-        year, owner,
+        year, owner, profileId,
         fivePercent, revenues, generalFund, coreOperatingBudget, totalRevenue,
         personnel, program, contracts, grants, travel, equipment, overhead, debtService, other, totalExpenses,
         salaryAdmin, pensionAccumulationAdmin, retireeHealthInsuranceAdmin, postEmploymentBenefitsAdmin, employeesHealthFundAdmin,
@@ -204,7 +204,7 @@ class BudgetFormInputCollection extends BaseCollection {
   dumpOne(docID) {
     const doc = this.findDoc(docID);
     const {
-      year, owner,
+      year, owner, profileId,
       fivePercent, revenues, generalFund, coreOperatingBudget, totalRevenue,
       personnel, program, contracts, grants, travel, equipment, overhead, debtService, other, totalExpenses,
       salaryAdmin, pensionAccumulationAdmin, retireeHealthInsuranceAdmin, postEmploymentBenefitsAdmin, employeesHealthFundAdmin,
@@ -216,7 +216,7 @@ class BudgetFormInputCollection extends BaseCollection {
       management, supportServices, beneficiaryAdvocacy,
     } = doc;
     return {
-      year, owner,
+      year, owner, profileId,
       fivePercent, revenues, generalFund, coreOperatingBudget, totalRevenue,
       personnel, program, contracts, grants, travel, equipment, overhead, debtService, other, totalExpenses,
       salaryAdmin, pensionAccumulationAdmin, retireeHealthInsuranceAdmin, postEmploymentBenefitsAdmin, employeesHealthFundAdmin,

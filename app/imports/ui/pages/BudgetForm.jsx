@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Segment, Container, Grid, Button, Menu, Dropdown } from 'semantic-ui-react';
 import { Tracker } from 'meteor/tracker';
 import { Meteor } from 'meteor/meteor';
+import PropTypes from 'prop-types';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import Revenue from '../components/BudgetFormComponents/Revenue';
 import Expenses from '../components/BudgetFormComponents/Expenses';
@@ -36,12 +37,14 @@ class BudgetForm extends React.Component {
 
   // Fires when the component mounts
   componentDidMount() {
+    const { profileId } = this.props;
+    console.log('Profile ID on mount:', profileId);
     this.tracker = Tracker.autorun(() => {
       const { selectedYear } = this.state;
       const subscription = BudgetFormInput.subscribeBudgetForm();
       const rdy = subscription.ready();
       const username = Meteor.user()?.username;
-      const budgetFormData = BudgetFormInput.find({ owner: username, year: selectedYear }).fetch();
+      const budgetFormData = BudgetFormInput.find({ owner: username, profileId, year: selectedYear }).fetch();
       this.setState({ isLoading: !rdy, record: budgetFormData });
     });
 
@@ -54,9 +57,10 @@ class BudgetForm extends React.Component {
   // Fires when the component updates
   componentDidUpdate(prevProps, prevState) {
     const { selectedYear } = this.state;
-    if (prevState.selectedYear !== selectedYear) {
+    const { profileId } = this.props;
+    if (prevState.selectedYear !== selectedYear || prevProps.profileId !== profileId) {
       const username = Meteor.user()?.username;
-      const budgetFormData = BudgetFormInput.find({ owner: username, year: selectedYear }).fetch();
+      const budgetFormData = BudgetFormInput.find({ owner: username, year: selectedYear, profileId: profileId }).fetch();
       this.setState({ record: budgetFormData.length > 0 ? budgetFormData : [] });
       this.handleSnackBar(false, '', false);
     }
@@ -68,6 +72,16 @@ class BudgetForm extends React.Component {
       this.tracker.stop();
     }
   }
+
+  handleBackToScenarios = () => {
+    const { navigate } = this.props;
+    navigate('/financial-profiles');
+  };
+
+  handleViewOverview = () => {
+    const { profileId, navigate } = this.props;
+    navigate(`/profile-budget-form/${profileId}`);
+  };
 
   // Handle input changes
   handleChange = (e, { name, value }) => {
@@ -89,17 +103,23 @@ class BudgetForm extends React.Component {
   // Handle form submission
   handleSubmit = () => {
     const { record, selectedYear } = this.state;
+    const { profileId } = this.props;
     const collectionName = BudgetFormInput.getCollectionName();
     const data = JSON.parse(JSON.stringify(record));
+
     if (data.length === 0) {
       data.push({});
     }
+
     const owner = Meteor.user()?.username;
-    const budgetFormData = BudgetFormInput.find({ owner: owner, year: selectedYear }).fetch();
+    const budgetFormData = BudgetFormInput.find({ owner, year: selectedYear, profileId }).fetch();
+
     if (budgetFormData.length === 0) {
       data[0].year = selectedYear;
       data[0].owner = owner;
-      defineMethod.callPromise({ collectionName: collectionName, definitionData: data[0] })
+      data[0].profileId = profileId;
+
+      defineMethod.callPromise({ collectionName, definitionData: data[0] })
         .then((response) => {
           const isError = response.status <= 0;
           const errorMessage = isError ? response.errorMessage : 'Record has been inserted successfully!';
@@ -112,6 +132,8 @@ class BudgetForm extends React.Component {
         });
     } else {
       data[0].id = record[0]._id;
+      data[0].profileId = profileId;
+
       updateMethod.callPromise({ collectionName, updateData: data[0] })
         .then(() => {
           this.handleSnackBar(true, 'Item updated successfully', false);
@@ -127,10 +149,16 @@ class BudgetForm extends React.Component {
   // Handles delete
   handleDelete = () => {
     const { selectedYear } = this.state;
+    const { profileId } = this.props;
     const collectionName = BudgetFormInput.getCollectionName();
     const owner = Meteor.user()?.username;
 
-    const budgetFormData = BudgetFormInput.find({ owner: owner, year: selectedYear }).fetch();
+    const budgetFormData = BudgetFormInput.find({ owner, year: selectedYear, profileId }).fetch();
+    if (budgetFormData.length === 0) {
+      this.handleSnackBar(true, 'No record found to delete for the selected year.', true);
+      return;
+    }
+
     const recordId = budgetFormData[0]._id;
 
     removeItMethod.callPromise({ collectionName, instance: recordId })
@@ -166,6 +194,15 @@ class BudgetForm extends React.Component {
 
     return (
       <Container id={PAGE_IDS.BUDGET_FORM}>
+
+        <Grid.Column textAlign="left">
+          <Button primary onClick={this.handleBackToScenarios}>
+            Back to Scenarios
+          </Button>
+          <Button primary onClick={this.handleViewOverview}>
+            View Overview
+          </Button>
+        </Grid.Column>
         <Grid centered>
           <Grid.Column>
             <br />
@@ -235,5 +272,10 @@ class BudgetForm extends React.Component {
     );
   }
 }
+
+BudgetForm.propTypes = {
+  profileId: PropTypes.string.isRequired,
+  navigate: PropTypes.func.isRequired,
+};
 
 export default BudgetForm;

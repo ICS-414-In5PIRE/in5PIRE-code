@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Segment, Container, Grid, Button, Menu, Dropdown } from 'semantic-ui-react';
 import { Tracker } from 'meteor/tracker';
 import { Meteor } from 'meteor/meteor';
+import PropTypes from 'prop-types';
 import OtherAssets from '../components/BalanceSheetComponents/OtherAssets';
 import CashAndCashEquivalents from '../components/BalanceSheetComponents/CashAndCashEquivalents';
 import Liabilities from '../components/BalanceSheetComponents/Liabilities';
@@ -32,16 +33,19 @@ class BalanceSheetInput extends React.Component {
       dropdownOptions: {},
     };
     this.tracker = null;
+    // this.navigate = null;
   }
 
   // Fires when the component mounts
   componentDidMount() {
+    const { profileId } = this.props;
     this.tracker = Tracker.autorun(() => {
       const { selectedYear } = this.state;
       const subscription = BalanceSheetInputs.subscribeBalanceSheet();
       const rdy = subscription.ready();
       const username = Meteor.user()?.username;
-      const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
+      // added profileId here
+      const balanceSheetData = BalanceSheetInputs.find({ owner: username, profileId, year: selectedYear }).fetch();
       this.setState({ isLoading: !rdy, record: balanceSheetData });
     });
 
@@ -51,13 +55,19 @@ class BalanceSheetInput extends React.Component {
     this.setState({ dropdownOptions: options });
   }
 
-  // Fires when the component updates
   componentDidUpdate(prevProps, prevState) {
     const { selectedYear } = this.state;
-    if (prevState.selectedYear !== selectedYear) {
+    const { profileId } = this.props;
+    if (prevState.selectedYear !== selectedYear || prevProps.profileId !== profileId) {
       const username = Meteor.user()?.username;
-      const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
-      this.setState({ record: balanceSheetData.length > 0 ? balanceSheetData : [] });
+      const balanceSheetData = BalanceSheetInputs.find({
+        owner: username,
+        profileId,
+        year: selectedYear,
+      }).fetch();
+      // Check if a record exists for the selected year
+      const isExistingRecord = balanceSheetData.length > 0;
+      this.setState({ record: isExistingRecord ? balanceSheetData : [] });
       this.handleSnackBar(false, '', false);
     }
   }
@@ -68,6 +78,16 @@ class BalanceSheetInput extends React.Component {
       this.tracker.stop();
     }
   }
+
+  handleViewOverview = () => {
+    const { profileId, navigate } = this.props;
+    navigate(`/profile-balance-sheet/${profileId}`);
+  };
+
+  handleBackToScenarios = () => {
+    const { navigate } = this.props;
+    navigate('/financial-profiles');
+  };
 
   // Handle input changes
   handleChange = (e, { name, value }) => {
@@ -86,19 +106,30 @@ class BalanceSheetInput extends React.Component {
     this.setState({ activeItem: name });
   };
 
-  // Handle form submission
   handleSubmit = () => {
     const { record, selectedYear } = this.state;
+    const { profileId } = this.props; // Ensure profileId is obtained from props
     const collectionName = BalanceSheetInputs.getCollectionName();
     const data = JSON.parse(JSON.stringify(record));
+
     if (data.length === 0) {
       data.push({});
     }
+
     const owner = Meteor.user()?.username;
-    const balanceSheetData = BalanceSheetInputs.find({ owner: owner, year: selectedYear }).fetch();
+    // Check if a record exists for this specific profileId and year
+    const balanceSheetData = BalanceSheetInputs.find({
+      owner,
+      profileId, // Ensure profileId is part of the check
+      year: selectedYear,
+    }).fetch();
+
     if (balanceSheetData.length === 0) {
+      // When inserting a new record, include profileId
       data[0].year = selectedYear;
       data[0].owner = owner;
+      data[0].profileId = profileId; // Make sure to set profileId here
+
       defineMethod.callPromise({ collectionName: collectionName, definitionData: data[0] })
         .then((response) => {
           const isError = response.status <= 0;
@@ -112,6 +143,8 @@ class BalanceSheetInput extends React.Component {
         });
     } else {
       data[0].id = record[0]._id;
+      data[0].profileId = profileId; // Ensure profileId is present during updates
+
       updateMethod.callPromise({ collectionName, updateData: data[0] })
         .then(() => {
           this.handleSnackBar(true, 'Item updated successfully', false);
@@ -124,13 +157,24 @@ class BalanceSheetInput extends React.Component {
     }
   };
 
-  // Handles delete
   handleDelete = () => {
     const { selectedYear } = this.state;
+    const { profileId } = this.props; // Ensure profileId is obtained from props
     const collectionName = BalanceSheetInputs.getCollectionName();
     const owner = Meteor.user()?.username;
 
-    const balanceSheetData = BalanceSheetInputs.find({ owner: owner, year: selectedYear }).fetch();
+    // Find record matching owner, profileId, and selected year
+    const balanceSheetData = BalanceSheetInputs.find({
+      owner,
+      profileId,
+      year: selectedYear,
+    }).fetch();
+
+    if (balanceSheetData.length === 0) {
+      this.handleSnackBar(true, 'No record found to delete for the selected year.', true);
+      return;
+    }
+
     const recordId = balanceSheetData[0]._id;
 
     removeItMethod.callPromise({ collectionName, instance: recordId })
@@ -156,8 +200,8 @@ class BalanceSheetInput extends React.Component {
   // Render the component
   render() {
     const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions } = this.state;
-    const username = Meteor.user()?.username;
-    const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
+    // const username = Meteor.user()?.username;
+    // const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
 
     if (isLoading) {
       return (
@@ -167,6 +211,15 @@ class BalanceSheetInput extends React.Component {
 
     return (
       <Container id={PAGE_IDS.BALANCE_SHEET_INPUT}>
+        <Grid.Column textAlign="left">
+          <Button primary onClick={this.handleBackToScenarios}>
+            Back to Scenarios
+          </Button>
+          <Button primary onClick={this.handleViewOverview}>
+            View Overview
+          </Button>
+        </Grid.Column>
+
         <Grid centered>
           <Grid.Column>
             <br />
@@ -226,10 +279,10 @@ class BalanceSheetInput extends React.Component {
               <Grid className="py-3">
                 <Grid.Column textAlign="right">
                   <Button primary type="submit" onClick={this.handleSubmit}>
-                    {balanceSheetData.length > 0 ? 'Update' : 'Submit'}
+                    {record.length > 0 ? 'Update' : 'Submit'}
                   </Button>
                   {
-                    balanceSheetData.length > 0 && (
+                    record.length > 0 && (
                       <Button color="red" onClick={this.handleDelete}>
                         Delete
                       </Button>
@@ -237,6 +290,7 @@ class BalanceSheetInput extends React.Component {
                   }
                 </Grid.Column>
               </Grid>
+
             </Form>
           </Grid.Column>
         </Grid>
@@ -244,5 +298,10 @@ class BalanceSheetInput extends React.Component {
     );
   }
 }
+
+BalanceSheetInput.propTypes = {
+  profileId: PropTypes.string.isRequired,
+  navigate: PropTypes.string.isRequired,
+};
 
 export default BalanceSheetInput;

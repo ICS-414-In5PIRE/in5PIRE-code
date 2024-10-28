@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 import { MATPCollections } from '../../api/matp/MATPCollections';
 import { StaticFinancials } from '../../api/financial/StaticFinancialsCollection';
+import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputsCollection';
 
 // Call publish for all the collections.
 MATPCollections.collections.forEach(c => c.publish());
@@ -39,4 +40,17 @@ Meteor.publish('staticFinancialsAdmin', function publishStaticFinancialsAdmin() 
     return StaticFinancials._collection.find();
   }
   return this.ready();
+});
+
+Meteor.publish('balanceSheet', function publishBalanceSheet(profileId) {
+  if (!this.userId) {
+    return this.ready();
+  }
+
+  // Ensure profileId is provided
+  if (!profileId) {
+    throw new Meteor.Error('profileId-required', 'A profileId is required to publish balance sheet inputs.');
+  }
+
+  return BalanceSheetInputs.find({ profileId });
 });

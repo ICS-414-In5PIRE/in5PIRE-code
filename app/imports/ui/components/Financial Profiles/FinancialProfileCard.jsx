@@ -27,6 +27,9 @@ const FinancialProfileCard = ({
   const handleEditProfile = () => {
     navigate(`/edit-financial-profile/${profileId}`);
   };
+  const handleEditData = () => {
+    navigate(`/balance-sheet/${profileId}`);
+  };
 
   const handleViewDashboard = () => {
     navigate('/dashboard');
@@ -67,7 +70,12 @@ const FinancialProfileCard = ({
               <Button fluid color="blue" onClick={handleEditProfile}>
                 <Icon name="edit" /> Edit Profile
               </Button>
+
+              <Button fluid color="blue" onClick={handleEditData}>
+                <Icon name="edit" /> Edit Balance Sheet
+              </Button>
             </Grid.Column>
+
           )}
           <Grid.Column>
             <Button fluid color="teal" onClick={handleViewDashboard}>

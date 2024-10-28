@@ -32,7 +32,7 @@ class BalanceSheetInputsCollection extends BaseCollection {
     llcLand, restrictedCash, deferredOutflowsPensions,
     deferredOutflowsOPEB, accountsPayable, dueToFund, dueToOtherFunds,
     deferredInflowsPensions, deferredInflowsOPEB, investedInCapitalAssets,
-    restrictedFederalFunds, unrestricted, owner, year, accruedVacationDueWithinOneYear, workersCompensationDueWithinOneYear, accruedRetirementPlanDueWithinOneYear,
+    restrictedFederalFunds, unrestricted, owner, year, profileId, accruedVacationDueWithinOneYear, workersCompensationDueWithinOneYear, accruedRetirementPlanDueWithinOneYear,
     accruedLeaseGuarantyDueWithinOneYear, capitalLeaseObligationsDueWithinOneYear, notesPayableBuildingADueWithinOneYear,
     netPensionLiabilityDueWithinOneYear, netOPEBLiabilityDueWithinOneYear, lineOfCreditBuildingADueWithinOneYear,
     lineOfCreditBuildingBDueWithinOneYear, debtServiceDueWithinOneYear, accruedVacationDueAfterOneYear, workersCompensationDueAfterOneYear, accruedRetirementPlanDueAfterOneYear,
@@ -41,8 +41,7 @@ class BalanceSheetInputsCollection extends BaseCollection {
     lineOfCreditBuildingBDueAfterOneYear, debtServiceDueAfterOneYear,
   }) {
     try {
-      const existingDocument = this._collection.findOne({ owner, year });
-
+      const existingDocument = this._collection.findOne({ owner, year, profileId });
       if (existingDocument) {
         return {
           status: 0,
@@ -183,7 +182,7 @@ class BalanceSheetInputsCollection extends BaseCollection {
         accruedVacationDueAfterOneYear, workersCompensationDueAfterOneYear, accruedRetirementPlanDueAfterOneYear,
         accruedLeaseGuarantyDueAfterOneYear, capitalLeaseObligationsDueAfterOneYear, notesPayableBuildingADueAfterOneYear,
         netPensionLiabilityDueAfterOneYear, netOPEBLiabilityDueAfterOneYear, lineOfCreditBuildingADueAfterOneYear,
-        lineOfCreditBuildingBDueAfterOneYear, debtServiceDueAfterOneYear, netLiabilitiesDueAfterOneYear, owner, year,
+        lineOfCreditBuildingBDueAfterOneYear, debtServiceDueAfterOneYear, netLiabilitiesDueAfterOneYear, owner, year, profileId,
       });
 
       return {
@@ -443,7 +442,7 @@ class BalanceSheetInputsCollection extends BaseCollection {
       llcNet, llcLand, llcAssetsNet, totalCapitalAssetsNet, restrictedCash, totalOtherAssets, deferredOutflowsPensions,
       deferredOutflowsOPEB, netAssetsDeferredOutflows, accountsPayable, dueToFund, dueToOtherFunds, totalLiabilities,
       deferredInflowsPensions, deferredInflowsOPEB, netLiabilitiesDeferredInflows, investedInCapitalAssets,
-      restrictedFederalFunds, unrestricted, totalNetPosition, totalLiabilitiesDeferredNetPosition, owner,
+      restrictedFederalFunds, unrestricted, totalNetPosition, totalLiabilitiesDeferredNetPosition, owner, profileId,
     } = doc;
     return {
       pettyCash, cash, cashInBanks, totalCashAndCashEquivalents, accountsReceivables, dueFromOtherFunds,
@@ -456,7 +455,7 @@ class BalanceSheetInputsCollection extends BaseCollection {
       llcNet, llcLand, llcAssetsNet, totalCapitalAssetsNet, restrictedCash, totalOtherAssets, deferredOutflowsPensions,
       deferredOutflowsOPEB, netAssetsDeferredOutflows, accountsPayable, dueToFund, dueToOtherFunds, totalLiabilities,
       deferredInflowsPensions, deferredInflowsOPEB, netLiabilitiesDeferredInflows, investedInCapitalAssets,
-      restrictedFederalFunds, unrestricted, totalNetPosition, totalLiabilitiesDeferredNetPosition, owner,
+      restrictedFederalFunds, unrestricted, totalNetPosition, totalLiabilitiesDeferredNetPosition, owner, profileId,
     };
   }
 }

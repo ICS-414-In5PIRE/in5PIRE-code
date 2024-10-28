@@ -20,12 +20,25 @@ Meteor.publish(null, function () {
 });
 
 // Publish StaticFinancials for regular users
-Meteor.publish('staticFinancials', function publishStaticFinancials() {
-  if (this.userId) {
-    const username = Meteor.users.findOne(this.userId).username;
-    return StaticFinancials._collection.find({ owner: username });
+// Meteor.publish('staticFinancials', function publishStaticFinancials() {
+//   if (this.userId) {
+//     const username = Meteor.users.findOne(this.userId).username;
+//     return StaticFinancials._collection.find({ owner: username });
+//   }
+//   return this.ready();
+// });
+
+Meteor.publish('staticFinancials', function publishBalanceSheet(profileId) {
+  if (!this.userId) {
+    return this.ready();
   }
-  return this.ready();
+
+  check(profileId, String);
+  if (!profileId) {
+    throw new Meteor.Error('profileId-required', 'A profileId is required to publish static financials inputs.');
+  }
+
+  return StaticFinancials.find({ profileId });
 });
 
 // publish emails

@@ -41,7 +41,7 @@ const FinancialProfileCard = ({
   };
 
   const handleViewDashboard = () => {
-    navigate('/dashboard');
+    navigate(`/dashboard/${profileId}`);
   };
 
   useEffect(() => {

@@ -15,6 +15,10 @@ class StaticFinancialsCollection extends BaseCollection {
   // Constructor to define the schema and collection name
   constructor() {
     super('StaticFinancials', new SimpleSchema({
+      profileId: {
+        type: String,
+        optional: false,
+      },
       customerName: String, // Name of customer
       year: Number, // Fiscal year
       assets: Number, // Total assets
@@ -83,6 +87,7 @@ class StaticFinancialsCollection extends BaseCollection {
    * @returns {String} - The docID of the newly inserted record.
    */
   define({
+    profileId,
     customerName,
     year,
     assets,
@@ -101,6 +106,7 @@ class StaticFinancialsCollection extends BaseCollection {
   }) {
     console.log('Defining financial data:', customerName);
     const docID = this._collection.insert({
+      profileId,
       customerName,
       year,
       assets,
@@ -258,12 +264,13 @@ class StaticFinancialsCollection extends BaseCollection {
   dumpOne(docID) {
     const doc = this.findDoc(docID);
     const {
-      customerName, year, assets, liabilities, netPosition, cashOnHand,
+      profileId, customerName, year, assets, liabilities, netPosition, cashOnHand,
       investment, liquidity, debt, revenues, opex, netIncome, cashFlow, incrementalFringeBenefits,
       owner,
     } = doc;
 
     return {
+      profileId,
       customerName,
       year,
       assets,

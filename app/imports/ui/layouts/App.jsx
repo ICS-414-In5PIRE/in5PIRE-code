@@ -79,6 +79,7 @@ const App = () => {
           <Route path="/audited-fs" element={<ProtectedRoute><FinancialStatement /></ProtectedRoute>} />
           <Route path="/audited-fs/:profileId" element={<ProtectedRoute><FinancialStatementWrapper /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/dashboard/:profileId" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/budget-form" element={<ProtectedRoute><BudgetForm /></ProtectedRoute>} />
           <Route path="/budget-form/:profileId" element={<ProtectedRoute><BudgetFormInputWrapper /></ProtectedRoute>} />
           <Route path="/upload-file" element={<ProtectedRoute><UploadFile /></ProtectedRoute>} />

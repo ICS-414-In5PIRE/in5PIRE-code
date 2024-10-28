@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Segment, Container, Grid, Menu, Header, Card } from 'semantic-ui-react';
+import { useParams } from 'react-router-dom';
+import { Segment, Container, Grid, Menu, Header, Card, Loader } from 'semantic-ui-react';
 import { Line } from 'react-chartjs-2';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
@@ -10,25 +11,38 @@ import { PAGE_IDS } from '../utilities/PageIDs';
 import { yearsOfSolvency4yrConfig, netPosition4yrConfig, demandForCapital4yrConfig, financing4yrConfig, yearsOfSolvencyBasedOnCashFlow4yrConfig, budget4yrConfig } from '../components/DashboardComponents/4yrChartConfigs';
 import { yearsOfSolvency8yrConfig, netPosition8yrConfig, demandForCapital8yrConfig, financing8yrConfig, yearsOfSolvencyBasedOnCashFlow8yrConfig, budget8yrConfig } from '../components/DashboardComponents/8yrChartConfigs';
 import { yearsOfSolvency12yrConfig, netPosition12yrConfig, demandForCapital12yrConfig, financing12yrConfig, yearsOfSolvencyBasedOnCashFlow12yrConfig, budget12yrConfig } from '../components/DashboardComponents/12yrChartConfigs';
-
+import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputsCollection';
+import { BudgetFormInput } from '../../api/BudgetFormInput/BudgetFormInputCollection';
+import { FinancialStatementInput } from '../../api/FinancialStatementInput/FinancialStatementInputCollection';
 // Register Chart.js components
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const Dashboard = () => {
+  const { profileId } = useParams(); // Use profileId from URL params
   const [activeTab, setActiveTab] = useState('Snapshot');
 
-  const handleTabChange = (e, { name }) => setActiveTab(name);
+  const { balanceSheetData, budgetFormData, financialStatementData, financialData, isLoading } = useTracker(() => {
+    const balanceSheetHandle = Meteor.subscribe('balanceSheet', profileId);
+    const budgetFormHandle = Meteor.subscribe('budgetform', profileId);
+    const financialStatementHandle = Meteor.subscribe('auditedfs', profileId);
+    const staticFinancialsHandle = Meteor.subscribe('staticFinancials', profileId);
 
-  // Use useTracker to subscribe to 'staticFinancials' and fetch data from the StaticFinancials collection
-  const { financialData, isLoading } = useTracker(() => {
-    const subscription = Meteor.subscribe('staticFinancials'); // Subscribe to the publication
-    const loading = !subscription.ready();
-    const data = StaticFinancials.find().fetch(); // Fetch the data once the subscription is ready
+    const loading = !balanceSheetHandle.ready() || !budgetFormHandle.ready() || !financialStatementHandle.ready() || !staticFinancialsHandle.ready();
+
     return {
-      financialData: data,
+      balanceSheetData: BalanceSheetInputs.find({ profileId }).fetch(),
+      budgetFormData: BudgetFormInput.find({ profileId }).fetch(),
+      financialStatementData: FinancialStatementInput.find({ profileId }).fetch(),
+      financialData: StaticFinancials.find({ profileId }).fetch(),
       isLoading: loading,
     };
-  });
+  }, [profileId]);
+
+  if (isLoading) {
+    return <Loader text="Loading data..." />;
+  }
+
+  const handleTabChange = (e, { name }) => setActiveTab(name);
 
   const renderCharts = (configs) => (
     <Grid stackable columns={2}>

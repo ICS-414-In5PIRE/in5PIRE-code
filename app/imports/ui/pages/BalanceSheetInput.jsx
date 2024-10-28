@@ -44,7 +44,6 @@ class BalanceSheetInput extends React.Component {
       const subscription = BalanceSheetInputs.subscribeBalanceSheet();
       const rdy = subscription.ready();
       const username = Meteor.user()?.username;
-      // added profileId here
       const balanceSheetData = BalanceSheetInputs.find({ owner: username, profileId, year: selectedYear }).fetch();
       this.setState({ isLoading: !rdy, record: balanceSheetData });
     });

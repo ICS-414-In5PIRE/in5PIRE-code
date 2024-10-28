@@ -43,7 +43,13 @@ const ProfileBalanceSheetOverview = () => {
   }
 
   if (data.length === 0) {
-    return <Container><Header>No balance sheet data available for this profile.</Header></Container>;
+    return (
+      <Container><Header>No balance sheet data available for this profile.</Header>
+        <Button primary onClick={backToDataInput}>
+          Back to Data Input
+        </Button>
+      </Container>
+    );
   }
 
   // Get the years from the data

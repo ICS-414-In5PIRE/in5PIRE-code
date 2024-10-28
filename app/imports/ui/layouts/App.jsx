@@ -35,7 +35,8 @@ import BalanceSheetInputWrapper from '../components/BalanceSheetComponents/Balan
 import ProfileBalanceSheetOverview from '../pages/ProfileBalanceSheetOverview';
 import BudgetFormInputWrapper from '../components/BudgetFormComponents/BudgetFormInputWrapper';
 import ProfileBudgetFormOverview from '../pages/ProfileBudgetFormOverview';
-
+import FinancialStatementWrapper from '../components/FinancialStatementComponents/FinancialStatementWrapper';
+import ProfileFinancialStatementOverview from '../pages/ProfileFinancialStatementOverview';
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
   const { ready } = useTracker(() => {
@@ -67,6 +68,8 @@ const App = () => {
           <Route path="/add-financial-profile/" element={<ProtectedRoute><AddFinancialProfile /></ProtectedRoute>} />
           <Route path="/profile-balance-sheet/:profileId" element={<ProtectedRoute><ProfileBalanceSheetOverview /></ProtectedRoute>} />
           <Route path="/profile-budget-form/:profileId" element={<ProtectedRoute><ProfileBudgetFormOverview /></ProtectedRoute>} />
+          <Route path="/profile-audited-fs/:profileId" element={<ProtectedRoute><ProfileFinancialStatementOverview /></ProtectedRoute>} />
+
           <Route path="/admin" element={<AdminProtectedRoute ready={ready}><ListStuffAdmin /></AdminProtectedRoute>} />
           <Route path="/manage-database" element={<AdminProtectedRoute ready={ready}><ManageDatabase /></AdminProtectedRoute>} />
           <Route path="/notauthorized" element={<NotAuthorized />} />
@@ -74,6 +77,7 @@ const App = () => {
           <Route path="/balance-sheet" element={<ProtectedRoute><BalanceSheetInput /></ProtectedRoute>} />
           <Route path="/balance-sheet/:profileId" element={<ProtectedRoute><BalanceSheetInputWrapper /></ProtectedRoute>} />
           <Route path="/audited-fs" element={<ProtectedRoute><FinancialStatement /></ProtectedRoute>} />
+          <Route path="/audited-fs/:profileId" element={<ProtectedRoute><FinancialStatementWrapper /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/budget-form" element={<ProtectedRoute><BudgetForm /></ProtectedRoute>} />
           <Route path="/budget-form/:profileId" element={<ProtectedRoute><BudgetFormInputWrapper /></ProtectedRoute>} />

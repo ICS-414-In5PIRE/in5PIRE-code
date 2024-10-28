@@ -21,7 +21,7 @@ class FinancialStatementInputCollection extends BaseCollection {
    * @return {String} The document ID of the new FinancialStatementInput.
    */
   define({
-    year, owner, pettyCash, cash, cashInBanks, cashByInvestmentManager, restrictedCash,
+    year, owner, profileId, pettyCash, cash, cashInBanks, cashByInvestmentManager, restrictedCash,
     accountsReceivable, dueFromOtherFund, interestAndDividends, inventoryPrepaidAndOthers, notesReceivableWithinOneYear, notesReceivableAfterOneYear, securityDeposits, investments, netCapitalAssets, deferredOutflowsOfResources,
     accountsPayableAndAccruedLiabilities, dueToFund, dueToOtherFunds, longTermLiabilitiesWithinOneYear, longTermLiabilitiesAfterOneYear, deferredInflowsResources, deferredInflowsOPEB,
     capitalAssetsRelatedDebt, restrictedFederalFunds, unrestricted,
@@ -31,7 +31,7 @@ class FinancialStatementInputCollection extends BaseCollection {
     beginningOfYear, restatementAdjustment,
   }) {
     try {
-      const existingDocument = this._collection.findOne({ owner, year });
+      const existingDocument = this._collection.findOne({ owner, profileId, year });
 
       if (existingDocument) {
         return {
@@ -141,7 +141,7 @@ class FinancialStatementInputCollection extends BaseCollection {
         (parseFloat(restatementAdjustment) || 0);
 
       const docID = this._collection.insert({
-        year, owner, pettyCash, cash, cashInBanks, cashByInvestmentManager, restrictedCash, totalCashAndCashEquivalents,
+        year, owner, profileId, pettyCash, cash, cashInBanks, cashByInvestmentManager, restrictedCash, totalCashAndCashEquivalents,
         accountsReceivable, dueFromOtherFund, interestAndDividends, inventoryPrepaidAndOthers, notesReceivableWithinOneYear, notesReceivableAfterOneYear, securityDeposits, investments, netCapitalAssets, totalOtherAssets,
         deferredOutflowsOfResources, totalAssetsDeferredOutflows,
         accountsPayableAndAccruedLiabilities, dueToFund, dueToOtherFunds, longTermLiabilitiesWithinOneYear, longTermLiabilitiesAfterOneYear, totalLiabilities, deferredInflowsResources, deferredInflowsOPEB, totalLiabilitiesDeferredInflows,
@@ -372,7 +372,7 @@ class FinancialStatementInputCollection extends BaseCollection {
   dumpOne(docID) {
     const doc = this.findDoc(docID);
     const {
-      year, owner, pettyCash, cash, cashInBanks, cashByInvestmentManager, restrictedCash, totalCashAndCashEquivalents,
+      year, owner, profileId, pettyCash, cash, cashInBanks, cashByInvestmentManager, restrictedCash, totalCashAndCashEquivalents,
       accountsReceivable, dueFromOtherFund, interestAndDividends, inventoryPrepaidAndOthers, notesReceivableWithinOneYear, notesReceivableAfterOneYear, securityDeposits, investments, netCapitalAssets, totalOtherAssets,
       deferredOutflowsOfResources, totalAssetsDeferredOutflows,
       accountsPayableAndAccruedLiabilities, dueToFund, dueToOtherFunds, longTermLiabilitiesWithinOneYear, longTermLiabilitiesAfterOneYear, totalLiabilities, deferredInflowsResources, deferredInflowsOPEB, totalLiabilitiesDeferredInflows,
@@ -383,7 +383,7 @@ class FinancialStatementInputCollection extends BaseCollection {
       beginningOfYear, restatementAdjustment, netPositionEndOfYear,
     } = doc;
     return {
-      year, owner, pettyCash, cash, cashInBanks, cashByInvestmentManager, restrictedCash, totalCashAndCashEquivalents,
+      year, owner, profileId, pettyCash, cash, cashInBanks, cashByInvestmentManager, restrictedCash, totalCashAndCashEquivalents,
       accountsReceivable, dueFromOtherFund, interestAndDividends, inventoryPrepaidAndOthers, notesReceivableWithinOneYear, notesReceivableAfterOneYear, securityDeposits, investments, netCapitalAssets, totalOtherAssets,
       deferredOutflowsOfResources, totalAssetsDeferredOutflows,
       accountsPayableAndAccruedLiabilities, dueToFund, dueToOtherFunds, longTermLiabilitiesWithinOneYear, longTermLiabilitiesAfterOneYear, totalLiabilities, deferredInflowsResources, deferredInflowsOPEB, totalLiabilitiesDeferredInflows,

@@ -5,6 +5,7 @@ import { MATPCollections } from '../../api/matp/MATPCollections';
 import { StaticFinancials } from '../../api/financial/StaticFinancialsCollection';
 import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputsCollection';
 import { BudgetFormInput } from '../../api/BudgetFormInput/BudgetFormInputCollection';
+import { FinancialStatementInput } from '../../api/FinancialStatementInput/FinancialStatementInputCollection';
 // Call publish for all the collections.
 MATPCollections.collections.forEach(c => c.publish());
 
@@ -68,4 +69,18 @@ Meteor.publish('budgetform', function publishBudgetForm(profileId) {
   }
 
   return BudgetFormInput.find({ profileId });
+});
+
+Meteor.publish('auditedfs', function publishBudgetForm(profileId) {
+  if (!this.userId) {
+    return this.ready();
+  }
+
+  check(profileId, String);
+
+  if (!profileId) {
+    throw new Meteor.Error('profileId-required', 'A profileId is required to publish audited financial inputs.');
+  }
+
+  return FinancialStatementInput.find({ profileId });
 });

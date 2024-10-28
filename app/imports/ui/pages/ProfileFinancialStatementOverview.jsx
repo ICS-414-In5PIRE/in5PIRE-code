@@ -4,31 +4,26 @@ import { Meteor } from 'meteor/meteor';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Tracker } from 'meteor/tracker';
 import Loader from '../components/Loader';
-import { BudgetFormInput } from '../../api/BudgetFormInput/BudgetFormInputCollection';
+import { FinancialStatementInput } from '../../api/FinancialStatementInput/FinancialStatementInputCollection';
 
-const ProfileBudgetFormOverview = () => {
+const ProfileFinancialStatementOverview = () => {
   const navigate = useNavigate();
   const { profileId } = useParams();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const backToDataInput = () => {
-    navigate(`/budget-form/${profileId}`);
+    navigate(`/audited-fs/${profileId}`);
   };
 
   useEffect(() => {
-    // Subscribe to budget form data for the given profileId
-    const subscription = Meteor.subscribe('budgetform', profileId);
+    const subscription = Meteor.subscribe('auditedfs', profileId);
 
-    // Set up a Tracker to monitor the subscription and collection
     const tracker = Tracker.autorun(() => {
       const ready = subscription.ready();
-
       if (ready) {
-        // Fetch all budget sheet data for the given profileId, sorted by year
-        const budgetFormData = BudgetFormInput.find({ profileId }, { sort: { year: 1 } }).fetch();
-
-        setData(budgetFormData);
+        const financialStatementData = FinancialStatementInput.find({ profileId }, { sort: { year: 1 } }).fetch();
+        setData(financialStatementData);
         setIsLoading(false);
       }
     });
@@ -39,12 +34,12 @@ const ProfileBudgetFormOverview = () => {
   }, [profileId]);
 
   if (isLoading) {
-    return <Loader text="Loading budget form overview..." />;
+    return <Loader text="Loading Financial Statement overview..." />;
   }
 
   if (data.length === 0) {
     return (
-      <Container><Header>No budget form data available for this profile.</Header>
+      <Container><Header>No financial statement data available for this profile.</Header>
         <Button primary onClick={backToDataInput}>
           Back to Data Input
         </Button>
@@ -52,7 +47,6 @@ const ProfileBudgetFormOverview = () => {
     );
   }
 
-  // Get the years from the data
   const years = data.map(item => item.year);
   const fields = Object.keys(data[0]).filter(field => field !== '_id' && field !== 'owner' && field !== 'profileId' && field !== 'year');
 
@@ -61,7 +55,7 @@ const ProfileBudgetFormOverview = () => {
       <Button primary onClick={backToDataInput}>
         Back to Data Input
       </Button>
-      <Header as="h2">Budget Form Overview</Header>
+      <Header as="h2">Audited Financial Statements Overview</Header>
       <Table celled>
         <Table.Header>
           <Table.Row>
@@ -88,4 +82,4 @@ const ProfileBudgetFormOverview = () => {
   );
 };
 
-export default ProfileBudgetFormOverview;
+export default ProfileFinancialStatementOverview;

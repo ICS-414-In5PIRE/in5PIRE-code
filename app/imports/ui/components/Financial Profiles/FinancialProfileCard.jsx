@@ -36,6 +36,10 @@ const FinancialProfileCard = ({
     navigate(`/budget-form/${profileId}`);
   };
 
+  const handleEditFinancialStatement = () => {
+    navigate(`/audited-fs/${profileId}`);
+  };
+
   const handleViewDashboard = () => {
     navigate('/dashboard');
   };
@@ -82,6 +86,10 @@ const FinancialProfileCard = ({
 
               <Button fluid color="blue" onClick={handleEditBudgetForm}>
                 <Icon name="edit" /> Edit Budget Form
+              </Button>
+
+              <Button fluid color="blue" onClick={handleEditFinancialStatement}>
+                <Icon name="edit" /> Edit Audited Financial Statement
               </Button>
             </Grid.Column>
 

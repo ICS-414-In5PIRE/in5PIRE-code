@@ -34,6 +34,7 @@ import BudgetFormInputWrapper from '../components/BudgetFormComponents/BudgetFor
 import ProfileBudgetFormOverview from '../pages/ProfileBudgetFormOverview';
 import FinancialStatementWrapper from '../components/FinancialStatementComponents/FinancialStatementWrapper';
 import ProfileFinancialStatementOverview from '../pages/ProfileFinancialStatementOverview';
+import CSVInstructionsPage from '../pages/CSVInstructionsPage';
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
   const { ready } = useTracker(() => {
@@ -66,7 +67,7 @@ const App = () => {
           <Route path="/profile-balance-sheet/:profileId" element={<ProtectedRoute><ProfileBalanceSheetOverview /></ProtectedRoute>} />
           <Route path="/profile-budget-form/:profileId" element={<ProtectedRoute><ProfileBudgetFormOverview /></ProtectedRoute>} />
           <Route path="/profile-audited-fs/:profileId" element={<ProtectedRoute><ProfileFinancialStatementOverview /></ProtectedRoute>} />
-
+          <Route path="/csv-instructions" element={<ProtectedRoute><CSVInstructionsPage /></ProtectedRoute>} />
           <Route path="/admin" element={<AdminProtectedRoute ready={ready}><ListStuffAdmin /></AdminProtectedRoute>} />
           <Route path="/manage-database" element={<AdminProtectedRoute ready={ready}><ManageDatabase /></AdminProtectedRoute>} />
           <Route path="/notauthorized" element={<NotAuthorized />} />

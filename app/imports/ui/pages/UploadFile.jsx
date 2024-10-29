@@ -1,87 +1,88 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import * as XLSX from 'xlsx';
 import { Table, Header, Container, Button, Icon, Grid, Dropdown, GridRow, GridColumn, Divider, Segment } from 'semantic-ui-react';
 import { Image } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { parseCSV } from '../components/CsvComponents/parseCsv';
 import { PAGE_IDS } from '../utilities/PageIDs';
 
 /**
  * UploadFile: Allows the user to upload a spreadsheet or .csv file
- * and import the data into a table.
- *
+ * and import the data into a table with validation for CSV files.
  */
 
-const UploadFile = () => {
+const UploadFile = ({ schemaType }) => {
   const [tableData, setTableData] = useState([]);
-  const [sheetNames, setSheetNames] = useState([]);
-  const [selectedSheet, setSelectedSheet] = useState(null);
-  const [workbook, setWorkbook] = useState(null);
+  const [availableSheetNames, setAvailableSheetNames] = useState([]);
+  const [activeSheet, setActiveSheet] = useState(null);
+  const [storedWorkbook, setStoredWorkbook] = useState(null);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   // Function to handle file upload and conversion
-  const handleFileUpload = (e) => {
+  const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
+      setError(null);
+      setSuccess(null);
       const fileName = file.name.toLowerCase();
       const reader = new FileReader();
 
-      reader.onload = (event) => {
+      reader.onload = async (event) => {
         const arrayBuffer = event.target.result;
-        const data = new Uint8Array(arrayBuffer); // Create a Uint8Array from the buffer
+        const data = new Uint8Array(arrayBuffer);
 
-        // If the file is an Excel file (.xlsx, .xls, .xlsm)
+        // Handle Excel files (.xlsx, .xls, .xlsm)
         if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls') || fileName.endsWith('.xlsm')) {
-          let workbook = XLSX.read(data, { type: 'array' }); // Read as ArrayBuffer
-
-          // Get sheet names
-          let sheetNames = workbook.SheetNames;
-          setSheetNames(sheetNames);
-          setWorkbook(workbook); // Store workbook in state for future access
-
-          // Automatically select the first sheet
-          setSelectedSheet(sheetNames[0]);
-
-          // Load the first sheet by default
-          const firstSheet = workbook.Sheets[sheetNames[0]];
+          const wb = XLSX.read(data, { type: 'array' });
+          const sheetNames = wb.SheetNames;
+          setAvailableSheetNames(sheetNames);
+          setStoredWorkbook(wb);
+          setActiveSheet(sheetNames[0]);
+          const firstSheet = wb.Sheets[sheetNames[0]];
           const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
           setTableData(jsonData);
-        } else if (fileName.endsWith('.csv')) { // If the file is a CSV file
-          const workbook = XLSX.read(data, { type: 'array' }); // Read as ArrayBuffer for CSV as well
+          setSuccess('File uploaded successfully!');
 
-          // CSV will only have one "sheet"
-          const csvSheet = workbook.Sheets[workbook.SheetNames[0]];
-          const jsonData = XLSX.utils.sheet_to_json(csvSheet, { header: 1 });
-          setTableData(jsonData);
-          setSheetNames([]); // CSV has no multiple sheets
-          setSelectedSheet(null);
-          setWorkbook(null);
+          // Handle CSV files with validation
+        } else if (fileName.endsWith('.csv')) {
+          try {
+            const parsedData = await parseCSV(file, schemaType);
+            setTableData(parsedData);
+            setAvailableSheetNames([]);
+            setActiveSheet(null);
+            setStoredWorkbook(null);
+            setSuccess('CSV file validated and uploaded successfully!');
+          } catch (errorMsg) {
+            setError(errorMsg);
+          }
         } else {
-          alert('Unsupported file type! Please upload a supported file type.');
+          setError('Unsupported file type! Please upload a supported file type (.xls, .xlsx, .xlsm, .csv).');
         }
       };
-      reader.readAsArrayBuffer(file); // Use readAsArrayBuffer for both Excel and CSV
+      reader.readAsArrayBuffer(file);
     }
   };
 
   // Function to handle sheet selection
   const handleSheetChange = (e, { value }) => {
-    setSelectedSheet(value);
-
-    // Access the workbook stored in the state
-    if (workbook) {
-      let selectedSheet = workbook.Sheets[value];
+    setActiveSheet(value);
+    if (storedWorkbook) {
+      const selectedSheet = storedWorkbook.Sheets[value];
       const jsonData = XLSX.utils.sheet_to_json(selectedSheet, { header: 1 });
       setTableData(jsonData);
     } else {
-      alert('Workbook not found. Please upload the file again.');
+      setError('Workbook not found. Please upload the file again.');
     }
   };
 
   // Render table from the tableData array using Semantic UI
-  // TODO?: Make table render prettier.
   const renderTable = () => (
     <Table celled striped>
       <Table.Header>
         <Table.Row>
-          {tableData[0]?.map((colHeader, index) => (
+          {Array.isArray(tableData[0]) && tableData[0].map((colHeader, index) => (
             <Table.HeaderCell key={index}>{colHeader}</Table.HeaderCell>
           ))}
         </Table.Row>
@@ -89,9 +90,14 @@ const UploadFile = () => {
       <Table.Body>
         {tableData.slice(1).map((row, rowIndex) => (
           <Table.Row key={rowIndex}>
-            {row.map((cell, cellIndex) => (
-              <Table.Cell key={cellIndex}>{cell}</Table.Cell>
-            ))}
+            {Array.isArray(row) ? (
+              row.map((cell, cellIndex) => (
+                <Table.Cell key={cellIndex}>{cell}</Table.Cell>
+              ))
+            ) : (
+              // If row is not an array, display an error message or skip
+              <Table.Cell colSpan={tableData[0]?.length || 1}>Error: Row data is invalid</Table.Cell>
+            )}
           </Table.Row>
         ))}
       </Table.Body>
@@ -100,7 +106,6 @@ const UploadFile = () => {
 
   return (
     <Container id={PAGE_IDS.UPLOAD_FILE} style={{ marginTop: '20px' }}>
-      <br />
       <Segment>
         <Grid columns={2} relaxed="very" stackable>
           <Grid.Column textAlign="center">
@@ -136,32 +141,41 @@ const UploadFile = () => {
         <Divider vertical>OR</Divider>
       </Segment>
 
+      {/* Link to CSV Instructions */}
+      <p style={{ marginTop: '20px' }}>
+        <Link to="/csv-instructions">View CSV Formatting Instructions</Link>
+      </p>
+
       {/* Sheet selection dropdown if multiple sheets are available */}
-      {sheetNames.length > 0 && (
+      {availableSheetNames.length > 0 && (
         <Dropdown
           placeholder="Select Sheet"
           fluid
           selection
-          options={sheetNames.map((sheetName) => ({
+          options={availableSheetNames.map((sheetName) => ({
             key: sheetName,
             text: sheetName,
             value: sheetName,
           }))}
           onChange={handleSheetChange}
-          value={selectedSheet}
+          value={activeSheet}
           style={{ marginTop: '20px' }}
         />
       )}
 
-      {/* TODO: Allow horizontal scroll */}
+      {/* Display success or error messages */}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {success && <p style={{ color: 'green' }}>{success}</p>}
+
+      {/* Render data table if data is available */}
       {tableData.length > 0 && (
         <div style={{ marginTop: '20px' }}>
-          <Header as="h3">Data from the {selectedSheet ? selectedSheet : 'Excel/CSV'} Sheet:</Header>
+          <Header as="h3">Data from the {activeSheet || 'CSV'} Sheet:</Header>
           {renderTable()}
         </div>
       )}
 
-      {/* Bottom footer section (needs cleanup) */}
+      {/* Additional information and images */}
       <Image src="/images/Upload3.png" fluid rounded className="mt-3" />
       <Grid>
         <Divider />
@@ -196,6 +210,16 @@ const UploadFile = () => {
       </Grid>
     </Container>
   );
+};
+
+// Define propTypes to validate 'schemaType'
+UploadFile.propTypes = {
+  schemaType: PropTypes.string,
+};
+
+// Set default prop for schemaType
+UploadFile.defaultProps = {
+  schemaType: 'balanceSheet',
 };
 
 export default UploadFile;

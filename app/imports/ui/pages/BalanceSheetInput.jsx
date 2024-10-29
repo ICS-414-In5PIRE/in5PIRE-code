@@ -31,6 +31,7 @@ class BalanceSheetInput extends React.Component {
       selectedYear: 2024,
       record: [],
       dropdownOptions: {},
+      isSubmit: true,
     };
     this.tracker = null;
     // this.navigate = null;
@@ -45,7 +46,7 @@ class BalanceSheetInput extends React.Component {
       const rdy = subscription.ready();
       const username = Meteor.user()?.username;
       const balanceSheetData = BalanceSheetInputs.find({ owner: username, profileId, year: selectedYear }).fetch();
-      this.setState({ isLoading: !rdy, record: balanceSheetData });
+      this.setState({ isLoading: !rdy, record: balanceSheetData, isSubmit: balanceSheetData.length === 0 });
     });
 
     const options = {};
@@ -132,6 +133,7 @@ class BalanceSheetInput extends React.Component {
           const isError = response.status <= 0;
           const errorMessage = isError ? response.errorMessage : 'Record has been inserted successfully!';
           this.handleSnackBar(true, errorMessage, isError);
+          this.setState({ isSubmit: false });
         })
         .catch((error) => {
           if (error) {
@@ -195,9 +197,7 @@ class BalanceSheetInput extends React.Component {
 
   // Render the component
   render() {
-    const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions } = this.state;
-    // const username = Meteor.user()?.username;
-    // const balanceSheetData = BalanceSheetInputs.find({ owner: username, year: selectedYear }).fetch();
+    const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions, isSubmit } = this.state;
 
     if (isLoading) {
       return (
@@ -208,14 +208,8 @@ class BalanceSheetInput extends React.Component {
     return (
       <Container id={PAGE_IDS.BALANCE_SHEET_INPUT}>
         <Grid.Column textAlign="left">
-          <Button primary onClick={this.handleBackToScenarios}>
-            Back to Scenarios
-          </Button>
-          <Button primary onClick={this.handleViewOverview}>
-            View Overview
-          </Button>
+          <Button labelPosition="left" icon="left chevron" content="Back to Scenarios" onClick={this.handleBackToScenarios} />
         </Grid.Column>
-
         <Grid centered>
           <Grid.Column>
             <br />
@@ -275,18 +269,20 @@ class BalanceSheetInput extends React.Component {
               <Grid className="py-3">
                 <Grid.Column textAlign="right">
                   <Button primary type="submit" onClick={this.handleSubmit}>
-                    {record.length > 0 ? 'Update' : 'Submit'}
+                    {record.length > 0 && !isSubmit ? 'Update' : 'Submit'}
                   </Button>
                   {
-                    record.length > 0 && (
+                    record.length > 0 && !isSubmit && (
                       <Button color="red" onClick={this.handleDelete}>
                         Delete
                       </Button>
                     )
                   }
+                  <Button primary onClick={this.handleViewOverview}>
+                    View Overview
+                  </Button>
                 </Grid.Column>
               </Grid>
-
             </Form>
           </Grid.Column>
         </Grid>

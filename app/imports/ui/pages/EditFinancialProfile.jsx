@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Col, Container, Row, Button } from 'react-bootstrap';
+import { FaAngleLeft } from 'react-icons/fa';
 import { AutoForm, ErrorsField, SubmitField, TextField, SelectField, LongTextField } from 'uniforms-bootstrap5';
 import swal from 'sweetalert';
 import { useTracker } from 'meteor/react-meteor-data';
@@ -112,8 +113,14 @@ const EditFinancialProfile = () => {
 
       {/* Go back to financial Profile Page */}
       <Row>
-        <Col xs="auto" className="px-3">
-          <Button variant="secondary" onClick={() => navigate('/financial-profiles')}>
+        <Col xs="auto">
+          <Button
+            variant="link"
+            className="text-dark"
+            onClick={() => navigate('/financial-profiles')}
+            style={{ fontSize: '1.1rem' }}
+          >
+            <FaAngleLeft size={16} className="me-2" />
             Back to Financial Profiles
           </Button>
         </Col>
@@ -137,13 +144,6 @@ const EditFinancialProfile = () => {
                     <Col className="pt-1">
                       <Button variant="danger" onClick={handleDelete}>
                         Delete Financial Profile
-                      </Button>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col className="pt-1">
-                      <Button variant="secondary" onClick={() => navigate('/financial-profiles')}>
-                        Back to Financial Profiles
                       </Button>
                     </Col>
                   </Row>

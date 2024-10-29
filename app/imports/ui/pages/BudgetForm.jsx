@@ -31,6 +31,7 @@ class BudgetForm extends React.Component {
       selectedYear: 2024,
       record: [],
       dropdownOptions: {},
+      isSubmit: true,
     };
     this.tracker = null;
   }
@@ -45,7 +46,7 @@ class BudgetForm extends React.Component {
       const rdy = subscription.ready();
       const username = Meteor.user()?.username;
       const budgetFormData = BudgetFormInput.find({ owner: username, profileId, year: selectedYear }).fetch();
-      this.setState({ isLoading: !rdy, record: budgetFormData });
+      this.setState({ isLoading: !rdy, record: budgetFormData, isSubmit: budgetFormData.length === 0 });
     });
 
     const options = {};
@@ -182,7 +183,7 @@ class BudgetForm extends React.Component {
   };
 
   render() {
-    const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions } = this.state;
+    const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions, isSubmit } = this.state;
     const username = Meteor.user()?.username;
     const budgetFormData = BudgetFormInput.find({ owner: username, year: selectedYear }).fetch();
 
@@ -194,14 +195,8 @@ class BudgetForm extends React.Component {
 
     return (
       <Container id={PAGE_IDS.BUDGET_FORM}>
-
         <Grid.Column textAlign="left">
-          <Button primary onClick={this.handleBackToScenarios}>
-            Back to Scenarios
-          </Button>
-          <Button primary onClick={this.handleViewOverview}>
-            View Overview
-          </Button>
+          <Button labelPosition="left" icon="left chevron" content="Back to Scenarios" onClick={this.handleBackToScenarios} />
         </Grid.Column>
         <Grid centered>
           <Grid.Column>
@@ -254,15 +249,18 @@ class BudgetForm extends React.Component {
               <Grid className="py-3">
                 <Grid.Column textAlign="right">
                   <Button primary type="submit" onClick={this.handleSubmit}>
-                    {budgetFormData.length > 0 ? 'Update' : 'Submit'}
+                    {budgetFormData.length > 0 && !isSubmit ? 'Update' : 'Submit'}
                   </Button>
                   {
-                    budgetFormData.length > 0 && (
+                    budgetFormData.length > 0 && !isSubmit && (
                       <Button color="red" onClick={this.handleDelete}>
                         Delete
                       </Button>
                     )
                   }
+                  <Button primary onClick={this.handleViewOverview}>
+                    View Overview
+                  </Button>
                 </Grid.Column>
               </Grid>
             </Form>

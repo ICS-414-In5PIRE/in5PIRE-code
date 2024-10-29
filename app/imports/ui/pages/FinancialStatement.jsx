@@ -30,6 +30,7 @@ class FinancialStatement extends React.Component {
       selectedYear: 2024,
       record: [],
       dropdownOptions: {},
+      isSubmit: true,
     };
     this.tracker = null;
   }
@@ -43,7 +44,7 @@ class FinancialStatement extends React.Component {
       const rdy = subscription.ready();
       const username = Meteor.user()?.username;
       const financialStatementData = FinancialStatementInput.find({ owner: username, profileId, year: selectedYear }).fetch();
-      this.setState({ isLoading: !rdy, record: financialStatementData });
+      this.setState({ isLoading: !rdy, record: financialStatementData, isSubmit: financialStatementData.length === 0 });
     });
 
     const options = {};
@@ -99,100 +100,46 @@ class FinancialStatement extends React.Component {
   };
 
   // Handle form submission
-  // handleSubmit = () => {
-  //   const { record, selectedYear } = this.state;
-  //   const { profileId } = this.props;
-  //   const collectionName = FinancialStatementInput.getCollectionName();
-  //   const data = JSON.parse(JSON.stringify(record));
-  //   if (data.length === 0) {
-  //     data.push({});
-  //   }
-  //   const owner = Meteor.user()?.username;
-  //   console.log("Data being submitted:", data[0]); // Add this line to inspect data structure
-  //
-  //   const financialStatementData = FinancialStatementInput.find({ owner: owner, year: selectedYear }).fetch();
-  //   if (financialStatementData.length === 0) {
-  //     data[0].year = selectedYear;
-  //     data[0].owner = owner;
-  //     data[0].profileId = profileId;
-  //     defineMethod.callPromise({ collectionName: collectionName, definitionData: data[0] })
-  //       .then((response) => {
-  //         const isError = response.status <= 0;
-  //         const errorMessage = isError ? response.errorMessage : 'Record has been inserted successfully!';
-  //         this.handleSnackBar(true, errorMessage, isError);
-  //       })
-  //       .catch((error) => {
-  //         if (error) {
-  //           console.error('Define Method Error:', error); // Log the actual error
-  //           this.handleSnackBar(true, 'Something went wrong!', true);
-  //         }
-  //       });
-  //   } else {
-  //     data[0].id = record[0]._id;
-  //     data[0].profileId = profileId;
-  //     updateMethod.callPromise({ collectionName, updateData: data[0] })
-  //       .then(() => {
-  //         this.handleSnackBar(true, 'Item updated successfully', false);
-  //       })
-  //       .catch((error) => {
-  //         if (error) {
-  //           console.error('Define Method Error:', error); // Log the actual error
-  //
-  //           this.handleSnackBar(true, 'Something went wrong!', true);
-  //         }
-  //       });
-  //   }
-  // };
   handleSubmit = () => {
     const { record, selectedYear } = this.state;
-    const { profileId } = this.props; // Ensure profileId is accessed correctly
+    const { profileId } = this.props;
     const collectionName = FinancialStatementInput.getCollectionName();
-
-    // Create data object, ensuring all fields are defined with default values if not set
     const data = JSON.parse(JSON.stringify(record));
+
     if (data.length === 0) {
       data.push({});
     }
 
     const owner = Meteor.user()?.username;
-    data[0] = {
-      year: selectedYear,
-      owner: owner || '',
-      profileId: profileId || '',  // Explicitly set profileId here
-      pettyCash: data[0].pettyCash || 0,
-      cash: data[0].cash || 0,
-      cashInBanks: data[0].cashInBanks || 0,
-      // Add all remaining fields from the schema here
-      ...data[0], // Override with any existing values in record
-    };
-
-    // Find any existing records to determine whether to insert or update
     const financialStatementData = FinancialStatementInput.find({ owner, year: selectedYear, profileId }).fetch();
 
     if (financialStatementData.length === 0) {
+      data[0].year = selectedYear;
+      data[0].owner = owner;
+      data[0].profileId = profileId;
+
       defineMethod.callPromise({ collectionName, definitionData: data[0] })
         .then(response => {
           const isError = response.status <= 0;
           const errorMessage = isError ? response.errorMessage : 'Record has been inserted successfully!';
           this.handleSnackBar(true, errorMessage, isError);
         })
-        .catch(error => {
-          console.error("Define Method Error:", error); // Log error details for clarity
+        .catch(() => {
           this.handleSnackBar(true, 'Something went wrong!', true);
         });
     } else {
       data[0].id = record[0]._id;
+      data[0].profileId = profileId;
+
       updateMethod.callPromise({ collectionName, updateData: data[0] })
         .then(() => {
           this.handleSnackBar(true, 'Item updated successfully', false);
         })
-        .catch(error => {
-          console.error("Update Method Error:", error); // Log error details for clarity
+        .catch(() => {
           this.handleSnackBar(true, 'Something went wrong!', true);
         });
     }
   };
-
 
   // Handles delete
   handleDelete = () => {
@@ -225,9 +172,7 @@ class FinancialStatement extends React.Component {
   };
 
   render() {
-    const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions } = this.state;
-    const username = Meteor.user()?.username;
-    const financialStatementData = FinancialStatementInput.find({ owner: username, year: selectedYear }).fetch();
+    const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions, isSubmit } = this.state;
 
     if (isLoading) {
       return (
@@ -238,12 +183,7 @@ class FinancialStatement extends React.Component {
     return (
       <Container id={PAGE_IDS.AUDITED_FS}>
         <Grid.Column textAlign="left">
-          <Button primary onClick={this.handleBackToScenarios}>
-            Back to Scenarios
-          </Button>
-          <Button primary onClick={this.handleViewOverview}>
-            View Overview
-          </Button>
+          <Button labelPosition="left" icon="left chevron" content="Back to Scenarios" onClick={this.handleBackToScenarios} />
         </Grid.Column>
         <Grid centered>
           <Grid.Column>
@@ -285,15 +225,18 @@ class FinancialStatement extends React.Component {
               <Grid className="py-3">
                 <Grid.Column textAlign="right">
                   <Button primary type="submit" onClick={this.handleSubmit}>
-                    {financialStatementData.length > 0 ? 'Update' : 'Submit'}
+                    {record.length > 0 && !isSubmit ? 'Update' : 'Submit'}
                   </Button>
                   {
-                    financialStatementData.length > 0 && (
+                    record.length > 0 && !isSubmit && (
                       <Button color="red" onClick={this.handleDelete}>
                         Delete
                       </Button>
                     )
                   }
+                  <Button primary onClick={this.handleViewOverview}>
+                    View Overview
+                  </Button>
                 </Grid.Column>
               </Grid>
             </Form>

@@ -18,18 +18,15 @@ import NotAuthorized from '../pages/NotAuthorized';
 import { ROLE } from '../../api/role/Role';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ManageDatabase from '../pages/ManageDatabase';
-import BalanceSheetInput from '../pages/BalanceSheetInput';
 import AboutUs from '../pages/AboutUs';
 import NewNav from '../components/NewNav';
 import FinancialProfilesPage from '../pages/FinancialProfiles';
 import AddFinancialProfile from '../pages/AddFinancialProfile';
-import BudgetForm from '../pages/BudgetForm';
 import Dashboard from '../pages/Dashboard';
 import FAQ from '../pages/FAQ';
 import ContactUs from '../pages/ContactUs';
 import UserGuide from '../pages/UserGuide';
 import UploadFile from '../pages/UploadFile';
-import FinancialStatement from '../pages/FinancialStatement';
 import EditFinancialProfile from '../pages/EditFinancialProfile';
 import BalanceSheetInputWrapper from '../components/BalanceSheetComponents/BalanceSheetWrapper';
 import ProfileBalanceSheetOverview from '../pages/ProfileBalanceSheetOverview';
@@ -74,12 +71,9 @@ const App = () => {
           <Route path="/manage-database" element={<AdminProtectedRoute ready={ready}><ManageDatabase /></AdminProtectedRoute>} />
           <Route path="/notauthorized" element={<NotAuthorized />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/balance-sheet" element={<ProtectedRoute><BalanceSheetInput /></ProtectedRoute>} />
           <Route path="/balance-sheet/:profileId" element={<ProtectedRoute><BalanceSheetInputWrapper /></ProtectedRoute>} />
-          <Route path="/audited-fs" element={<ProtectedRoute><FinancialStatement /></ProtectedRoute>} />
           <Route path="/audited-fs/:profileId" element={<ProtectedRoute><FinancialStatementWrapper /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/budget-form" element={<ProtectedRoute><BudgetForm /></ProtectedRoute>} />
           <Route path="/budget-form/:profileId" element={<ProtectedRoute><BudgetFormInputWrapper /></ProtectedRoute>} />
           <Route path="/upload-file" element={<ProtectedRoute><UploadFile /></ProtectedRoute>} />
         </Routes>

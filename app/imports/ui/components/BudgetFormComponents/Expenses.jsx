@@ -1,9 +1,9 @@
 import React from 'react';
-import { Form, Tab } from 'semantic-ui-react';
+import { Form, Tab, Divider } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import PersonnelAndFringeAdmin from './PersonnelAndFringeAdmin';
 import PersonnelAndFringeManagement from './PersonnelAndFringeManagement';
-import PersonnelAndFringeManagementStaff from './PersonnelAndFringeManagementStaff';
+import PersonnelAndFringeAdminStaff from './PersonnelAndFringeAdminStaff';
 
 /**
  * Component for Expenses form for Budget Form
@@ -27,10 +27,10 @@ const Expenses = ({ formData, handleChange }) => {
       ),
     },
     {
-      menuItem: 'Personnel & Fringe - Management Staff',
+      menuItem: 'Personnel & Fringe - Admin Staff',
       render: () => (
         <Tab.Pane>
-          <PersonnelAndFringeManagementStaff formData={formData} handleChange={handleChange} />
+          <PersonnelAndFringeAdminStaff formData={formData} handleChange={handleChange} />
         </Tab.Pane>
       ),
     },
@@ -47,6 +47,7 @@ const Expenses = ({ formData, handleChange }) => {
         type="number"
       />
       <Tab panes={panes} />
+      <Divider />
       <Form.Group widths="equal">
         <Form.Input
           label="Program"

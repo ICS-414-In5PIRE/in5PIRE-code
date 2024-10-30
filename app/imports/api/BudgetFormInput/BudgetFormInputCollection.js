@@ -62,18 +62,75 @@ class BudgetFormInputCollection extends BaseCollection {
         (parseFloat(debtService) || 0) +
         (parseFloat(other) || 0);
 
+      // Auto-calculate management fringe benefits
+      const fringeBenefitsManagement =
+        (parseFloat(pensionAccumulationManagement) || 0) +
+        (parseFloat(retireeHealthInsuranceManagement) || 0) +
+        (parseFloat(postEmploymentBenefitsManagement) || 0) +
+        (parseFloat(employeesHealthFundManagement) || 0) +
+        (parseFloat(socialSecurityManagement) || 0) +
+        (parseFloat(medicareManagement) || 0) +
+        (parseFloat(workersCompensationManagement) || 0) +
+        (parseFloat(unemploymentCompensationManagement) || 0) +
+        (parseFloat(pensionAdministrationManagement) || 0);
+
+      // Auto-calculate personnel and fringe management
+      const personnelAndFringeManagement =
+        (parseFloat(salaryManagement) || 0) +
+        (parseFloat(fringeBenefitsManagement) || 0);
+
+      // Auto-calculate staff fringe benefits
+      const fringeBenefitsStaff =
+        (parseFloat(pensionAccumulationStaff) || 0) +
+        (parseFloat(retireeHealthInsuranceStaff) || 0) +
+        (parseFloat(postEmploymentBenefitsStaff) || 0) +
+        (parseFloat(employeesHealthFundStaff) || 0) +
+        (parseFloat(socialSecurityStaff) || 0) +
+        (parseFloat(medicareStaff) || 0) +
+        (parseFloat(workersCompensationStaff) || 0) +
+        (parseFloat(unemploymentCompensationStaff) || 0) +
+        (parseFloat(pensionAdministrationStaff) || 0);
+
+      // Auto-calculate personnel and fringe staff
+      const personnelAndFringeStaff =
+        (parseFloat(management) || 0) -
+        (parseFloat(personnelAndFringeManagement) || 0);
+
+      // Auto-calculate admin fringe benefits
+      const fringeBenefitsAdmin =
+        (parseFloat(pensionAccumulationAdmin) || 0) +
+        (parseFloat(retireeHealthInsuranceAdmin) || 0) +
+        (parseFloat(postEmploymentBenefitsAdmin) || 0) +
+        (parseFloat(employeesHealthFundAdmin) || 0) +
+        (parseFloat(socialSecurityAdmin) || 0) +
+        (parseFloat(medicareAdmin) || 0) +
+        (parseFloat(workersCompensationAdmin) || 0) +
+        (parseFloat(unemploymentCompensationAdmin) || 0) +
+        (parseFloat(pensionAdministrationAdmin) || 0);
+
+      // Auto-calculate personnel and fringe admin
+      const personnelAndFringeAdmin =
+        (parseFloat(personnel) || 0) -
+        (parseFloat(personnelAndFringeStaff) || 0) -
+        (parseFloat(personnelAndFringeManagement) || 0);
+
+      // Auto-calculate surplus deficit
+      const surplusDeficit =
+        (parseFloat(totalRevenue) || 0) -
+        (parseFloat(totalExpenses) || 0);
+
       // Insert a new document
       const docID = this._collection.insert({
         year, owner, profileId,
         fivePercent, revenues, generalFund, coreOperatingBudget, totalRevenue,
         personnel, program, contracts, grants, travel, equipment, overhead, debtService, other, totalExpenses,
         salaryAdmin, pensionAccumulationAdmin, retireeHealthInsuranceAdmin, postEmploymentBenefitsAdmin, employeesHealthFundAdmin,
-        socialSecurityAdmin, medicareAdmin, workersCompensationAdmin, unemploymentCompensationAdmin, pensionAdministrationAdmin,
+        socialSecurityAdmin, medicareAdmin, workersCompensationAdmin, unemploymentCompensationAdmin, pensionAdministrationAdmin, fringeBenefitsAdmin, personnelAndFringeAdmin,
         salaryManagement, pensionAccumulationManagement, retireeHealthInsuranceManagement, postEmploymentBenefitsManagement, employeesHealthFundManagement,
-        socialSecurityManagement, medicareManagement, workersCompensationManagement, unemploymentCompensationManagement, pensionAdministrationManagement,
+        socialSecurityManagement, medicareManagement, workersCompensationManagement, unemploymentCompensationManagement, pensionAdministrationManagement, fringeBenefitsManagement, personnelAndFringeManagement,
         salaryStaff, pensionAccumulationStaff, retireeHealthInsuranceStaff, postEmploymentBenefitsStaff, employeesHealthFundStaff,
-        socialSecurityStaff, medicareStaff, workersCompensationStaff, unemploymentCompensationStaff, pensionAdministrationStaff,
-        management, supportServices, beneficiaryAdvocacy,
+        socialSecurityStaff, medicareStaff, workersCompensationStaff, unemploymentCompensationStaff, pensionAdministrationStaff, fringeBenefitsStaff, personnelAndFringeStaff,
+        management, supportServices, beneficiaryAdvocacy, surplusDeficit,
       });
 
       return {
@@ -117,10 +174,74 @@ class BudgetFormInputCollection extends BaseCollection {
       (parseFloat(updateData.debtService) || 0) +
       (parseFloat(updateData.other) || 0);
 
+    // Auto-calculate management fringe benefits
+    const fringeBenefitsManagement =
+      (parseFloat(updateData.pensionAccumulationManagement) || 0) +
+      (parseFloat(updateData.retireeHealthInsuranceManagement) || 0) +
+      (parseFloat(updateData.postEmploymentBenefitsManagement) || 0) +
+      (parseFloat(updateData.employeesHealthFundManagement) || 0) +
+      (parseFloat(updateData.socialSecurityManagement) || 0) +
+      (parseFloat(updateData.medicareManagement) || 0) +
+      (parseFloat(updateData.workersCompensationManagement) || 0) +
+      (parseFloat(updateData.unemploymentCompensationManagement) || 0) +
+      (parseFloat(updateData.pensionAdministrationManagement) || 0);
+
+    // Auto-calculate personnel and fringe management
+    const personnelAndFringeManagement =
+      (parseFloat(updateData.salaryManagement) || 0) +
+      (parseFloat(updateData.fringeBenefitsManagement) || 0);
+
+    // Auto-calculate staff fringe benefits
+    const fringeBenefitsStaff =
+      (parseFloat(updateData.pensionAccumulationStaff) || 0) +
+      (parseFloat(updateData.retireeHealthInsuranceStaff) || 0) +
+      (parseFloat(updateData.postEmploymentBenefitsStaff) || 0) +
+      (parseFloat(updateData.employeesHealthFundStaff) || 0) +
+      (parseFloat(updateData.socialSecurityStaff) || 0) +
+      (parseFloat(updateData.medicareStaff) || 0) +
+      (parseFloat(updateData.workersCompensationStaff) || 0) +
+      (parseFloat(updateData.unemploymentCompensationStaff) || 0) +
+      (parseFloat(updateData.pensionAdministrationStaff) || 0);
+
+    // Auto-calculate personnel and fringe staff
+    const personnelAndFringeStaff =
+      (parseFloat(updateData.management) || 0) -
+      (parseFloat(updateData.personnelAndFringeManagement) || 0);
+
+    // Auto-calculate admin fringe benefits
+    const fringeBenefitsAdmin =
+      (parseFloat(updateData.pensionAccumulationAdmin) || 0) +
+      (parseFloat(updateData.retireeHealthInsuranceAdmin) || 0) +
+      (parseFloat(updateData.postEmploymentBenefitsAdmin) || 0) +
+      (parseFloat(updateData.employeesHealthFundAdmin) || 0) +
+      (parseFloat(updateData.socialSecurityAdmin) || 0) +
+      (parseFloat(updateData.medicareAdmin) || 0) +
+      (parseFloat(updateData.workersCompensationAdmin) || 0) +
+      (parseFloat(updateData.unemploymentCompensationAdmin) || 0) +
+      (parseFloat(updateData.pensionAdministrationAdmin) || 0);
+
+    // Auto-calculate personnel and fringe admin
+    const personnelAndFringeAdmin =
+      (parseFloat(updateData.personnel) || 0) -
+      ((parseFloat(updateData.personnelAndFringeStaff) || 0) +
+        (parseFloat(updateData.personnelAndFringeManagement) || 0));
+
+    // Auto-calculate surplus deficit
+    const surplusDeficit =
+      (parseFloat(updateData.totalRevenue) || 0) -
+      (parseFloat(updateData.totalExpenses) || 0);
+
     const updatedDataWithCalculations = {
       ...updateData,
       totalRevenue,
       totalExpenses,
+      fringeBenefitsManagement,
+      personnelAndFringeManagement,
+      fringeBenefitsStaff,
+      personnelAndFringeStaff,
+      fringeBenefitsAdmin,
+      personnelAndFringeAdmin,
+      surplusDeficit,
     };
 
     this._collection.update(docID, { $set: updatedDataWithCalculations });
@@ -208,24 +329,24 @@ class BudgetFormInputCollection extends BaseCollection {
       fivePercent, revenues, generalFund, coreOperatingBudget, totalRevenue,
       personnel, program, contracts, grants, travel, equipment, overhead, debtService, other, totalExpenses,
       salaryAdmin, pensionAccumulationAdmin, retireeHealthInsuranceAdmin, postEmploymentBenefitsAdmin, employeesHealthFundAdmin,
-      socialSecurityAdmin, medicareAdmin, workersCompensationAdmin, unemploymentCompensationAdmin, pensionAdministrationAdmin,
+      socialSecurityAdmin, medicareAdmin, workersCompensationAdmin, unemploymentCompensationAdmin, pensionAdministrationAdmin, fringeBenefitsAdmin, personnelAndFringeAdmin,
       salaryManagement, pensionAccumulationManagement, retireeHealthInsuranceManagement, postEmploymentBenefitsManagement, employeesHealthFundManagement,
-      socialSecurityManagement, medicareManagement, workersCompensationManagement, unemploymentCompensationManagement, pensionAdministrationManagement,
+      socialSecurityManagement, medicareManagement, workersCompensationManagement, unemploymentCompensationManagement, pensionAdministrationManagement, fringeBenefitsManagement, personnelAndFringeManagement,
       salaryStaff, pensionAccumulationStaff, retireeHealthInsuranceStaff, postEmploymentBenefitsStaff, employeesHealthFundStaff,
-      socialSecurityStaff, medicareStaff, workersCompensationStaff, unemploymentCompensationStaff, pensionAdministrationStaff,
-      management, supportServices, beneficiaryAdvocacy,
+      socialSecurityStaff, medicareStaff, workersCompensationStaff, unemploymentCompensationStaff, pensionAdministrationStaff, fringeBenefitsStaff, personnelAndFringeStaff,
+      management, supportServices, beneficiaryAdvocacy, surplusDeficit,
     } = doc;
     return {
       year, owner, profileId,
       fivePercent, revenues, generalFund, coreOperatingBudget, totalRevenue,
       personnel, program, contracts, grants, travel, equipment, overhead, debtService, other, totalExpenses,
       salaryAdmin, pensionAccumulationAdmin, retireeHealthInsuranceAdmin, postEmploymentBenefitsAdmin, employeesHealthFundAdmin,
-      socialSecurityAdmin, medicareAdmin, workersCompensationAdmin, unemploymentCompensationAdmin, pensionAdministrationAdmin,
+      socialSecurityAdmin, medicareAdmin, workersCompensationAdmin, unemploymentCompensationAdmin, pensionAdministrationAdmin, fringeBenefitsAdmin, personnelAndFringeAdmin,
       salaryManagement, pensionAccumulationManagement, retireeHealthInsuranceManagement, postEmploymentBenefitsManagement, employeesHealthFundManagement,
-      socialSecurityManagement, medicareManagement, workersCompensationManagement, unemploymentCompensationManagement, pensionAdministrationManagement,
+      socialSecurityManagement, medicareManagement, workersCompensationManagement, unemploymentCompensationManagement, pensionAdministrationManagement, fringeBenefitsManagement, personnelAndFringeManagement,
       salaryStaff, pensionAccumulationStaff, retireeHealthInsuranceStaff, postEmploymentBenefitsStaff, employeesHealthFundStaff,
-      socialSecurityStaff, medicareStaff, workersCompensationStaff, unemploymentCompensationStaff, pensionAdministrationStaff,
-      management, supportServices, beneficiaryAdvocacy,
+      socialSecurityStaff, medicareStaff, workersCompensationStaff, unemploymentCompensationStaff, pensionAdministrationStaff, fringeBenefitsStaff, personnelAndFringeStaff,
+      management, supportServices, beneficiaryAdvocacy, surplusDeficit,
     };
   }
 }

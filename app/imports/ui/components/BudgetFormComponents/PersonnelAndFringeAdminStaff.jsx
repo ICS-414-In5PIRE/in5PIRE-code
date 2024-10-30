@@ -2,7 +2,7 @@ import React from 'react';
 import { Form } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
-const PersonnelAndFringeManagementStaff = ({ formData, handleChange }) => (
+const PersonnelAndFringeAdminStaff = ({ formData, handleChange }) => (
   <>
     <Form.Input
       width={4}
@@ -80,10 +80,30 @@ const PersonnelAndFringeManagementStaff = ({ formData, handleChange }) => (
         type="number"
       />
     </Form.Group>
+    <Form.Group className="total-fields">
+      <Form.Input
+        className="dotted-input"
+        label="Fringe Benefits"
+        name="fringeBenefitsStaff"
+        value={formData.fringeBenefitsStaff ?? ''}
+        onChange={handleChange}
+        type="number"
+        readOnly
+      />
+      <Form.Input
+        className="dotted-input"
+        label="Personnel & Fringe"
+        name="personnelAndFringeStaff"
+        value={formData.personnelAndFringeStaff ?? ''}
+        onChange={handleChange}
+        type="number"
+        readOnly
+      />
+    </Form.Group>
   </>
 );
 
-PersonnelAndFringeManagementStaff.propTypes = {
+PersonnelAndFringeAdminStaff.propTypes = {
   formData: PropTypes.shape({
     salaryStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     pensionAccumulationStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -95,13 +115,15 @@ PersonnelAndFringeManagementStaff.propTypes = {
     workersCompensationStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     unemploymentCompensationStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     pensionAdministrationStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    fringeBenefitsStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    personnelAndFringeStaff: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
 };
 
-PersonnelAndFringeManagementStaff.defaultProps = {
+PersonnelAndFringeAdminStaff.defaultProps = {
   formData: {},
   handleChange: () => {},
 };
 
-export default PersonnelAndFringeManagementStaff;
+export default PersonnelAndFringeAdminStaff;

@@ -80,6 +80,26 @@ const PersonnelAndFringeAdmin = ({ formData, handleChange }) => (
         type="number"
       />
     </Form.Group>
+    <Form.Group className="total-fields">
+      <Form.Input
+        className="dotted-input"
+        label="Fringe Benefits"
+        name="fringeBenefitsAdmin"
+        value={formData.fringeBenefitsAdmin ?? ''}
+        onChange={handleChange}
+        type="number"
+        readOnly
+      />
+      <Form.Input
+        className="dotted-input"
+        label="Personnel & Fringe"
+        name="personnelAndFringeAdmin"
+        value={formData.personnelAndFringeAdmin ?? ''}
+        onChange={handleChange}
+        type="number"
+        readOnly
+      />
+    </Form.Group>
   </>
 );
 
@@ -95,6 +115,8 @@ PersonnelAndFringeAdmin.propTypes = {
     workersCompensationAdmin: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     unemploymentCompensationAdmin: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     pensionAdministrationAdmin: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    fringeBenefitsAdmin: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    personnelAndFringeAdmin: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
 };

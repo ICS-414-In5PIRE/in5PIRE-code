@@ -141,6 +141,16 @@ export const BudgetFormInputSchema = new SimpleSchema({
     optional: true,
     defaultValue: null,
   },
+  fringeBenefitsAdmin: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  personnelAndFringeAdmin: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
   // Management personnel and fringe fields
   salaryManagement: {
     type: Number,
@@ -188,6 +198,16 @@ export const BudgetFormInputSchema = new SimpleSchema({
     defaultValue: null,
   },
   pensionAdministrationManagement: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  fringeBenefitsManagement: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  personnelAndFringeManagement: {
     type: Number,
     optional: true,
     defaultValue: null,
@@ -243,6 +263,16 @@ export const BudgetFormInputSchema = new SimpleSchema({
     optional: true,
     defaultValue: null,
   },
+  fringeBenefitsStaff: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  personnelAndFringeStaff: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
   // Surplus fields
   management: {
     type: Number,
@@ -255,6 +285,11 @@ export const BudgetFormInputSchema = new SimpleSchema({
     defaultValue: null,
   },
   beneficiaryAdvocacy: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  surplusDeficit: {
     type: Number,
     optional: true,
     defaultValue: null,

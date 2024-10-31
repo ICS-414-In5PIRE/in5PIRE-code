@@ -53,25 +53,29 @@ const AddFinancialProfile = () => {
   const submit = (data, formRef) => {
     const { title, type, description, image, members = [] } = data;
     const ownerId = Meteor.userId();
-    // Automatically assign the profile creator as an admin
-    const fullMembers = [{ userId: ownerId, role: 'admin' }, ...members.map((member) => {
-      const user = Meteor.users.findOne({ username: member.username });
-      return { userId: user._id, role: member.role };
-    })];
 
-    console.log('Current User ID:', ownerId);
-    console.log('Members:', fullMembers);
+    // Automatically assign the profile creator as an admin
+    const fullMembers = [{ userId: ownerId, role: 'admin' }];
+
+    members.forEach((member) => {
+      const user = Meteor.users.findOne({ username: member.username });
+      if (user) {
+        fullMembers.push({ userId: user._id, role: member.role });
+      } else {
+        console.warn(`User with username ${member.username} not found.`);
+      }
+    });
 
     const collectionName = FinancialProfiles.getCollectionName();
     const definitionData = { title, type, description, image, owner: ownerId, members: fullMembers };
 
     defineMethod.callPromise({ collectionName, definitionData })
-      .catch(error => swal('Error', error.message, 'error'))
       .then(() => {
         swal('Success', 'Financial profile added successfully', 'success');
         formRef.reset();
         navigate('/financial-profiles');
-      });
+      })
+      .catch(error => swal('Error', error.message, 'error'));
   };
 
   // Render the form. Use Uniforms: https://github.com/vazco/uniforms

@@ -1,3 +1,3 @@
 [![ci-in5PIRE-code](https://github.com/ICS-414-In5PIRE/in5PIRE-code/actions/workflows/ci.yml/badge.svg)](https://github.com/ICS-414-In5PIRE/in5PIRE-code/actions/workflows/ci.yml)
 
-For details, please see http://ICS-414-In5PIRE/in5PIRE-code
+For more details, please see https://ics-414-in5pire.github.io/

@@ -11,7 +11,7 @@ const AboutUs = () => (
             <div className="section-title">
               <h1 className="display-4 fw-semibold">About Us</h1>
               <div className="line" />
-              <p>In5pire is here to declutter your process and highlight what truly matters</p>
+              <p>In5pire is here to declutter your process and highlight what truly matters.</p>
             </div>
           </div>
         </div>
@@ -32,48 +32,41 @@ const AboutUs = () => (
       <h1 className="title">Our Team</h1>
       <div className="team-row">
         <div className="member">
-          <Image src="../../../public/images/Unknown_person.jpg" alt="" roundedCircle />
+          <Image src="https://avatars.githubusercontent.com/u/110771308?v=4" alt="Bobby Roth" roundedCircle />
           <h2>Bobby Roth</h2>
-          <p>Placeholder</p>
+          <a href="https://github.com/bobbyir" target="_blank" rel="noreferrer noopener">GitHub Profile</a>
         </div>
         <div className="member">
-          <Image src="../../../public/images/Unknown_person.jpg" alt="" roundedCircle />
+          <Image src="https://avatars.githubusercontent.com/u/143555858?v=4" alt="Brayden Danielson" roundedCircle />
           <h2>Brayden Danielson</h2>
-          <p>Placeholder</p>
+          <a href="https://github.com/bfd2" target="_blank" rel="noreferrer noopener">GitHub Profile</a>
         </div>
         <div className="member">
-          <Image src="../../../public/images/Unknown_person.jpg" alt=" " roundedCircle />
-          <h2>Dao Mcgill</h2>
-          <p>Placeholder</p>
+          <Image src="https://avatars.githubusercontent.com/u/77309217?v=4" alt="Dao McGill" roundedCircle />
+          <h2>Dao McGill</h2>
+          <a href="https://github.com/daomcgill" target="_blank" rel="noreferrer noopener">GitHub Profile</a>
         </div>
         <div className="member">
-          <Image src=" " alt=" " roundedCircle />
+          <Image src="https://avatars.githubusercontent.com/u/156912540?v=4" alt="Emily Hsu" roundedCircle />
           <h2>Emily Hsu</h2>
-          <p>Placeholder</p>
+          <a href="https://github.com/ehsuGit" target="_blank" rel="noreferrer noopener">GitHub Profile</a>
         </div>
         <div className="member">
-          <Image src="../../../public/images/Unknown_person.jpg" alt=" " roundedCircle />
-          <h2>Zachary Stoddard</h2>
-          <p>Placeholder</p>
-        </div>
-        <div className="member">
-          <Image src="../../../public/images/Unknown_person.jpg" alt=" " roundedCircle />
+          <Image src="https://avatars.githubusercontent.com/u/107680213?v=4" alt="Shedrick Klifford Ulibas" roundedCircle />
           <h2>Shedrick Klifford Ulibas</h2>
-          <p>Placeholder</p>
+          <a href="https://github.com/skulibas" target="_blank" rel="noreferrer noopener">GitHub Profile</a>
         </div>
         <div className="member">
-          <Image src="../../../public/images/Unknown_person.jpg" alt=" " roundedCircle />
+          <Image src="https://avatars.githubusercontent.com/u/87156222?v=4" alt="Luke Pagtulingan" roundedCircle />
           <h2>Luke Pagtulingan</h2>
-          <p>Placeholder</p>
+          <a href="https://github.com/lukepag" target="_blank" rel="noreferrer noopener">GitHub Profile</a>
         </div>
         <div className="member">
-          <Image src="../../../public/images/Unknown_person.jpg" alt=" " roundedCircle />
+          <Image src="https://avatars.githubusercontent.com/u/97641529?v=4" alt="Sean Sunoo" roundedCircle />
           <h2>Sean Sunoo</h2>
-          <p>Placeholder</p>
+          <a href="https://github.com/ssunoo2" target="_blank" rel="noreferrer noopener">GitHub Profile</a>
         </div>
-
       </div>
-
     </section>
   </Container>
 );

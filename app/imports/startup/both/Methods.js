@@ -5,6 +5,9 @@ import { check } from 'meteor/check';
 import { Roles } from 'meteor/alanning:roles';
 import { ROLES } from '../../api/role/Role';
 import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection';
+import { BudgetFormInput } from '../../api/BudgetFormInput/BudgetFormInputCollection';
+import { calculateProjectionValues } from '../../api/projections/BudgetProjectionUtils';
+import { BudgetProjections } from '../../api/projections/BudgetProjectionCollection';
 
 const verificationCodes = new Map(); // Store codes temporarily in memory
 
@@ -136,5 +139,82 @@ Meteor.methods({
     }
 
     FinancialProfiles.removeMember(profileId, userId);
+  },
+  // Method to generate budget form projections for a profile
+  generateBudgetProjections(profileId) {
+    check(profileId, String);
+
+    const actualData = BudgetFormInput.find({ profileId }, { sort: { year: -1 }, limit: 3 }).fetch();
+    if (actualData.length === 0) throw new Meteor.Error('No actual data found for projections.');
+
+    // Define growth rates for each field
+    // 5% is a placeholder for now
+    const growthRates = {
+      fivePercent: 0.05,
+      revenues: 0.05,
+      generalFund: 0.05,
+      coreOperatingBudget: 0.05,
+      personnel: 0.05,
+      program: 0.05,
+      contracts: 0.05,
+      grants: 0.05,
+      travel: 0.05,
+      equipment: 0.05,
+      overhead: 0.05,
+      debtService: 0.05,
+      other: 0.05,
+      salaryAdmin: 0.05,
+      pensionAccumulationAdmin: 0.05,
+      retireeHealthInsuranceAdmin: 0.05,
+      postEmploymentBenefitsAdmin: 0.05,
+      employeesHealthFundAdmin: 0.05,
+      socialSecurityAdmin: 0.05,
+      medicareAdmin: 0.05,
+      workersCompensationAdmin: 0.05,
+      unemploymentCompensationAdmin: 0.05,
+      pensionAdministrationAdmin: 0.05,
+      salaryManagement: 0.05,
+      pensionAccumulationManagement: 0.05,
+      retireeHealthInsuranceManagement: 0.05,
+      postEmploymentBenefitsManagement: 0.05,
+      employeesHealthFundManagement: 0.05,
+      socialSecurityManagement: 0.05,
+      medicareManagement: 0.05,
+      workersCompensationManagement: 0.05,
+      unemploymentCompensationManagement: 0.05,
+      pensionAdministrationManagement: 0.05,
+      salaryStaff: 0.05,
+      pensionAccumulationStaff: 0.05,
+      retireeHealthInsuranceStaff: 0.05,
+      postEmploymentBenefitsStaff: 0.05,
+      employeesHealthFundStaff: 0.05,
+      socialSecurityStaff: 0.05,
+      medicareStaff: 0.05,
+      workersCompensationStaff: 0.05,
+      unemploymentCompensationStaff: 0.05,
+      pensionAdministrationStaff: 0.05,
+      management: 0.05,
+      supportServices: 0.05,
+      beneficiaryAdvocacy: 0.05,
+    };
+
+    actualData.forEach((data) => {
+      const { year, ...actualValues } = data;
+
+      // Calculate projections for specified forecast years
+      const projectedValues = calculateProjectionValues(actualValues, growthRates);
+
+      // Insert projection data for each forecast period (4, 8, and 12 years ahead)
+      [4, 8, 12].forEach((forecastPeriod, index) => {
+        BudgetProjections.define({
+          financialProfileId: profileId,
+          year: year + forecastPeriod,
+          forecastType: 'fullProjection',
+          values: Object.fromEntries(
+            Object.keys(projectedValues).map((field) => [field, projectedValues[field][index]]),
+          ),
+        });
+      });
+    });
   },
 });

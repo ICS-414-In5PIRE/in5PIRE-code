@@ -1,13 +1,12 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { FinancialProfiles } from '../FinancialProfiles/FinancialProfilesCollection';
-import { calculateBudgetProjections } from './BudgetProjectionUtils';
+import { calculateProjectionValues } from './BudgetProjectionUtils';
 
 Meteor.methods({
   'projections.generateBudgetProjections'(profileId, baseValues, growthRate) {
     check(profileId, String);
 
-    // Ensure baseValues are an object with relevant fields
     check(baseValues, {
       revenue: Number,
       expenses: Number,
@@ -17,7 +16,7 @@ Meteor.methods({
     check(growthRate, Number); // Check if growthRate is a number
 
     // Generate budget projections
-    const projections = calculateBudgetProjections(baseValues, growthRate);
+    const projections = calculateProjectionValues(baseValues, growthRate);
 
     // Save the projections back to the profile
     FinancialProfiles.update(profileId, {
@@ -26,6 +25,6 @@ Meteor.methods({
       },
     });
 
-    return projections; // Optional: return projections if needed for immediate use
+    return projections;
   },
 });

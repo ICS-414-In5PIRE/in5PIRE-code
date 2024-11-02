@@ -4,6 +4,7 @@ import { check } from 'meteor/check';
 import { Roles } from 'meteor/alanning:roles';
 import BaseCollection from '../base/BaseCollection';
 import { ROLE } from '../role/Role';
+import FinancialProfiles from '../../ui/pages/FinancialProfiles';
 
 export const budgetProjectionPublications = {
   projections: 'BudgetProjections',
@@ -17,13 +18,45 @@ class BudgetProjectionCollection extends BaseCollection {
       year: Number,
       forecastType: {
         type: String,
-        allowedValues: ['revenue', 'expense', 'assets'], // Extend as needed
+        allowedValues: ['revenue', 'expense', 'assets', 'fullProjection'],
       },
-      values: {
-        type: Array,
-        optional: true,
-      },
-      'values.$': Number,
+      values: Object,
+      'values.fivePercent': { type: Number, optional: true },
+      'values.revenues': { type: Number, optional: true },
+      'values.generalFund': { type: Number, optional: true },
+      'values.coreOperatingBudget': { type: Number, optional: true },
+      'values.personnel': { type: Number, optional: true },
+      'values.program': { type: Number, optional: true },
+      'values.contracts': { type: Number, optional: true },
+      'values.grants': { type: Number, optional: true },
+      'values.travel': { type: Number, optional: true },
+      'values.equipment': { type: Number, optional: true },
+      'values.overhead': { type: Number, optional: true },
+      'values.debtService': { type: Number, optional: true },
+      'values.other': { type: Number, optional: true },
+      'values.salaryAdmin': { type: Number, optional: true },
+      'values.pensionAccumulationAdmin': { type: Number, optional: true },
+      'values.retireeHealthInsuranceAdmin': { type: Number, optional: true },
+      'values.postEmploymentBenefitsManagement': { type: Number, optional: true },
+      'values.employeesHealthFundManagement': { type: Number, optional: true },
+      'values.socialSecurityManagement': { type: Number, optional: true },
+      'values.medicareManagement': { type: Number, optional: true },
+      'values.workersCompensationManagement': { type: Number, optional: true },
+      'values.unemploymentCompensationManagement': { type: Number, optional: true },
+      'values.pensionAdministrationManagement': { type: Number, optional: true },
+      'values.salaryStaff': { type: Number, optional: true },
+      'values.pensionAccumulationStaff': { type: Number, optional: true },
+      'values.retireeHealthInsuranceStaff': { type: Number, optional: true },
+      'values.postEmploymentBenefitsStaff': { type: Number, optional: true },
+      'values.employeesHealthFundStaff': { type: Number, optional: true },
+      'values.socialSecurityStaff': { type: Number, optional: true },
+      'values.medicareStaff': { type: Number, optional: true },
+      'values.workersCompensationStaff': { type: Number, optional: true },
+      'values.unemploymentCompensationStaff': { type: Number, optional: true },
+      'values.pensionAdministrationStaff': { type: Number, optional: true },
+      'values.management': { type: Number, optional: true },
+      'values.supportServices': { type: Number, optional: true },
+      'values.beneficiaryAdvocacy': { type: Number, optional: true },
     }));
   }
 
@@ -33,7 +66,7 @@ class BudgetProjectionCollection extends BaseCollection {
    * @return {String} The document ID of the new BudgetProjection.
    */
   define({ financialProfileId, year, forecastType, values }) {
-    // Ensure no duplicate projections for the same year and profile.
+    // No duplicate projections for the same year and profile.
     const existing = this._collection.findOne({ financialProfileId, year, forecastType });
     if (existing) {
       throw new Meteor.Error('Projection already exists for this year and profile');
@@ -81,7 +114,10 @@ class BudgetProjectionCollection extends BaseCollection {
       Meteor.publish(budgetProjectionPublications.projections, function publish() {
         if (this.userId) {
           const user = Meteor.users.findOne(this.userId);
-          return instance._collection.find({ financialProfileId: user.profileId });
+          const profile = FinancialProfiles.findOne({ owner: user.username });
+          if (profile) {
+            return instance._collection.find({ financialProfileId: profile._id });
+          }
         }
         return this.ready();
       });

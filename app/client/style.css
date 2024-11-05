@@ -423,7 +423,7 @@ body{
   }
 }
 
-#balance-sheet-overview {
+#balance-sheet-overview, #budget-form-overview, #financial-statement-overview {
   .overview-table {
     margin-bottom: 2rem;
     height: 700px;

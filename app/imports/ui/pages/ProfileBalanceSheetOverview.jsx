@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Container, Header, Button } from 'semantic-ui-react';
+import { Table, Container, Header, Button, Grid } from 'semantic-ui-react';
 import { Meteor } from 'meteor/meteor';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Tracker } from 'meteor/tracker';
@@ -57,33 +57,35 @@ const ProfileBalanceSheetOverview = () => {
   const fields = Object.keys(data[0]).filter(field => field !== '_id' && field !== 'owner' && field !== 'profileId' && field !== 'year');
 
   return (
-    <Container>
-      <Button primary onClick={backToDataInput}>
-        Back to Data Input
-      </Button>
+    <Container id="balance-sheet-overview">
+      <Grid.Column className="pt-3" textAlign="left">
+        <Button labelPosition="left" icon="left chevron" content="Back to Data Input" onClick={backToDataInput} />
+      </Grid.Column>
       <Header as="h2">Balance Sheet Overview</Header>
-      <Table celled>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Field</Table.HeaderCell>
-            {years.map(year => (
-              <Table.HeaderCell key={year}>{year}</Table.HeaderCell>
-            ))}
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {fields.map(field => (
-            <Table.Row key={field}>
-              <Table.Cell>{field}</Table.Cell>
-              {data.map(entry => (
-                <Table.Cell key={`${field}-${entry.year}`}>
-                  {entry[field] !== undefined ? entry[field] : 'N/A'}
-                </Table.Cell>
+      <div className="overview-table">
+        <Table celled>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Field</Table.HeaderCell>
+              {years.map(year => (
+                <Table.HeaderCell key={year}>{year}</Table.HeaderCell>
               ))}
             </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+          </Table.Header>
+          <Table.Body>
+            {fields.map(field => (
+              <Table.Row key={field}>
+                <Table.Cell>{field}</Table.Cell>
+                {data.map(entry => (
+                  <Table.Cell key={`${field}-${entry.year}`}>
+                    {entry[field] !== undefined ? entry[field] : 'N/A'}
+                  </Table.Cell>
+                ))}
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      </div>
     </Container>
   );
 };

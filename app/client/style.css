@@ -422,3 +422,19 @@ body{
     text-align: start;
   }
 }
+
+#balance-sheet-overview {
+  .overview-table {
+    margin-bottom: 2rem;
+    height: 700px;
+    overflow: auto;
+
+    th:first-child,
+    td:first-child {
+      position: sticky;
+      left: 0;
+      background-color: #fff;
+      z-index: 1;
+    }
+  }
+}

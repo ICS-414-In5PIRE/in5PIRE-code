@@ -106,6 +106,7 @@ const UploadFile = ({ schemaType }) => {
 
   return (
     <Container id={PAGE_IDS.UPLOAD_FILE} style={{ marginTop: '20px' }}>
+      <br />
       <Segment>
         <Grid columns={2} relaxed="very" stackable>
           <Grid.Column textAlign="center">

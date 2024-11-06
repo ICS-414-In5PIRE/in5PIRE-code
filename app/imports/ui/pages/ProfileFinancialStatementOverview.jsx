@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Tracker } from 'meteor/tracker';
 import Loader from '../components/Loader';
+import { PAGE_IDS } from '../utilities/PageIDs';
 import { FinancialStatementInput } from '../../api/FinancialStatementInput/FinancialStatementInputCollection';
 
 const ProfileFinancialStatementOverview = () => {
@@ -53,7 +54,7 @@ const ProfileFinancialStatementOverview = () => {
   const fields = Object.keys(data[0]).filter(field => field !== '_id' && field !== 'owner' && field !== 'profileId' && field !== 'year');
 
   return (
-    <Container id="financial-statement-overview">
+    <Container id={PAGE_IDS.PROFILE_FINANCIAL_STATEMENT_OVERVIEW}>
       <Grid.Column className="pt-3" textAlign="left">
         <Button labelPosition="left" icon="left chevron" content="Back to Data Input" onClick={backToDataInput} />
       </Grid.Column>

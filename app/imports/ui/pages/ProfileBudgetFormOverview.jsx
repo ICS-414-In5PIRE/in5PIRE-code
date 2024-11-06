@@ -44,7 +44,9 @@ const ProfileBudgetFormOverview = () => {
 
   if (data.length === 0) {
     return (
-      <Container><Header>No budget form data available for this profile.</Header>
+      <Container>
+        <br />
+        <Header>No budget form data available for this profile.</Header>
         <Button primary onClick={backToDataInput}>
           Back to Data Input
         </Button>
@@ -59,9 +61,11 @@ const ProfileBudgetFormOverview = () => {
   return (
     <Container id="budget-form-overview">
       <Grid.Column className="pt-3" textAlign="left">
-        <Button labelPosition="left" icon="left chevron" content="Back to Data Input" onClick={backToDataInput}/>
+        <Button labelPosition="left" icon="left chevron" content="Back to Data Input" onClick={backToDataInput} />
       </Grid.Column>
       <Header as="h2">Budget Form Overview</Header>
+      <hr />
+      <br />
       <div className="overview-table">
         <Table celled>
           <Table.Header>

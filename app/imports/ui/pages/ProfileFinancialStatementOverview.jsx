@@ -39,7 +39,9 @@ const ProfileFinancialStatementOverview = () => {
 
   if (data.length === 0) {
     return (
-      <Container><Header>No financial statement data available for this profile.</Header>
+      <Container>
+        <br />
+        <Header>No financial statement data available for this profile.</Header>
         <Button primary onClick={backToDataInput}>
           Back to Data Input
         </Button>
@@ -53,9 +55,11 @@ const ProfileFinancialStatementOverview = () => {
   return (
     <Container id="financial-statement-overview">
       <Grid.Column className="pt-3" textAlign="left">
-        <Button labelPosition="left" icon="left chevron" content="Back to Data Input" onClick={backToDataInput}/>
+        <Button labelPosition="left" icon="left chevron" content="Back to Data Input" onClick={backToDataInput} />
       </Grid.Column>
       <Header as="h2">Audited Financial Statements Overview</Header>
+      <hr />
+      <br />
       <div className="overview-table">
         <Table celled>
           <Table.Header>

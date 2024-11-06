@@ -3,7 +3,7 @@ import { Table, Container, Header, Button, Grid } from 'semantic-ui-react';
 import { Meteor } from 'meteor/meteor';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Tracker } from 'meteor/tracker';
-import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputsCollection';
+import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputCollection';
 import Loader from '../components/Loader';
 
 const ProfileBalanceSheetOverview = () => {
@@ -44,7 +44,9 @@ const ProfileBalanceSheetOverview = () => {
 
   if (data.length === 0) {
     return (
-      <Container><Header>No balance sheet data available for this profile.</Header>
+      <Container>
+        <br />
+        <Header>No balance sheet data available for this profile.</Header>
         <Button primary onClick={backToDataInput}>
           Back to Data Input
         </Button>
@@ -58,10 +60,13 @@ const ProfileBalanceSheetOverview = () => {
 
   return (
     <Container id="balance-sheet-overview">
+      <br />
       <Grid.Column className="pt-3" textAlign="left">
         <Button labelPosition="left" icon="left chevron" content="Back to Data Input" onClick={backToDataInput} />
       </Grid.Column>
       <Header as="h2">Balance Sheet Overview</Header>
+      <hr />
+      <br />
       <div className="overview-table">
         <Table celled>
           <Table.Header>

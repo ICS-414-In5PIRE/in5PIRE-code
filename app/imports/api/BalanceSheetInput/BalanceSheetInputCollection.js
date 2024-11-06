@@ -11,7 +11,7 @@ export const balanceSheetPublications = {
   balanceSheetAdmin: 'BalanceSheetAdmin',
 };
 
-class BalanceSheetInputsCollection extends BaseCollection {
+class BalanceSheetInputCollection extends BaseCollection {
   constructor() {
     super('BalanceSheetInputs', BalanceSheetInputSchema);
   }
@@ -460,4 +460,4 @@ class BalanceSheetInputsCollection extends BaseCollection {
   }
 }
 
-export const BalanceSheetInputs = new BalanceSheetInputsCollection();
+export const BalanceSheetInputs = new BalanceSheetInputCollection();

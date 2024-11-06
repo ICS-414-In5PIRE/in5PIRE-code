@@ -3,7 +3,7 @@ import { Roles } from 'meteor/alanning:roles';
 import { check } from 'meteor/check';
 import { MATPCollections } from '../../api/matp/MATPCollections';
 import { StaticFinancials } from '../../api/financial/StaticFinancialsCollection';
-import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputsCollection';
+import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputCollection';
 import { BudgetFormInput } from '../../api/BudgetFormInput/BudgetFormInputCollection';
 import { FinancialStatementInput } from '../../api/FinancialStatementInput/FinancialStatementInputCollection';
 // Call publish for all the collections.

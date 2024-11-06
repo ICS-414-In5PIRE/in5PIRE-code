@@ -9,7 +9,7 @@ import Liabilities from '../components/BalanceSheetComponents/Liabilities';
 import CommitmentsAndContingencies from '../components/BalanceSheetComponents/CommitmentsAndContingencies';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import Loader from '../components/Loader';
-import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputsCollection';
+import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputCollection';
 import { defineMethod, removeItMethod, updateMethod } from '../../api/base/BaseCollection.methods';
 import InputSheetMessage from '../components/InputSheetMessage';
 import { generateYears } from '../utilities/ComboBox';

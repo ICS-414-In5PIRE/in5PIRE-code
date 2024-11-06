@@ -77,7 +77,7 @@ const FinancialProfileCard = ({
           {userRole === 'admin' && (
             <Grid.Column>
               <Button className="mb-2" fluid color="blue" onClick={handleEditProfile}>
-                <Icon name="edit" /> Edit Profile
+                <Icon name="edit" /> Edit Scenario
               </Button>
 
               <Button className="mb-2" fluid color="blue" onClick={handleEditBalanceSheet}>

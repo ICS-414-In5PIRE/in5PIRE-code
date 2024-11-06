@@ -3,6 +3,7 @@ import { Form, Segment, Container, Grid, Button, Menu, Dropdown } from 'semantic
 import { Tracker } from 'meteor/tracker';
 import { Meteor } from 'meteor/meteor';
 import PropTypes from 'prop-types';
+import swal from 'sweetalert';
 import OtherAssets from '../components/BalanceSheetComponents/OtherAssets';
 import CashAndCashEquivalents from '../components/BalanceSheetComponents/CashAndCashEquivalents';
 import Liabilities from '../components/BalanceSheetComponents/Liabilities';
@@ -175,16 +176,30 @@ class BalanceSheetInput extends React.Component {
 
     const recordId = balanceSheetData[0]._id;
 
-    removeItMethod.callPromise({ collectionName, instance: recordId })
-      .then(() => {
-        this.handleSnackBar(true, 'Record has been deleted successfully!', false);
-        this.setState({ record: [] });
-      })
-      .catch((error) => {
-        if (error) {
-          this.handleSnackBar(true, 'Something went wrong!', true);
-        }
-      });
+    swal({
+      title: 'Are you sure?',
+      text: 'This action cannot be undone.',
+      icon: 'warning',
+      buttons: ['Cancel', 'Delete'],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        // Proceed with deletion
+        removeItMethod.callPromise({ collectionName, instance: recordId })
+          .then(() => {
+            this.handleSnackBar(true, 'Record has been deleted successfully!', false);
+            this.setState({ record: [] });
+          })
+          .catch((error) => {
+            if (error) {
+              this.handleSnackBar(true, 'Something went wrong!', true);
+            }
+          });
+      } else {
+        // Optionally handle cancellation here
+        this.handleSnackBar(true, 'Deletion canceled.', false);
+      }
+    });
   };
 
   // Handle year change

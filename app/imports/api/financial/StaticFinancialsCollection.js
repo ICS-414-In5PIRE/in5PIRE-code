@@ -16,6 +16,10 @@ class StaticFinancialsCollection extends BaseCollection {
   constructor() {
     super('StaticFinancials', new SimpleSchema({
       customerName: String, // Name of customer
+      profileId: {
+        type: String,
+        optional: false,
+      },
       year: Number, // Fiscal year
       assets: Number, // Total assets
       liabilities: Number, // Total liabilities
@@ -84,6 +88,7 @@ class StaticFinancialsCollection extends BaseCollection {
    */
   define({
     customerName,
+    profileId,
     year,
     assets,
     liabilities,
@@ -102,6 +107,7 @@ class StaticFinancialsCollection extends BaseCollection {
     console.log('Defining financial data:', customerName);
     const docID = this._collection.insert({
       customerName,
+      profileId,
       year,
       assets,
       liabilities,
@@ -140,6 +146,7 @@ class StaticFinancialsCollection extends BaseCollection {
    */
   update(docID, {
     customerName,
+    profileId,
     year,
     assets,
     liabilities,
@@ -156,6 +163,7 @@ class StaticFinancialsCollection extends BaseCollection {
   }) {
     const updateData = {};
     if (customerName) updateData.customerName = customerName;
+    if (profileId) updateData.customerName = customerName;
     if (_.isNumber(year)) updateData.year = year;
     if (_.isNumber(assets)) updateData.assets = assets;
     if (_.isNumber(liabilities)) updateData.liabilities = liabilities;
@@ -258,13 +266,14 @@ class StaticFinancialsCollection extends BaseCollection {
   dumpOne(docID) {
     const doc = this.findDoc(docID);
     const {
-      customerName, year, assets, liabilities, netPosition, cashOnHand,
+      customerName, profileId, year, assets, liabilities, netPosition, cashOnHand,
       investment, liquidity, debt, revenues, opex, netIncome, cashFlow, incrementalFringeBenefits,
       owner,
     } = doc;
 
     return {
       customerName,
+      profileId,
       year,
       assets,
       liabilities,

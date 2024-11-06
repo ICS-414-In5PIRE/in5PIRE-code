@@ -31,6 +31,7 @@ import ProfileBudgetFormOverview from '../pages/ProfileBudgetFormOverview';
 import FinancialStatementWrapper from '../components/FinancialStatementComponents/FinancialStatementWrapper';
 import ProfileFinancialStatementOverview from '../pages/ProfileFinancialStatementOverview';
 import CSVInstructionsPage from '../pages/CSVInstructionsPage';
+import ProfileDashboard from '../pages/ProfileDashboard';
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
   const { ready } = useTracker(() => {
@@ -67,6 +68,7 @@ const App = () => {
           <Route path="/balance-sheet/:profileId" element={<ProtectedRoute><BalanceSheetInputWrapper /></ProtectedRoute>} />
           <Route path="/audited-fs/:profileId" element={<ProtectedRoute><FinancialStatementWrapper /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/profiledashboard/:profileId" element={<ProtectedRoute><ProfileDashboard /></ProtectedRoute>} />
           <Route path="/budget-form/:profileId" element={<ProtectedRoute><BudgetFormInputWrapper /></ProtectedRoute>} />
           <Route path="/upload-file" element={<ProtectedRoute><UploadFile /></ProtectedRoute>} />
         </Routes>

@@ -44,6 +44,10 @@ const FinancialProfileCard = ({
     navigate('/dashboard');
   };
 
+  const handleViewProfileDashboard = () => {
+    navigate(`/profiledashboard/${profileId}`);
+  };
+
   useEffect(() => {
     // Subscribe to userEmails to get access to users' emails
     const userEmailSubscription = Meteor.subscribe('userEmails');
@@ -97,6 +101,9 @@ const FinancialProfileCard = ({
           <Grid.Column>
             <Button fluid color="teal" onClick={handleViewDashboard}>
               <Icon name="dashboard" /> View Dashboard
+            </Button>
+            <Button fluid color="teal" onClick={handleViewProfileDashboard}>
+              <Icon name="dashboard" /> View Profile Dashboard
             </Button>
           </Grid.Column>
         </Grid>

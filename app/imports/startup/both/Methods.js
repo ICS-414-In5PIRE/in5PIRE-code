@@ -9,6 +9,7 @@ import { BudgetFormInput } from '../../api/BudgetFormInput/BudgetFormInputCollec
 import { calculateProjectionValues } from '../../api/projections/BudgetProjectionUtils';
 import { BudgetProjections } from '../../api/projections/BudgetProjectionCollection';
 
+
 const verificationCodes = new Map(); // Store codes temporarily in memory
 
 Meteor.methods({

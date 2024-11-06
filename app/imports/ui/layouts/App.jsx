@@ -6,10 +6,6 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Landing from '../pages/Landing';
-import ListStuff from '../pages/ListStuff';
-import ListStuffAdmin from '../pages/ListStuffAdmin';
-import AddStuff from '../pages/AddStuff';
-import EditStuff from '../pages/EditStuff';
 import NotFound from '../pages/NotFound';
 import SignUp from '../pages/SignUp';
 import SignOut from '../pages/SignOut';
@@ -58,9 +54,6 @@ const App = () => {
           <Route path="/About" element={<AboutUs />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/home" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
-          <Route path="/list" element={<ProtectedRoute><ListStuff /></ProtectedRoute>} />
-          <Route path="/add" element={<ProtectedRoute><AddStuff /></ProtectedRoute>} />
-          <Route path="/edit/:_id" element={<ProtectedRoute><EditStuff /></ProtectedRoute>} />
           <Route path="/financial-profiles/" element={<ProtectedRoute><FinancialProfilesPage /></ProtectedRoute>} />
           <Route path="/edit-financial-profile/:profileId" element={<ProtectedRoute><EditFinancialProfile /></ProtectedRoute>} />
           <Route path="/add-financial-profile/" element={<ProtectedRoute><AddFinancialProfile /></ProtectedRoute>} />
@@ -68,7 +61,6 @@ const App = () => {
           <Route path="/profile-budget-form/:profileId" element={<ProtectedRoute><ProfileBudgetFormOverview /></ProtectedRoute>} />
           <Route path="/profile-audited-fs/:profileId" element={<ProtectedRoute><ProfileFinancialStatementOverview /></ProtectedRoute>} />
           <Route path="/csv-instructions" element={<ProtectedRoute><CSVInstructionsPage /></ProtectedRoute>} />
-          <Route path="/admin" element={<AdminProtectedRoute ready={ready}><ListStuffAdmin /></AdminProtectedRoute>} />
           <Route path="/manage-database" element={<AdminProtectedRoute ready={ready}><ManageDatabase /></AdminProtectedRoute>} />
           <Route path="/notauthorized" element={<NotAuthorized />} />
           <Route path="*" element={<NotFound />} />

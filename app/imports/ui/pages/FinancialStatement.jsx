@@ -3,6 +3,7 @@ import { Menu, Grid, Form, Container, Button, Segment, Dropdown } from 'semantic
 import { Tracker } from 'meteor/tracker';
 import { Meteor } from 'meteor/meteor';
 import PropTypes from 'prop-types';
+import swal from 'sweetalert';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import Revenues from '../components/FinancialStatementComponents/Revenues';
 import NetPosition from '../components/FinancialStatementComponents/NetPosition';
@@ -151,16 +152,30 @@ class FinancialStatement extends React.Component {
     const financialStatementData = FinancialStatementInput.find({ owner: owner, profileId, year: selectedYear }).fetch();
     const recordId = financialStatementData[0]._id;
 
-    removeItMethod.callPromise({ collectionName, instance: recordId })
-      .then(() => {
-        this.handleSnackBar(true, 'Record has been deleted successfully!', false);
-        this.setState({ record: [] });
-      })
-      .catch((error) => {
-        if (error) {
-          this.handleSnackBar(true, 'Something went wrong!', true);
-        }
-      });
+    swal({
+      title: 'Are you sure?',
+      text: 'This action cannot be undone.',
+      icon: 'warning',
+      buttons: ['Cancel', 'Delete'],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        // Proceed with deletion
+        removeItMethod.callPromise({ collectionName, instance: recordId })
+          .then(() => {
+            this.handleSnackBar(true, 'Record has been deleted successfully!', false);
+            this.setState({ record: [] });
+          })
+          .catch((error) => {
+            if (error) {
+              this.handleSnackBar(true, 'Something went wrong!', true);
+            }
+          });
+      } else {
+        // Optionally handle cancellation here
+        this.handleSnackBar(true, 'Deletion canceled.', false);
+      }
+    });
   };
 
   // Handle year change

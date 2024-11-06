@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Tracker } from 'meteor/tracker';
 import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputCollection';
 import Loader from '../components/Loader';
+import { PAGE_IDS } from '../utilities/PageIDs';
 
 const ProfileBalanceSheetOverview = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const ProfileBalanceSheetOverview = () => {
   const fields = Object.keys(data[0]).filter(field => field !== '_id' && field !== 'owner' && field !== 'profileId' && field !== 'year');
 
   return (
-    <Container id="balance-sheet-overview">
+    <Container id={PAGE_IDS.PROFILE_BALANCE_SHEET_OVERVIEW}>
       <br />
       <Grid.Column className="pt-3" textAlign="left">
         <Button labelPosition="left" icon="left chevron" content="Back to Data Input" onClick={backToDataInput} />

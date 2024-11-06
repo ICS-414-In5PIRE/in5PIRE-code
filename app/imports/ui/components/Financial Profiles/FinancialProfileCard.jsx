@@ -154,13 +154,8 @@ FinancialProfileCard.propTypes = {
   description: PropTypes.string,
   createdDate: PropTypes.string,
   editedDate: PropTypes.string,
-  // onDelete: PropTypes.func,
   userRole: PropTypes.string.isRequired,
   profileId: PropTypes.string.isRequired,
-  // members: PropTypes.arrayOf(PropTypes.shape({
-  //   userId: PropTypes.string.isRequired,
-  //   role: PropTypes.string.isRequired,
-  // })),
 };
 
 // Default props for optional fields
@@ -169,8 +164,6 @@ FinancialProfileCard.defaultProps = {
   description: 'No description available.',
   createdDate: 'Not available',
   editedDate: 'Not available',
-  // onDelete: null,
-  // members: [],
 };
 
 export default FinancialProfileCard;

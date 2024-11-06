@@ -48,7 +48,7 @@ const Landing = () => (
       </Row>
       <Row className="mb-5 justify-content-between">
         <Col md={3} className="mb-4">
-          <Fade>
+          <Slide direction="left">
             <Card className="shadow-sm h-100">
               <Card.Img variant="top" src="/images/landing4.jpg" />
               <Card.Body>
@@ -58,7 +58,7 @@ const Landing = () => (
                 </Card.Text>
               </Card.Body>
             </Card>
-          </Fade>
+          </Slide>
         </Col>
         <Col md={3} className="mb-4">
           <Slide direction="left">
@@ -74,7 +74,7 @@ const Landing = () => (
           </Slide>
         </Col>
         <Col md={3} className="mb-4">
-          <Fade>
+          <Slide direction="left">
             <Card className="shadow-sm h-100">
               <Card.Img variant="top" src="/images/landing2.jpg" />
               <Card.Body>
@@ -84,7 +84,7 @@ const Landing = () => (
                 </Card.Text>
               </Card.Body>
             </Card>
-          </Fade>
+          </Slide>
         </Col>
       </Row>
 
@@ -104,9 +104,10 @@ const Landing = () => (
           <Fade>
             <Card className="border-0 h-100">
               <Card.Body>
-                <Card.Title>User-Friendly Interface</Card.Title>
+                <Card.Title><h1>User-Friendly Interface</h1></Card.Title>
+                <hr />
                 <Card.Text>
-                  Our platform is designed with simplicity in mind, making it accessible for all users.
+                  Our platform is designed with simplicity in mind; making it accessible for all users, and creating a seamless and intuitive experience for all your financial needs.
                 </Card.Text>
               </Card.Body>
             </Card>
@@ -124,7 +125,8 @@ const Landing = () => (
           <Fade>
             <Card className="border-0 h-100">
               <Card.Body>
-                <Card.Title>Customizable Models</Card.Title>
+                <Card.Title><h1>Customizable Models</h1></Card.Title>
+                <hr />
                 <Card.Text>
                   Tailor your financial models to fit your specific needs.
                 </Card.Text>

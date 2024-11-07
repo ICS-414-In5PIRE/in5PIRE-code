@@ -14,16 +14,23 @@ import { yearsOfSolvency12yrConfig, netPosition12yrConfig, demandForCapital12yrC
 import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputCollection';
 import { BudgetFormInput } from '../../api/BudgetFormInput/BudgetFormInputCollection';
 import { FinancialStatementInput } from '../../api/FinancialStatementInput/FinancialStatementInputCollection';
+import { generateDashboardProjections } from '../components/DashboardComponents/generateDashboardProjections';
+
+// This page is a fork of dashboard.jsx and seeks to dynamically allocate values of the years 2020-2024 as defined
+// in 'staticFinancials.updateHistoricalData' in methods.js
+// It then seeks to dynamically generate 12 years of projections using generateDashboardProjections.js, which relies on
+// formulas in dashboardProjectionFormulas.js. The formulas are not currently complete and are placeholders
+
 // Register Chart.js components
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const ProfileDashboard = () => {
-  const { profileId } = useParams(); // Use profileId from URL params
+  const { profileId } = useParams();
   const [activeTab, setActiveTab] = useState('ProfileSnapshot');
+  const [loadingProjections, setLoadingProjections] = useState(false);
   const [updating, setUpdating] = useState(false);
   const navigate = useNavigate();
 
-  // const { balanceSheetData, budgetFormData, financialStatementData, financialData, isLoading } = useTracker(() => {
   const { financialData, isLoading } = useTracker(() => {
 
     const balanceSheetHandle = Meteor.subscribe('balanceSheet', profileId);
@@ -122,6 +129,19 @@ const ProfileDashboard = () => {
     return formattedData;
   };
 
+  const handleGenerateProjections = async () => {
+    setLoadingProjections(true);
+    try {
+      await generateDashboardProjections(profileId); // Call projection function
+      alert('12-year projections generated successfully!');
+    } catch (error) {
+      console.error(error);
+      alert('Failed to generate projections.');
+    } finally {
+      setLoadingProjections(false);
+    }
+  };
+
   const snapshotData = formatFinancialData(financialData);
 
   const chartConfigs4Year = [
@@ -154,8 +174,11 @@ const ProfileDashboard = () => {
   return (
     <Container id={PAGE_IDS.DASHBOARD} style={{ marginTop: '2em' }}>
       <Button labelPosition="left" icon="left chevron" content="Back to Scenarios" onClick={handleBackToFinancialProfiles} />
-      <Button onClick={handleUpdateDashboardData} loading={updating} disabled={updating}>
+      <Button color="blue" onClick={handleUpdateDashboardData} loading={updating} disabled={updating}>
         {updating ? 'Updating...' : 'Update Dashboard Data'}
+      </Button>
+      <Button color="green" onClick={handleGenerateProjections} loading={loadingProjections} disabled={loadingProjections}>
+        Generate 12-Year Projections
       </Button>
       <br />
       <Grid centered>

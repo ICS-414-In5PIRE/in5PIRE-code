@@ -8,7 +8,10 @@ import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfiles
 import { BudgetFormInput } from '../../api/BudgetFormInput/BudgetFormInputCollection';
 import { calculateProjectionValues } from '../../api/projections/BudgetProjectionUtils';
 import { BudgetProjections } from '../../api/projections/BudgetProjectionCollection';
-
+import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputCollection';
+import { FinancialStatementInput } from '../../api/FinancialStatementInput/FinancialStatementInputCollection';
+import { StaticFinancials } from '../../api/financial/StaticFinancialsCollection';
+import { updateMethod, defineMethod } from '../../api/base/BaseCollection.methods';
 
 const verificationCodes = new Map(); // Store codes temporarily in memory
 
@@ -217,5 +220,107 @@ Meteor.methods({
         });
       });
     });
+  },
+
+  'staticFinancials.updateHistoricalData'({ profileId }) {
+    check(profileId, String);
+
+    const years = [2020, 2021, 2022, 2023, 2024];
+    const errors = [];
+
+    years.forEach(async (year) => {
+      // console.log(`Processing data for year: ${year}`);
+
+      // Retrieve data from each collection for the given year and profileId
+      const balanceSheetData = BalanceSheetInputs.findOne({ profileId, year }) || {};
+      const budgetFormData = BudgetFormInput.findOne({ profileId, year }) || {};
+      const financialStatementData = FinancialStatementInput.findOne({ profileId, year }) || {};
+
+      if (!balanceSheetData) {
+        errors.push(`BalanceSheetInputs data missing for year ${year}`);
+        // console.log(`Error: BalanceSheetInputs data missing for year ${year}`);
+      }
+      if (!budgetFormData) {
+        errors.push(`BudgetFormInput data missing for year ${year}`);
+        // console.log(`Error: BudgetFormInput data missing for year ${year}`);
+      }
+      if (!financialStatementData) {
+        errors.push(`FinancialStatementInput data missing for year ${year}`);
+        // console.log(`Error: FinancialStatementInput data missing for year ${year}`);
+      }
+
+      // Calculations for fields
+      const assets = (balanceSheetData.totalCashAndCashEquivalents || 0)
+        + (balanceSheetData.totalOtherAssets || 0)
+        + (balanceSheetData.totalInvestments || 0);
+      const liabilities = balanceSheetData.totalLiabilities || 0;
+      const netPosition = assets - liabilities;
+      const cashOnHand = balanceSheetData.cash || 0;
+      const investment = balanceSheetData.totalInvestments || 0;
+      const liquidity = balanceSheetData.cashInBanks || 0;
+      const debt = liabilities + (balanceSheetData.longTermLiabilitiesAfterOneYear || 0);
+      const revenues = budgetFormData.revenues || 0;
+      const opex = budgetFormData.totalExpenses || 0;
+      const netIncome = revenues - opex;
+
+      const cashFlow = {
+        inflow: financialStatementData.totalProgramRevenues || 0,
+        outflow: financialStatementData.totalExpenses || 0,
+        net: (financialStatementData.totalProgramRevenues || 0) - (financialStatementData.totalExpenses || 0),
+      };
+
+      const incrementalFringeBenefits = {
+        admin: budgetFormData.fringeBenefitsAdmin || 0,
+        mgmtStaff: budgetFormData.fringeBenefitsStaff || 0,
+        mgmt: budgetFormData.fringeBenefitsManagement || 0,
+      };
+
+      // Check if StaticFinancials data for this year already exists
+      const existingData = StaticFinancials.findOne({ profileId, year });
+      const definitionData = {
+        profileId,
+        year,
+        assets,
+        liabilities,
+        netPosition,
+        cashOnHand,
+        investment,
+        liquidity,
+        debt,
+        revenues,
+        opex,
+        netIncome,
+        cashFlow,
+        incrementalFringeBenefits,
+        owner: Meteor.userId(),
+      };
+
+      try {
+        if (existingData) {
+          // console.log(`Updating existing StaticFinancials record for year ${year}`);
+          // Update using updateMethod
+          await updateMethod.callPromise({
+            collectionName: StaticFinancials.getCollectionName(),
+            updateData: { ...definitionData, id: existingData._id },
+          });
+        } else {
+          // console.log(`Inserting new StaticFinancials record for year ${year}`);
+          // Define new record using defineMethod
+          await defineMethod.callPromise({
+            collectionName: StaticFinancials.getCollectionName(),
+            definitionData,
+          });
+        }
+      } catch (error) {
+        // console.error(`Error processing data for year ${year}:`, error);
+        errors.push(`Failed to update or insert data for year ${year}`);
+      }
+    });
+
+    if (errors.length > 0) {
+      throw new Meteor.Error('incomplete-data', `Missing or failed data: ${errors.join('; ')}`);
+    }
+
+    return `Historical data updated for profile ${profileId}`;
   },
 });

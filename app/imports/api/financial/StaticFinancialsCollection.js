@@ -15,7 +15,10 @@ class StaticFinancialsCollection extends BaseCollection {
   // Constructor to define the schema and collection name
   constructor() {
     super('StaticFinancials', new SimpleSchema({
-      customerName: String, // Name of customer
+      customerName: {
+        type: String,
+        optional: true,
+      }, // Name of customer
       profileId: {
         type: String,
         optional: false,

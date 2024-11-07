@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Meteor } from 'meteor/meteor';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Segment, Container, Grid, Menu, Header, Card, Loader, Button } from 'semantic-ui-react';
 import { Line } from 'react-chartjs-2';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { StaticFinancials } from '../../api/financial/StaticFinancialsCollection';
-import Snapshot from '../components/DashboardComponents/Snapshot';
+import ProfileSnapshot from '../components/DashboardComponents/ProfileSnapshot';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { yearsOfSolvency4yrConfig, netPosition4yrConfig, demandForCapital4yrConfig, financing4yrConfig, yearsOfSolvencyBasedOnCashFlow4yrConfig, budget4yrConfig } from '../components/DashboardComponents/4yrChartConfigs';
 import { yearsOfSolvency8yrConfig, netPosition8yrConfig, demandForCapital8yrConfig, financing8yrConfig, yearsOfSolvencyBasedOnCashFlow8yrConfig, budget8yrConfig } from '../components/DashboardComponents/8yrChartConfigs';
@@ -19,13 +19,17 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Too
 
 const ProfileDashboard = () => {
   const { profileId } = useParams(); // Use profileId from URL params
-  const [activeTab, setActiveTab] = useState('Snapshot');
+  const [activeTab, setActiveTab] = useState('ProfileSnapshot');
+  const [updating, setUpdating] = useState(false);
+  const navigate = useNavigate();
 
-  const { balanceSheetData, budgetFormData, financialStatementData, financialData, isLoading } = useTracker(() => {
+  // const { balanceSheetData, budgetFormData, financialStatementData, financialData, isLoading } = useTracker(() => {
+  const { financialData, isLoading } = useTracker(() => {
+
     const balanceSheetHandle = Meteor.subscribe('balanceSheet', profileId);
     const budgetFormHandle = Meteor.subscribe('budgetform', profileId);
     const financialStatementHandle = Meteor.subscribe('auditedfs', profileId);
-    const staticFinancialsHandle = Meteor.subscribe('staticFinancials', profileId);
+    const staticFinancialsHandle = Meteor.subscribe('staticFinancialsForProfile', profileId);
 
     const loading = !balanceSheetHandle.ready() || !budgetFormHandle.ready() || !financialStatementHandle.ready() || !staticFinancialsHandle.ready();
 
@@ -42,18 +46,28 @@ const ProfileDashboard = () => {
     return <Loader text="Loading data..." />;
   }
 
-  const handleUpdateDashboard = () => {
-    Meteor.call('dashboard.updateData', { profileId, year }, (error, result) => {
+  const handleUpdateDashboardData = () => {
+    setUpdating(true); // Set updating state to true
+
+    Meteor.call('staticFinancials.updateHistoricalData', { profileId }, (error, result) => {
+      setUpdating(false); // Reset updating state
+
       if (error) {
-        console.error('Error updating dashboard:', error);
-        alert('Failed to update dashboard data. Check console for details.');
+        if (error.error === 'incomplete-data') {
+          alert(`Dashboard update incomplete:\n${error.reason}`);
+        } else {
+          alert('Failed to update dashboard data due to an unexpected error. Check the console for details.');
+        }
       } else {
-        alert('Dashboard data updated successfully!');
+        alert(result || 'Dashboard data updated successfully!');
       }
     });
   };
-
   const handleTabChange = (e, { name }) => setActiveTab(name);
+
+  const handleBackToFinancialProfiles = () => {
+    navigate('/financial-profiles');
+  };
 
   const renderCharts = (configs) => (
     <Grid stackable columns={2}>
@@ -74,29 +88,41 @@ const ProfileDashboard = () => {
     return <div>Loading...</div>; // Show a loading message while the data is being fetched
   }
 
-  // Helper function to format financial data for Snapshot
-  const formatFinancialData = (financial) => [
-    { name: 'Customer Name', value: financial.customerName },
-    { name: 'Year', value: financial.year.toString() },
-    { name: 'Assets', value: `$${financial.assets.toLocaleString()}` },
-    { name: 'Liabilities', value: `$${financial.liabilities.toLocaleString()}` },
-    { name: 'Net Position', value: `$${financial.netPosition.toLocaleString()}` },
-    { name: 'Cash On Hand', value: `$${financial.cashOnHand.toLocaleString()}` },
-    { name: 'Investment', value: `$${financial.investment.toLocaleString()}` },
-    { name: 'Liquidity', value: `$${financial.liquidity.toLocaleString()}` },
-    { name: 'Debt', value: `$${financial.debt.toLocaleString()}` },
-    { name: 'Revenues', value: `$${financial.revenues.toLocaleString()}` },
-    { name: 'Opex', value: `$${financial.opex.toLocaleString()}` },
-    { name: 'Net Income', value: `$${financial.netIncome.toLocaleString()}` },
-    { name: 'Cash Flow Inflow', value: `$${financial.cashFlow.inflow.toLocaleString()}` },
-    { name: 'Cash Flow Outflow', value: `$${financial.cashFlow.outflow.toLocaleString()}` },
-    { name: 'Cash Flow Net', value: `$${financial.cashFlow.net.toLocaleString()}` },
-    { name: 'Fringe Benefits Admin', value: `$${financial.incrementalFringeBenefits.admin.toLocaleString()}` },
-    { name: 'Fringe Benefits Mgmt Staff', value: `$${financial.incrementalFringeBenefits.mgmtStaff.toLocaleString()}` },
-    { name: 'Fringe Benefits Mgmt', value: `$${financial.incrementalFringeBenefits.mgmt.toLocaleString()}` },
-  ];
+  const formatFinancialData = (financialEntries) => {
+    const formattedData = [];
 
-  const snapshotData = financialData.length > 0 ? formatFinancialData(financialData[0]) : [];
+    financialEntries.forEach((financial) => {
+      Object.keys(financial).forEach((key) => {
+        if (!['customerName', 'profileId', 'year', '_id', 'owner'].includes(key)) {
+          // Handle nested fields individually for cashFlow and incrementalFringeBenefits
+          if (key === 'cashFlow') {
+            formattedData.push(
+              { name: 'Cash Flow Inflow', year: financial.year, value: `$${financial[key].inflow.toLocaleString()}` },
+              { name: 'Cash Flow Outflow', year: financial.year, value: `$${financial[key].outflow.toLocaleString()}` },
+              { name: 'Cash Flow Net', year: financial.year, value: `$${financial[key].net.toLocaleString()}` },
+            );
+          } else if (key === 'incrementalFringeBenefits') {
+            formattedData.push(
+              { name: 'Fringe Benefits Admin', year: financial.year, value: `$${financial[key].admin.toLocaleString()}` },
+              { name: 'Fringe Benefits Mgmt Staff', year: financial.year, value: `$${financial[key].mgmtStaff.toLocaleString()}` },
+              { name: 'Fringe Benefits Mgmt', year: financial.year, value: `$${financial[key].mgmt.toLocaleString()}` },
+            );
+          } else {
+            // Handle non-nested fields as before
+            formattedData.push({
+              name: key,
+              year: financial.year,
+              value: `$${financial[key].toLocaleString()}`,
+            });
+          }
+        }
+      });
+    });
+
+    return formattedData;
+  };
+
+  const snapshotData = formatFinancialData(financialData);
 
   const chartConfigs4Year = [
     { title: 'Net Position (4 Years)', data: netPosition4yrConfig.data, options: netPosition4yrConfig.options },
@@ -127,8 +153,9 @@ const ProfileDashboard = () => {
 
   return (
     <Container id={PAGE_IDS.DASHBOARD} style={{ marginTop: '2em' }}>
-      <Button onClick={handleUpdateDashboard}>
-        Update Dashboard Data
+      <Button labelPosition="left" icon="left chevron" content="Back to Scenarios" onClick={handleBackToFinancialProfiles} />
+      <Button onClick={handleUpdateDashboardData} loading={updating} disabled={updating}>
+        {updating ? 'Updating...' : 'Update Dashboard Data'}
       </Button>
       <br />
       <Grid centered>
@@ -139,8 +166,8 @@ const ProfileDashboard = () => {
           <hr />
           <Menu pointing secondary>
             <Menu.Item
-              name="Snapshot"
-              active={activeTab === 'Snapshot'}
+              name="ProfileSnapshot"
+              active={activeTab === 'ProfileSnapshot'}
               onClick={handleTabChange}
             />
             <Menu.Item
@@ -161,7 +188,7 @@ const ProfileDashboard = () => {
           </Menu>
 
           <Segment>
-            {activeTab === 'Snapshot' && <Snapshot data={snapshotData} />} {/* Use the real financial data */}
+            {activeTab === 'ProfileSnapshot' && <ProfileSnapshot data={snapshotData} />} {/* Use the real financial data */}
             {activeTab === 'Dashboard 4 Year' && renderCharts(chartConfigs4Year)}
             {activeTab === 'Dashboard 8 Year' && renderCharts(chartConfigs8Year)}
             {activeTab === 'Dashboard 12 Year' && renderCharts(chartConfigs12Year)}

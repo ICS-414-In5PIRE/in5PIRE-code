@@ -40,10 +40,6 @@ const FinancialProfileCard = ({
     navigate(`/audited-fs/${profileId}`);
   };
 
-  const handleViewDashboard = () => {
-    navigate('/dashboard');
-  };
-
   const handleViewProfileDashboard = () => {
     navigate(`/profiledashboard/${profileId}`);
   };
@@ -99,9 +95,6 @@ const FinancialProfileCard = ({
 
           )}
           <Grid.Column>
-            <Button fluid color="teal" onClick={handleViewDashboard}>
-              <Icon name="dashboard" /> View Dashboard
-            </Button>
             <Button fluid color="teal" onClick={handleViewProfileDashboard}>
               <Icon name="dashboard" /> View Profile Dashboard
             </Button>

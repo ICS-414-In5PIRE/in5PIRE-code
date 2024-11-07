@@ -28,6 +28,15 @@ Meteor.publish('staticFinancials', function publishStaticFinancials() {
   return this.ready();
 });
 
+// Publish StaticFinancials for profile-specific data
+Meteor.publish('staticFinancialsForProfile', function publishStaticFinancialsForProfile(profileId) {
+  if (this.userId) {
+    check(profileId, String);
+    return StaticFinancials.find({ profileId });
+  }
+  return this.ready();
+});
+
 // publish emails
 Meteor.publish('userEmails', function publishUserEmails() {
   if (this.userId) {

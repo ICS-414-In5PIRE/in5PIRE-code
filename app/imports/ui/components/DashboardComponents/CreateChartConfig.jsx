@@ -27,7 +27,7 @@ export const createChartConfig = (labels, datasets, leftAxisTitle, rightAxisTitl
           beginAtZero: true,
         },
         grid: {
-          drawOnChartArea: false, // Prevent grid overlap
+          drawOnChartArea: false,
         },
       },
     },

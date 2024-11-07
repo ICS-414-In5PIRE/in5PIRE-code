@@ -321,6 +321,6 @@ Meteor.methods({
       throw new Meteor.Error('incomplete-data', `Missing or failed data: ${errors.join('; ')}`);
     }
 
-    return `Historical data updated for profile ${profileId}`;
+    return 'Historical data updated! Make sure to generate projections to reflect these changes.';
   },
 });

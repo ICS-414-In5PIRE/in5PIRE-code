@@ -11,7 +11,7 @@ export const BalanceSheetInputSchema = new SimpleSchema({
   },
   profileId: {
     type: String,
-    optional: false,
+    optional: true,
   },
   // Cash and Cash Equivalents fields
   pettyCash: {

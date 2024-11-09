@@ -11,7 +11,7 @@ export const BudgetFormInputSchema = new SimpleSchema({
   },
   profileId: {
     type: String,
-    optional: false,
+    optional: true,
   },
   // Revenue fields
   fivePercent: {

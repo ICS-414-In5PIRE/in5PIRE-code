@@ -21,7 +21,7 @@ class StaticFinancialsCollection extends BaseCollection {
       }, // Name of customer
       profileId: {
         type: String,
-        optional: false,
+        optional: true,
       },
       year: Number, // Fiscal year
       assets: Number, // Total assets

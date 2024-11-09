@@ -90,6 +90,21 @@ class BalanceSheetInput extends React.Component {
     navigate('/financial-profiles');
   };
 
+  handleEditBudgetForm = () => {
+    const { profileId, navigate } = this.props;
+    navigate(`/budget-form/${profileId}`);
+  };
+
+  handleEditAuditedFinancials = () => {
+    const { profileId, navigate } = this.props;
+    navigate(`/audited-fs/${profileId}`);
+  };
+
+  handleViewDashboard = () => {
+    const { profileId, navigate } = this.props;
+    navigate(`/profiledashboard/${profileId}`);
+  };
+
   // Handle input changes
   handleChange = (e, { name, value }) => {
     const { record } = this.state;
@@ -224,6 +239,9 @@ class BalanceSheetInput extends React.Component {
       <Container id={PAGE_IDS.BALANCE_SHEET_INPUT}>
         <Grid.Column textAlign="left">
           <Button labelPosition="left" icon="left chevron" content="Back to Scenarios" onClick={this.handleBackToScenarios} />
+          <Button color="blue" content="Edit Budget Form" onClick={this.handleEditBudgetForm} />
+          <Button color="blue" content="Edit Audited Financial Statement" onClick={this.handleEditAuditedFinancials} />
+          <Button color="green" content="Dashboard" onClick={this.handleViewDashboard} />
         </Grid.Column>
         <Grid centered>
           <Grid.Column>

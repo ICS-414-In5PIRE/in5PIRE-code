@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Segment, Container, Grid, Menu, Header, Card, Loader, Button } from 'semantic-ui-react';
+import { Segment, Container, Grid, Menu, Header, Card, Loader, Button, Icon } from 'semantic-ui-react';
 import { Line } from 'react-chartjs-2';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
@@ -71,6 +71,22 @@ const ProfileDashboard = () => {
 
   const handleBackToFinancialProfiles = () => {
     navigate('/financial-profiles');
+  };
+
+  const handleEditBalanceSheet = () => {
+    navigate(`/balance-sheet/${profileId}`);
+  };
+
+  const handleEditBudgetForm = () => {
+    navigate(`/budget-form/${profileId}`);
+  };
+
+  const handleEditFinancialStatement = () => {
+    navigate(`/audited-fs/${profileId}`);
+  };
+
+  const handleViewProfileDashboard = () => {
+    navigate(`/profiledashboard/${profileId}`);
   };
 
   const renderCharts = (configs) => (
@@ -153,6 +169,24 @@ const ProfileDashboard = () => {
       <Button color="green" onClick={handleGenerateProjections} loading={loadingProjections} disabled={loadingProjections}>
         Generate 12-Year Projections
       </Button>
+      <br />
+      <br />
+      <Button color="blue" onClick={handleEditBalanceSheet}>
+        <Icon name="edit" /> Edit Balance Sheet
+      </Button>
+
+      <Button className="mb-2" color="blue" onClick={handleEditBudgetForm}>
+        <Icon name="edit" /> Edit Budget Form
+      </Button>
+
+      <Button className="mb-2" color="blue" onClick={handleEditFinancialStatement}>
+        <Icon name="edit" /> Edit Audited Financial Statement
+      </Button>
+
+      <Button className="mb-2" color="blue" onClick={handleViewProfileDashboard}>
+        <Icon name="edit" /> Edit Audited Financial Statement
+      </Button>
+      <br />
       <br />
       <Grid centered>
         <Grid.Column width={16}>

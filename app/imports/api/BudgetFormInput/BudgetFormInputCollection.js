@@ -93,8 +93,8 @@ class BudgetFormInputCollection extends BaseCollection {
 
       // Auto-calculate personnel and fringe staff
       const personnelAndFringeStaff =
-        (parseFloat(management) || 0) -
-        (parseFloat(personnelAndFringeManagement) || 0);
+        (parseFloat(salaryStaff) || 0) +
+        (parseFloat(fringeBenefitsStaff) || 0);
 
       // Auto-calculate admin fringe benefits
       const fringeBenefitsAdmin =
@@ -110,9 +110,8 @@ class BudgetFormInputCollection extends BaseCollection {
 
       // Auto-calculate personnel and fringe admin
       const personnelAndFringeAdmin =
-        (parseFloat(personnel) || 0) -
-        (parseFloat(personnelAndFringeStaff) || 0) -
-        (parseFloat(personnelAndFringeManagement) || 0);
+        (parseFloat(salaryAdmin) || 0) +
+        (parseFloat(fringeBenefitsAdmin) || 0);
 
       // Auto-calculate surplus deficit
       const surplusDeficit =

@@ -323,4 +323,68 @@ Meteor.methods({
 
     return 'Historical data updated! Make sure to generate projections to reflect these changes.';
   },
+
+  'staticFinancials.updateFromBudgetForm'({ profileId, year }) {
+    check(profileId, String);
+    check(year, Number);
+
+    // Fetch data from BudgetFormInput for the given profileId and year
+    const budgetData = BudgetFormInput.findOne({ profileId, year });
+    if (!budgetData) {
+      throw new Meteor.Error('no-budget-data', `No BudgetFormInput data found for year ${year}`);
+    }
+
+    // Extract required fields from BudgetFormInput
+    const {
+      totalRevenue = 0,
+      totalExpenses = 0,
+      personnelAndFringeAdmin = 0,
+      personnelAndFringeStaff = 0,
+      personnelAndFringeManagement = 0,
+      management = 0,
+      supportServices = 0,
+      beneficiaryAdvocacy = 0,
+    } = budgetData;
+
+    // Calculate fields
+    const revenues = totalRevenue;
+    const opex = totalExpenses;
+    const netIncome = revenues - opex;
+
+    const inflow = revenues + management + supportServices + beneficiaryAdvocacy;
+    const outflow = revenues - inflow;
+    const cashFlow = { inflow, outflow, net: inflow - outflow };
+
+    const incrementalFringeBenefits = {
+      admin: personnelAndFringeAdmin,
+      mgmtStaff: personnelAndFringeStaff,
+      mgmt: personnelAndFringeManagement,
+    };
+
+    // Find existing StaticFinancials record for the profileId and year
+    const existingRecord = StaticFinancials.findOne({ profileId, year });
+
+    const updateData = {
+      revenues,
+      opex,
+      netIncome,
+      cashFlow,
+      incrementalFringeBenefits,
+    };
+
+    if (existingRecord) {
+    // Update the existing record
+      StaticFinancials.update(existingRecord._id, { $set: updateData });
+    } else {
+    // Define a new record if it doesn't exist
+      StaticFinancials.insert({
+        profileId,
+        year,
+        ...updateData,
+        owner: Meteor.userId(),
+      });
+    }
+
+    return 'Static financials updated successfully!';
+  },
 });

@@ -69,25 +69,12 @@ const ProfileDashboard = () => {
   };
   const handleTabChange = (e, { name }) => setActiveTab(name);
 
-  const handleBackToFinancialProfiles = () => {
-    navigate('/financial-profiles');
-  };
-
-  const handleEditBalanceSheet = () => {
-    navigate(`/balance-sheet/${profileId}`);
-  };
-
-  const handleEditBudgetForm = () => {
-    navigate(`/budget-form/${profileId}`);
-  };
-
-  const handleEditFinancialStatement = () => {
-    navigate(`/audited-fs/${profileId}`);
-  };
-
-  const handleViewProfileDashboard = () => {
-    navigate(`/profiledashboard/${profileId}`);
-  };
+  const buttonData = [
+    { label: 'Back to Financial Scenarios', path: '/financial-profiles', color: 'grey' },
+    { label: 'Edit Balance Sheet', path: `/balance-sheet/${profileId}`, color: 'blue' },
+    { label: 'Edit Budget Form', path: `/budget-form/${profileId},`, color: 'blue' },
+    { label: 'Edit Financial Statement', path: `/audited-fs/${profileId}`, color: 'blue' },
+  ];
 
   const renderCharts = (configs) => (
     <Grid stackable columns={2}>
@@ -162,7 +149,6 @@ const ProfileDashboard = () => {
 
   return (
     <Container id={PAGE_IDS.DASHBOARD} style={{ marginTop: '2em' }}>
-      <Button labelPosition="left" icon="left chevron" content="Back to Scenarios" onClick={handleBackToFinancialProfiles} />
       <Button color="blue" onClick={handleUpdateDashboardData} loading={updating} disabled={updating}>
         {updating ? 'Updating...' : 'Update Dashboard Data'}
       </Button>
@@ -171,21 +157,15 @@ const ProfileDashboard = () => {
       </Button>
       <br />
       <br />
-      <Button color="blue" onClick={handleEditBalanceSheet}>
-        <Icon name="edit" /> Edit Balance Sheet
-      </Button>
+      {/* Map out buttons */}
+      <div style={{ marginBottom: '1em' }}>
+        {buttonData.map(({ label, path, color }) => (
+          <Button key={label} color={color} onClick={() => navigate(path)} className="mb-2">
+            <Icon name="edit" /> {label}
+          </Button>
+        ))}
+      </div>
 
-      <Button className="mb-2" color="blue" onClick={handleEditBudgetForm}>
-        <Icon name="edit" /> Edit Budget Form
-      </Button>
-
-      <Button className="mb-2" color="blue" onClick={handleEditFinancialStatement}>
-        <Icon name="edit" /> Edit Audited Financial Statement
-      </Button>
-
-      <Button className="mb-2" color="blue" onClick={handleViewProfileDashboard}>
-        <Icon name="edit" /> Edit Audited Financial Statement
-      </Button>
       <br />
       <br />
       <Grid centered>

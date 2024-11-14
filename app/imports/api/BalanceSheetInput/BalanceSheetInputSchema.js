@@ -376,6 +376,11 @@ export const BalanceSheetInputSchema = new SimpleSchema({
     optional: true,
     defaultValue: null,
   },
+  totalLineCreditWithinOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
 
   // Liabilities Due After One Year fields
   accruedVacationDueAfterOneYear: {
@@ -439,6 +444,11 @@ export const BalanceSheetInputSchema = new SimpleSchema({
     defaultValue: null,
   },
   netLiabilitiesDueAfterOneYear: {
+    type: Number,
+    optional: true,
+    defaultValue: null,
+  },
+  totalLineCreditAfterOneYear: {
     type: Number,
     optional: true,
     defaultValue: null,

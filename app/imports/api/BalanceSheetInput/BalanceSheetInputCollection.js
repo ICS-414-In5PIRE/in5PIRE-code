@@ -162,6 +162,10 @@ class BalanceSheetInputCollection extends BaseCollection {
       // Auto-calculate total liabilities deferred net position
       const totalLiabilitiesDeferredNetPosition = netLiabilitiesDeferredInflows + totalNetPosition;
 
+      const totalLineCreditWithinOneYear = (parseFloat(lineOfCreditBuildingADueWithinOneYear) || 0) + (parseFloat(lineOfCreditBuildingBDueWithinOneYear) || 0);
+
+      const totalLineCreditAfterOneYear = (parseFloat(lineOfCreditBuildingADueAfterOneYear) || 0) + (parseFloat(lineOfCreditBuildingBDueAfterOneYear) || 0);
+
       // Insert a new document
       const docID = this._collection.insert({
         pettyCash, cash, cashInBanks, totalCashAndCashEquivalents, accountsReceivables, dueFromOtherFunds,
@@ -182,7 +186,7 @@ class BalanceSheetInputCollection extends BaseCollection {
         accruedVacationDueAfterOneYear, workersCompensationDueAfterOneYear, accruedRetirementPlanDueAfterOneYear,
         accruedLeaseGuarantyDueAfterOneYear, capitalLeaseObligationsDueAfterOneYear, notesPayableBuildingADueAfterOneYear,
         netPensionLiabilityDueAfterOneYear, netOPEBLiabilityDueAfterOneYear, lineOfCreditBuildingADueAfterOneYear,
-        lineOfCreditBuildingBDueAfterOneYear, debtServiceDueAfterOneYear, netLiabilitiesDueAfterOneYear, owner, year, profileId,
+        lineOfCreditBuildingBDueAfterOneYear, debtServiceDueAfterOneYear, netLiabilitiesDueAfterOneYear, owner, year, profileId, totalLineCreditWithinOneYear, totalLineCreditAfterOneYear,
       });
 
       return {
@@ -330,8 +334,14 @@ class BalanceSheetInputCollection extends BaseCollection {
     const totalLiabilitiesDeferredNetPosition =
       netLiabilitiesDeferredInflows + totalNetPosition;
 
+    const totalLineCreditWithinOneYear = (parseFloat(updateData.lineOfCreditBuildingADueWithinOneYear) || 0) + (parseFloat(updateData.lineOfCreditBuildingBDueWithinOneYear) || 0);
+
+    const totalLineCreditAfterOneYear = (parseFloat(updateData.lineOfCreditBuildingADueAfterOneYear) || 0) + (parseFloat(updateData.lineOfCreditBuildingBDueAfterOneYear) || 0);
+
     const updatedDataWithCalculations = {
       ...updateData,
+      totalLineCreditWithinOneYear,
+      totalLineCreditAfterOneYear,
       totalCashAndCashEquivalents,
       subtotalInvestments,
       subtotalLoanFund,

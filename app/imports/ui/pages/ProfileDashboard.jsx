@@ -8,9 +8,9 @@ import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, To
 import { StaticFinancials } from '../../api/financial/StaticFinancialsCollection';
 import ProfileSnapshot from '../components/DashboardComponents/ProfileSnapshot';
 import { PAGE_IDS } from '../utilities/PageIDs';
-import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputCollection';
-import { BudgetFormInput } from '../../api/BudgetFormInput/BudgetFormInputCollection';
-import { FinancialStatementInput } from '../../api/FinancialStatementInput/FinancialStatementInputCollection';
+// import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputCollection';
+// import { BudgetFormInput } from '../../api/BudgetFormInput/BudgetFormInputCollection';
+// import { FinancialStatementInput } from '../../api/FinancialStatementInput/FinancialStatementInputCollection';
 import { generateDashboardProjections } from '../components/DashboardComponents/generateDashboardProjections';
 import prepareChartData from '../components/DashboardComponents/PrepareChartData';
 
@@ -29,19 +29,19 @@ const ProfileDashboard = () => {
   const navigate = useNavigate();
 
   const { financialData, isLoading } = useTracker(() => {
-
-    const balanceSheetHandle = Meteor.subscribe('balanceSheet', profileId);
-    const budgetFormHandle = Meteor.subscribe('budgetform', profileId);
-    const financialStatementHandle = Meteor.subscribe('auditedfs', profileId);
+    const balanceSheetHandle = Meteor.subscribe('defaultBalanceSheetData', profileId);
+    const budgetFormHandle = Meteor.subscribe('defaultBudgetFormInput', profileId);
+    const financialStatementHandle = Meteor.subscribe('defaultFinancialStatementData', profileId);
     const staticFinancialsHandle = Meteor.subscribe('staticFinancialsForProfile', profileId);
 
-    const loading = !balanceSheetHandle.ready() || !budgetFormHandle.ready() || !financialStatementHandle.ready() || !staticFinancialsHandle.ready();
+    const loading =
+      !balanceSheetHandle.ready() ||
+      !budgetFormHandle.ready() ||
+      !financialStatementHandle.ready() ||
+      !staticFinancialsHandle.ready();
 
     return {
-      balanceSheetData: BalanceSheetInputs.find({ profileId }).fetch(),
-      budgetFormData: BudgetFormInput.find({ profileId }).fetch(),
-      financialStatementData: FinancialStatementInput.find({ profileId }).fetch(),
-      financialData: StaticFinancials.find({ profileId }).fetch(),
+      financialData: StaticFinancials.find({ profileId }, { sort: { year: 1 } }).fetch(),
       isLoading: loading,
     };
   }, [profileId]);
@@ -53,26 +53,37 @@ const ProfileDashboard = () => {
   const handleUpdateDashboardData = () => {
     setUpdating(true);
 
-    Meteor.call('staticFinancials.updateHistoricalData', { profileId }, (error, result) => {
-      setUpdating(false);
+    const years = [2021, 2022, 2023, new Date().getFullYear()];
 
-      if (error) {
-        if (error.error === 'incomplete-data') {
-          alert(`Dashboard update incomplete:\n${error.reason}`);
-        } else {
-          alert('Failed to update dashboard data due to an unexpected error. Check the console for details.');
+    let errorOccurred = false;
+    let completedCalls = 0;
+
+    years.forEach((year) => {
+      Meteor.call('staticFinancials.populateFromBudget', profileId, year, (error) => {
+        completedCalls++;
+        if (error) {
+          console.error(`Failed to update data for year ${year}: ${error.reason}`);
+          errorOccurred = true;
         }
-      } else {
-        alert(result || 'Dashboard data updated successfully!');
-      }
+
+        if (completedCalls === years.length) {
+          setUpdating(false);
+          if (errorOccurred) {
+            alert('Some years failed to update. Check the console for more details.');
+          } else {
+            alert('Dashboard data updated successfully for all years!');
+          }
+        }
+      });
     });
   };
+
   const handleTabChange = (e, { name }) => setActiveTab(name);
 
   const buttonData = [
     { label: 'Back to Financial Scenarios', path: '/financial-profiles', color: 'grey' },
     { label: 'Edit Balance Sheet', path: `/balance-sheet/${profileId}`, color: 'blue' },
-    { label: 'Edit Budget Form', path: `/budget-form/${profileId},`, color: 'blue' },
+    { label: 'Edit Budget Form', path: `/budget-form/${profileId}`, color: 'blue' },
     { label: 'Edit Financial Statement', path: `/audited-fs/${profileId}`, color: 'blue' },
   ];
 
@@ -90,31 +101,25 @@ const ProfileDashboard = () => {
       ))}
     </Grid>
   );
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   const formatFinancialData = (financialEntries) => {
     const formattedData = [];
-
     financialEntries.forEach((financial) => {
       Object.keys(financial).forEach((key) => {
         if (!['customerName', 'profileId', 'year', '_id', 'owner'].includes(key)) {
-          // Handle nested fields individually for cashFlow and incrementalFringeBenefits
           if (key === 'cashFlow') {
             formattedData.push(
               { name: 'Cash Flow Inflow', year: financial.year, value: `$${financial[key].inflow.toLocaleString()}` },
               { name: 'Cash Flow Outflow', year: financial.year, value: `$${financial[key].outflow.toLocaleString()}` },
-              { name: 'Cash Flow Net', year: financial.year, value: `$${financial[key].net.toLocaleString()}` },
+              { name: 'Net Cash Flow', year: financial.year, value: `$${financial[key].net.toLocaleString()}` },
             );
           } else if (key === 'incrementalFringeBenefits') {
             formattedData.push(
-              { name: 'Fringe Benefits Admin', year: financial.year, value: `$${financial[key].admin.toLocaleString()}` },
-              { name: 'Fringe Benefits Mgmt Staff', year: financial.year, value: `$${financial[key].mgmtStaff.toLocaleString()}` },
-              { name: 'Fringe Benefits Mgmt', year: financial.year, value: `$${financial[key].mgmt.toLocaleString()}` },
+              { name: 'Admin', year: financial.year, value: `$${financial[key].admin.toLocaleString()}` },
+              { name: 'Management Staff', year: financial.year, value: `$${financial[key].mgmtStaff.toLocaleString()}` },
+              { name: 'Management', year: financial.year, value: `$${financial[key].mgmt.toLocaleString()}` },
             );
           } else {
-            // Handle non-nested fields
             formattedData.push({
               name: key,
               year: financial.year,
@@ -124,7 +129,6 @@ const ProfileDashboard = () => {
         }
       });
     });
-
     return formattedData;
   };
 
@@ -142,7 +146,6 @@ const ProfileDashboard = () => {
   };
 
   const snapshotData = formatFinancialData(financialData);
-
   const chartConfigs4Year = prepareChartData(financialData, 4);
   const chartConfigs8Year = prepareChartData(financialData, 8);
   const chartConfigs12Year = prepareChartData(financialData, 12);

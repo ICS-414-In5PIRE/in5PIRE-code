@@ -30,8 +30,8 @@ Meteor.publish('staticFinancials', function publishStaticFinancials() {
 
 // Publish StaticFinancials for profile-specific data
 Meteor.publish('staticFinancialsForProfile', function publishStaticFinancialsForProfile(profileId) {
+  check(profileId, String);
   if (this.userId) {
-    check(profileId, String);
     return StaticFinancials.find({ profileId });
   }
   return this.ready();
@@ -53,7 +53,7 @@ Meteor.publish('staticFinancialsAdmin', function publishStaticFinancialsAdmin() 
   return this.ready();
 });
 
-Meteor.publish('balanceSheet', function publishBalanceSheet(profileId) {
+Meteor.publish('defaultBalanceSheetData', function publishBalanceSheet(profileId) {
   if (!this.userId) {
     return this.ready();
   }
@@ -66,7 +66,7 @@ Meteor.publish('balanceSheet', function publishBalanceSheet(profileId) {
   return BalanceSheetInputs.find({ profileId });
 });
 
-Meteor.publish('budgetform', function publishBudgetForm(profileId) {
+Meteor.publish('defaultBudgetFormInput', function publishBudgetForm(profileId) {
   if (!this.userId) {
     return this.ready();
   }
@@ -80,7 +80,7 @@ Meteor.publish('budgetform', function publishBudgetForm(profileId) {
   return BudgetFormInput.find({ profileId });
 });
 
-Meteor.publish('auditedfs', function publishBudgetForm(profileId) {
+Meteor.publish('defaultFinancialStatementData', function publishBudgetForm(profileId) {
   if (!this.userId) {
     return this.ready();
   }

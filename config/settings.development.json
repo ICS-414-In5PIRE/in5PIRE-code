@@ -49,8 +49,36 @@
       "owner": "john@foo.com"
     }
   ],
-
-  "BudgetFormInput": [
+  "defaultStaticFinancials": [
+    {
+      "year": 2021,
+      "revenues": 0,
+      "opex": 0,
+      "netIncome": 0,
+      "cashFlow": { "inflow": 0, "outflow": 0, "net": 0 },
+      "incrementalFringeBenefits": { "admin": 0, "mgmtStaff": 0, "mgmt": 0 },
+      "owner": "john@foo.com"
+    },
+    {
+      "year": 2022,
+      "revenues": 0,
+      "opex": 0,
+      "netIncome": 0,
+      "cashFlow": { "inflow": 0, "outflow": 0, "net": 0 },
+      "incrementalFringeBenefits": { "admin": 0, "mgmtStaff": 0, "mgmt": 0 },
+      "owner": "john@foo.com"
+    },
+    {
+      "year": 2023,
+      "revenues": 0,
+      "opex": 0,
+      "netIncome": 0,
+      "cashFlow": { "inflow": 0, "outflow": 0, "net": 0 },
+      "incrementalFringeBenefits": { "admin": 0, "mgmtStaff": 0, "mgmt": 0 },
+      "owner": "john@foo.com"
+    }
+  ],
+  "defaultBudgetFormInput": [
     {
       "year": 2021,
       "owner": "john@foo.com",
@@ -253,7 +281,7 @@
     }
   ],
 
-  "defaultbalancesheetdata": [
+  "defaultBalanceSheetData": [
     {
       "customerName": "User DefaultData",
       "year": 2020,
@@ -616,7 +644,7 @@
     }
   ],
 
-  "defaultauditedfs": [
+  "defaultFinancialStatementData": [
     {
       "year": 2020,
       "owner": "john@foo.com",

@@ -41,7 +41,6 @@ const ProfileSnapshot = ({ data }) => {
             {Object.keys(assets).map((assetName, index) => (
               <Table.Row
                 key={index}
-                // every other row should be slightly darker
                 style={{
                   backgroundColor: index % 2 === 0 ? 'rgba(240, 240, 240, 0.5)' : 'transparent',
                   transition: 'background-color 0.2s ease-in-out',
@@ -75,7 +74,6 @@ const ProfileSnapshot = ({ data }) => {
   );
 };
 
-// Define PropTypes for type checking
 ProfileSnapshot.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({

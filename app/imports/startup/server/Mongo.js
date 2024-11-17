@@ -8,169 +8,84 @@ import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfiles
 
 /* eslint-disable no-console */
 
-// Initialize the database with a default data document.
 function addData(data) {
-  console.log(`  Adding: ${data.name} (${data.owner})`);
+  console.log(`Adding: ${data.name} (${data.owner})`);
   Stuffs.define(data);
 }
 
-// Initialize the StuffsCollection if empty.
-if (Stuffs.count() === 0) {
-  if (Meteor.settings.defaultData) {
-    console.log('Creating default data.');
-    Meteor.settings.defaultData.forEach(data => addData(data));
-  }
+if (Stuffs.count() === 0 && Meteor.settings.defaultData) {
+  console.log('Initializing default Stuffs data...');
+  Meteor.settings.defaultData.forEach(addData);
 }
 
-function initializeStaticFinancials(data) {
-  const user = Meteor.users.findOne({ 'emails.address': 'john@foo.com' });
-  const financialProfile = FinancialProfiles.findOne({ owner: user.username });
-
-  if (!financialProfile) {
-    console.error('No financial profile found for john@foo.com');
+function initializeStaticFinancials() {
+  if (!Meteor.settings.defaultStaticFinancials || !Array.isArray(Meteor.settings.defaultStaticFinancials)) {
+    console.error('No valid defaultStaticFinancials in settings.');
     return;
   }
 
-  const profileId = financialProfile._id;
-  const entry = { ...data, profileId };
+  Meteor.settings.defaultStaticFinancials.forEach((data) => {
+    const user = Meteor.users.findOne({ 'emails.address': data.owner });
+    const financialProfile = FinancialProfiles.findOne({ owner: user?.username });
 
-  console.log(`Initializing StaticFinancials for year ${data.year}, profile ${profileId}`);
-  StaticFinancials.define(entry);
+    if (!financialProfile) {
+      console.warn(`No financial profile found for ${data.owner}. Skipping StaticFinancials initialization.`);
+      return;
+    }
+
+    const profileId = financialProfile._id;
+    if (!StaticFinancials.findOne({ profileId, year: data.year })) {
+      StaticFinancials.define({ ...data, profileId });
+      console.log(`Initialized StaticFinancials for year ${data.year}, owner: ${data.owner}`);
+    } else {
+      console.log(`StaticFinancials for year ${data.year}, owner: ${data.owner} already exists.`);
+    }
+  });
 }
 
 if (StaticFinancials.count() === 0 && Meteor.settings.defaultStaticFinancials) {
-  console.log('Initializing StaticFinancials with default values...');
-  Meteor.settings.defaultStaticFinancials.forEach(data => initializeStaticFinancials(data));
+  console.log('Initializing StaticFinancials...');
+  Meteor.settings.defaultStaticFinancials.forEach(initializeStaticFinancials);
 }
 
 function addBudgetFormInputData(data) {
   const userProfile = global.userProfiles[data.owner];
   if (!userProfile || !userProfile.financialProfileId) {
-    console.log(`No financial profile found for owner: ${data.owner}. Skipping this entry.`);
+    console.warn(`No financial profile found for owner: ${data.owner}. Skipping.`);
     return;
   }
-
-  const dataWithProfileId = { ...data, profileId: userProfile.financialProfileId };
-  BudgetFormInput.define(dataWithProfileId);
+  BudgetFormInput.define({ ...data, profileId: userProfile.financialProfileId });
 }
 
 if (BudgetFormInput.count() === 0 && Meteor.settings.defaultBudgetFormInput) {
-  console.log('Creating default BudgetFormInput data.');
-  Meteor.settings.defaultBudgetFormInput.forEach(data => addBudgetFormInputData(data));
-}
-
-function addFinancialData(data) {
-  const userProfile = global.userProfiles[data.owner];
-  if (!userProfile || !userProfile.financialProfileId) {
-    console.log(`No financial profile found for owner: ${data.owner}. Skipping this entry.`);
-    return;
-  }
-
-  const profileId = userProfile.financialProfileId;
-
-  // Find all years with budget data for this profile
-  const budgetDataForProfile = BudgetFormInput.find({ profileId }).fetch();
-
-  if (!budgetDataForProfile.length) {
-    console.log(`No budget data found for profileId: ${profileId}.`);
-    return;
-  }
-
-  budgetDataForProfile.forEach((budgetData) => {
-    const year = budgetData.year;
-    const existingData = StaticFinancials.findOne({ profileId, year });
-
-    if (existingData) {
-      console.log(`StaticFinancials for year ${year} already exists. Skipping.`);
-      return;
-    }
-
-    const financialDataForYear = {
-      profileId,
-      year,
-      revenues: budgetData.revenues || 0,
-      opex: budgetData.totalExpenses || 0,
-      netIncome: (budgetData.revenues || 0) - (budgetData.totalExpenses || 0),
-      incrementalFringeBenefits: {
-        admin: budgetData.fringeBenefitsAdmin || 0,
-        mgmtStaff: budgetData.fringeBenefitsStaff || 0,
-        mgmt: budgetData.fringeBenefitsManagement || 0,
-      },
-      owner: data.owner,
-    };
-
-    console.log(`Adding StaticFinancials for year ${year} (${data.owner})`);
-    StaticFinancials.define(financialDataForYear);
-  });
-}
-
-if (StaticFinancials.count() === 0) {
-  if (Meteor.settings.defaultFinancialData) {
-    console.log('Creating default Financial data.');
-    Meteor.settings.defaultFinancialData.forEach(data => addFinancialData(data));
-  }
+  console.log('Initializing default BudgetFormInput data...');
+  Meteor.settings.defaultBudgetFormInput.forEach(addBudgetFormInputData);
 }
 
 function addBalanceSheetData(data) {
   const userProfile = global.userProfiles[data.owner];
   if (!userProfile || !userProfile.financialProfileId) {
-    console.log(`No financial profile found for owner: ${data.owner}. Skipping this entry.`);
+    console.warn(`No financial profile found for owner: ${data.owner}. Skipping.`);
     return;
   }
-
-  const dataWithProfileId = { ...data, profileId: userProfile.financialProfileId };
-
-  console.log(`Adding Balance Sheet Data for Year: ${data.year} (${data.owner})`);
-  BalanceSheetInputs.define(dataWithProfileId);
+  BalanceSheetInputs.define({ ...data, profileId: userProfile.financialProfileId });
 }
 
 if (BalanceSheetInputs.count() === 0 && Meteor.settings.defaultBalanceSheetData) {
-  console.log('Creating default BalanceSheetInputs data.');
-  Meteor.settings.defaultBalanceSheetData.forEach(data => addBalanceSheetData(data));
+  console.log('Initializing default BalanceSheetInputs data...');
+  Meteor.settings.defaultBalanceSheetData.forEach(addBalanceSheetData);
 }
 
 function addFinancialStatementData(data) {
   const userProfile = global.userProfiles[data.owner];
   if (!userProfile || !userProfile.financialProfileId) {
-    console.log(`No financial profile found for owner: ${data.owner}. Skipping this entry.`);
+    console.warn(`No financial profile found for owner: ${data.owner}. Skipping.`);
     return;
   }
-
-  const dataWithProfileId = { ...data, profileId: userProfile.financialProfileId };
-
-  console.log(`Adding Financial Statement Data for Year: ${data.year} (${data.owner})`);
-  FinancialStatementInput.define(dataWithProfileId);
+  FinancialStatementInput.define({ ...data, profileId: userProfile.financialProfileId });
 }
 
 if (FinancialStatementInput.count() === 0 && Meteor.settings.defaultFinancialStatementData) {
-  console.log('Creating default FinancialStatementInput data.');
-  Meteor.settings.defaultFinancialStatementData.forEach(data => addFinancialStatementData(data));
-}
-
-function addStaticFinancialsData(profileId, owner) {
-  const years = [2021, 2022, 2023, 2024];
-  years.forEach((year) => {
-    if (!StaticFinancials.findOne({ profileId, year })) {
-      console.log(`  Initializing Static Financials for profile: ${profileId}, year: ${year}`);
-      StaticFinancials.define({
-        profileId,
-        year,
-        revenues: 0,
-        opex: 0,
-        netIncome: 0,
-        cashFlow: { inflow: 0, outflow: 0, net: 0 },
-        incrementalFringeBenefits: { admin: 0, mgmtStaff: 0, mgmt: 0 },
-        owner,
-      });
-    } else {
-      console.log(`  Static Financials already exist for profile: ${profileId}, year: ${year}`);
-    }
-  });
-}
-
-if (StaticFinancials.count() === 0) {
-  Object.keys(global.userProfiles).forEach((email) => {
-    const { financialProfileId } = global.userProfiles[email];
-    addStaticFinancialsData(financialProfileId, email);
-  });
+  console.log('Initializing default FinancialStatementInput data...');
+  Meteor.settings.defaultFinancialStatementData.forEach(addFinancialStatementData);
 }

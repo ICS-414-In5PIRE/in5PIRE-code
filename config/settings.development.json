@@ -49,6 +49,7 @@
       "owner": "john@foo.com"
     }
   ],
+
   "defaultStaticFinancials": [
     {
       "year": 2021,
@@ -78,6 +79,7 @@
       "owner": "john@foo.com"
     }
   ],
+
   "defaultBudgetFormInput": [
     {
       "year": 2021,

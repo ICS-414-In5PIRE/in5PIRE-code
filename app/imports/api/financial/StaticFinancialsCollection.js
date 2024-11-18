@@ -46,6 +46,25 @@ class StaticFinancialsCollection extends BaseCollection {
     }));
   }
 
+  /**
+   * Defines a new static financial record.
+   * @param customerName - Name of the customer.
+   * @param year - Fiscal year.
+   * @param assets - Total assets.
+   * @param liabilities - Total liabilities.
+   * @param netPosition - Net financial position.
+   * @param cashOnHand - Available cash.
+   * @param investment - Investments made.
+   * @param liquidity - Liquidity of assets.
+   * @param debt - Total debt.
+   * @param revenues - Total revenues.
+   * @param opex - Operational expenses.
+   * @param netIncome - Net income.
+   * @param cashFlow - Cash flow breakdown.
+   * @param incrementalFringeBenefits - Breakdown of fringe benefits.
+   * @param owner - Owner of the record.
+   * @returns {String} - The docID of the newly inserted record.
+   */
   define({
     customerName = '',
     profileId,
@@ -86,6 +105,24 @@ class StaticFinancialsCollection extends BaseCollection {
     return docID;
   }
 
+  /**
+   * Updates an existing static financial record.
+   * @param docID - The ID of the document to update.
+   * @param customerName - The updated customer name (optional).
+   * @param year - The updated year (optional).
+   * @param assets - The updated assets (optional).
+   * @param liabilities - The updated liabilities (optional).
+   * @param netPosition - The updated net position (optional).
+   * @param cashOnHand - The updated cash on hand (optional).
+   * @param investment - The updated investments (optional).
+   * @param liquidity - The updated liquidity (optional).
+   * @param debt - The updated debt (optional).
+   * @param revenues - The updated revenues (optional).
+   * @param opex - The updated operational expenses (optional).
+   * @param netIncome - The updated net income (optional).
+   * @param cashFlow - The updated cash flow (optional).
+   * @param incrementalFringeBenefits - The updated fringe benefits (optional).
+   */
   update(docID, updateData) {
     const cleanedUpdateData = { ...updateData };
 

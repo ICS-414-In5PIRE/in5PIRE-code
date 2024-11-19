@@ -969,6 +969,43 @@
       }
   ],
 
+  "defaultInvestmentPercentages": [
+    {
+      "targetAllocationTraditionalGlobalEquity": 0.4,
+      "compoundReturnTraditionalGlobalEquity": 0.0895,
+      "standardDeviationTraditionalGlobalEquity": 0.184,
+
+      "targetAllocationTraditionalFixedIncome": 0.17,
+      "compoundReturnTraditionalFixedIncome": 0.04,
+      "standardDeviationTraditionalFixedIncome": 0.055,
+
+      "targetAllocationTraditionalRealAssets": 0.05,
+      "compoundReturnTraditionalRealAssets": 0.04,
+      "standardDeviationTraditionalRealAssets": 0.055,
+
+      "targetAllocationHedgeFunds": 0.12,
+      "compoundReturnHedgeFunds": 0.058,
+      "standardDeviationHedgeFunds": 0.058,
+
+      "targetAllocationPrivateMarkets": 0.18,
+      "compoundReturnPrivateMarkets": 0.108,
+      "standardDeviationPrivateMarkets": 0.225,
+
+      "targetAllocationEnhancedLiquidity": 0.03,
+      "compoundReturnEnhancedLiquidity": 0.031,
+      "standardDeviationEnhancedLiquidity": 0.025,
+
+      "targetAllocationHawaiiDirectInvestments": 0.05,
+      "compoundReturnHawaiiDirectInvestments": 0.036,
+      "standardDeviationHawaiiDirectInvestments": 0.055,
+
+      "totalTargetAllocation": 1,
+      "overallCompoundReturn": 0.0748,
+      "overallStandardDeviation": 0.1442
+    }
+  ],
+
+
 
   "MAIL_URL": "smtp://localhost:1025",
 

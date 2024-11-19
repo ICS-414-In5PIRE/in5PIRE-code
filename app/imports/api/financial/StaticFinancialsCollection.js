@@ -69,39 +69,62 @@ class StaticFinancialsCollection extends BaseCollection {
     customerName = '',
     profileId,
     year,
-    assets = 0,
-    liabilities = 0,
-    netPosition = 0,
-    cashOnHand = 0,
-    investment = 0,
-    liquidity = 0,
-    debt = 0,
-    revenues = 0,
-    opex = 0,
-    netIncome = 0,
-    cashFlow = { inflow: 0, outflow: 0, net: 0 },
-    incrementalFringeBenefits = { admin: 0, mgmtStaff: 0, mgmt: 0 },
+    assets,
+    liabilities,
+    netPosition,
+    cashOnHand,
+    investment,
+    debt,
+    revenues,
+    opex,
+    cashFlow,
+    incrementalFringeBenefits,
     owner,
   }) {
-    console.log(`Defining financial data for ${profileId}, year ${year}`);
-    const docID = this._collection.insert({
-      customerName,
-      profileId,
-      year,
-      assets,
-      liabilities,
-      netPosition,
-      cashOnHand,
-      investment,
-      liquidity,
-      debt,
-      revenues,
-      opex,
-      netIncome,
-      cashFlow,
-      incrementalFringeBenefits,
-      owner,
-    });
+    // Fetch the existing record by profileId and year, if it exists
+    const existingRecord = this._collection.findOne({ profileId, year });
+
+    // Merge new data with existing data
+    const mergedData = {
+      customerName: customerName ?? existingRecord?.customerName ?? '',
+      profileId: profileId ?? existingRecord?.profileId,
+      year: year ?? existingRecord?.year,
+      assets: assets ?? existingRecord?.assets,
+      liabilities: liabilities ?? existingRecord?.liabilities,
+      netPosition: netPosition ?? existingRecord?.netPosition,
+      cashOnHand: cashOnHand ?? existingRecord?.cashOnHand ?? 0,
+      investment: investment ?? existingRecord?.investment ?? 0,
+      debt: debt ?? existingRecord?.debt,
+      revenues: revenues ?? existingRecord?.revenues ?? 0,
+      opex: opex ?? existingRecord?.opex ?? 0,
+      cashFlow: {
+        inflow: cashFlow?.inflow ?? existingRecord?.cashFlow?.inflow ?? 0,
+        outflow: cashFlow?.outflow ?? existingRecord?.cashFlow?.outflow ?? 0,
+        net: cashFlow?.net ?? existingRecord?.cashFlow?.net ?? 0,
+      },
+      incrementalFringeBenefits: {
+        admin: incrementalFringeBenefits?.admin ?? existingRecord?.incrementalFringeBenefits?.admin ?? 0,
+        mgmtStaff: incrementalFringeBenefits?.mgmtStaff ?? existingRecord?.incrementalFringeBenefits?.mgmtStaff ?? 0,
+        mgmt: incrementalFringeBenefits?.mgmt ?? existingRecord?.incrementalFringeBenefits?.mgmt ?? 0,
+        net: incrementalFringeBenefits?.net ?? existingRecord?.incrementalFringeBenefits?.net ?? 0,
+      },
+      owner: owner ?? existingRecord?.owner,
+    };
+
+    // Calculate derived fields based on the merged data
+    const liquidity = parseFloat(mergedData.cashOnHand) + parseFloat(mergedData.investment);
+    const netIncome = parseFloat(mergedData.revenues) - parseFloat(mergedData.opex);
+
+    // Add the derived fields to the merged data
+    mergedData.liquidity = liquidity;
+    mergedData.netIncome = netIncome;
+
+    // Perform the insert or update operation
+    if (existingRecord) {
+      this._collection.update({ profileId, year }, { $set: mergedData });
+      return existingRecord._id;
+    }
+    const docID = this._collection.insert(mergedData);
     return docID;
   }
 

@@ -19,7 +19,7 @@ const ProfileBalanceSheetOverview = () => {
 
   useEffect(() => {
     // Subscribe to balance sheet data for the given profileId
-    const subscription = Meteor.subscribe('balanceSheet', profileId);
+    const subscription = Meteor.subscribe('BalanceSheet', profileId);
 
     // Set up a Tracker to monitor the subscription and collection
     const tracker = Tracker.autorun(() => {

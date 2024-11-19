@@ -19,7 +19,7 @@ const ProfileBudgetFormOverview = () => {
   };
 
   useEffect(() => {
-    const subscription = Meteor.subscribe('budgetform', profileId);
+    const subscription = Meteor.subscribe('BudgetForm', profileId);
 
     const tracker = Tracker.autorun(() => {
       const ready = subscription.ready();

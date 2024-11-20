@@ -91,19 +91,6 @@ if (FinancialStatementInput.count() === 0 && Meteor.settings.defaultFinancialSta
   Meteor.settings.defaultFinancialStatementData.forEach(addFinancialStatementData);
 }
 
-// function addInvestmentStaticPercentages(data) {
-//   const userProfile = global.userProfiles[data.owner];
-//   if (!userProfile || !userProfile.financialProfileId) {
-//     console.warn(`No financial profile found for owner: ${data.owner}. Skipping.`);
-//     return;
-//   }
-//   InvestmentStaticPercentages.define({ ...data, profileId: userProfile.financialProfileId });
-// }
-//
-// if (InvestmentStaticPercentages.count() === 0 && Meteor.settings.defaultFinancialStatementData) {
-//   console.log('Initializing default Investment Static Percentages data...');
-//   Meteor.settings.defaultInvestmentPercentages.forEach(addInvestmentStaticPercentages);
-// }
 function addInvestmentStaticPercentages(data) {
   // Check if a record with the same targetAllocation already exists to avoid duplicates
   const existingRecord = InvestmentStaticPercentages.findOne({

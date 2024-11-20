@@ -6,6 +6,7 @@ import { StaticFinancials } from '../../api/financial/StaticFinancialsCollection
 import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputCollection';
 import { BudgetFormInput } from '../../api/BudgetFormInput/BudgetFormInputCollection';
 import { FinancialStatementInput } from '../../api/FinancialStatementInput/FinancialStatementInputCollection';
+import { InvestmentStaticPercentages } from '../../api/Investment/InvestmentStaticPercentagesCollection';
 // Call publish for all the collections.
 MATPCollections.collections.forEach(c => c.publish());
 
@@ -92,4 +93,8 @@ Meteor.publish('defaultFinancialStatementData', function publishBudgetForm(profi
   }
 
   return FinancialStatementInput.find({ profileId });
+});
+
+Meteor.publish('investmentStaticPercentages', function publishInvestmentStaticPercentages() {
+  return InvestmentStaticPercentages.find();
 });

@@ -5,6 +5,7 @@ import { BudgetFormInput } from '../../api/BudgetFormInput/BudgetFormInputCollec
 import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputCollection';
 import { FinancialStatementInput } from '../../api/FinancialStatementInput/FinancialStatementInputCollection';
 import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection';
+import { InvestmentStaticPercentages } from '../../api/Investment/InvestmentStaticPercentagesCollection';
 
 /* eslint-disable no-console */
 
@@ -88,4 +89,34 @@ function addFinancialStatementData(data) {
 if (FinancialStatementInput.count() === 0 && Meteor.settings.defaultFinancialStatementData) {
   console.log('Initializing default FinancialStatementInput data...');
   Meteor.settings.defaultFinancialStatementData.forEach(addFinancialStatementData);
+}
+
+function addInvestmentStaticPercentages(data) {
+  // Check if a record with the same targetAllocation already exists to avoid duplicates
+  const existingRecord = InvestmentStaticPercentages.findOne({
+    targetAllocationTraditionalGlobalEquity: data.targetAllocationTraditionalGlobalEquity,
+  });
+
+  if (existingRecord) {
+    console.warn('Skipping duplicate static percentage entry:', data);
+    return;
+  }
+
+  // Insert the new investment static percentage record
+  InvestmentStaticPercentages.define(data);
+}
+
+// Initialize default data if the collection is empty and settings are available
+if (
+  InvestmentStaticPercentages.count() === 0 &&
+  Meteor.settings?.defaultInvestmentPercentages?.length > 0
+) {
+  console.log('Initializing default Investment Static Percentages data...');
+  Meteor.settings.defaultInvestmentPercentages.forEach((data) => {
+    try {
+      addInvestmentStaticPercentages(data);
+    } catch (err) {
+      console.error('Error adding investment static percentages:', err);
+    }
+  });
 }

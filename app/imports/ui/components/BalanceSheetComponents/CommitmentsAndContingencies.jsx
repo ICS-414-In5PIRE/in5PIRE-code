@@ -7,51 +7,47 @@ import PropTypes from 'prop-types';
  */
 const CommitmentsAndContingencies = ({ formData, handleChange }) => (
   <>
-    <Form.Group widths="equal">
-      <Form.Input
-        label="Invested in capital assets, net of related debt"
-        name="investedInCapitalAssets"
-        value={formData.investedInCapitalAssets ?? ''}
-        onChange={handleChange}
-        type="number"
-      />
-      <Form.Input
-        label="Restricted - federal funds"
-        name="restrictedFederalFunds"
-        value={formData.restrictedFederalFunds ?? ''}
-        onChange={handleChange}
-        type="number"
-      />
-      <Form.Input
-        label="Unrestricted"
-        name="unrestricted"
-        value={formData.unrestricted ?? ''}
-        onChange={handleChange}
-        type="number"
-      />
-    </Form.Group>
-    <Form.Group widths="equal">
-      <Form.Input
-        className="dotted-input"
-        label="Total net position"
-        name="totalNetPosition"
-        value={formData.totalNetPosition ?? ''}
-        onChange={handleChange}
-        type="number"
-        readOnly
-        icon="calculator"
-      />
-      <Form.Input
-        className="dotted-input"
-        label="Total Liabilities, Deferred Inflows of Resources and Net Position"
-        name="totalLiabilitiesDeferredNetPosition"
-        value={formData.totalLiabilitiesDeferredNetPosition ?? ''}
-        onChange={handleChange}
-        type="number"
-        readOnly
-        icon="calculator"
-      />
-    </Form.Group>
+    <Form.Input
+      label="Invested in capital assets, net of related debt"
+      name="investedInCapitalAssets"
+      value={formData.investedInCapitalAssets ?? ''}
+      onChange={handleChange}
+      type="number"
+    />
+    <Form.Input
+      label="Restricted - federal funds"
+      name="restrictedFederalFunds"
+      value={formData.restrictedFederalFunds ?? ''}
+      onChange={handleChange}
+      type="number"
+    />
+    <Form.Input
+      label="Unrestricted"
+      name="unrestricted"
+      value={formData.unrestricted ?? ''}
+      onChange={handleChange}
+      type="number"
+    />
+    <Form.Input
+      className="dotted-input"
+      label="Total net position"
+      name="totalNetPosition"
+      value={formData.totalNetPosition ?? ''}
+      onChange={handleChange}
+      type="number"
+      readOnly
+      icon="calculator"
+    />
+    <Form.Input
+      className="dotted-input"
+      label="Total Liabilities, Deferred Inflows of Resources and Net Position"
+      name="totalLiabilitiesDeferredNetPosition"
+      value={formData.totalLiabilitiesDeferredNetPosition ?? ''}
+      onChange={handleChange}
+      type="number"
+      readOnly
+      icon="calculator"
+    />
   </>
 );
 

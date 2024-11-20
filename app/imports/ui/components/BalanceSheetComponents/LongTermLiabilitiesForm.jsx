@@ -10,114 +10,106 @@ import PropTypes from 'prop-types';
  */
 const LongTermLiabilitiesForm = ({ formData, netWording, handleChange }) => (
   <>
-    <Form.Group widths="equal">
-      <Form.Input
-        label="Accrued Vacation"
-        name={netWording === 'Long-term liabilities - due within one year' ? 'accruedVacationDueWithinOneYear' : 'accruedVacationDueAfterOneYear'}
-        value={netWording === 'Long-term liabilities - due within one year' ? formData.accruedVacationDueWithinOneYear ?? '' : formData.accruedVacationDueAfterOneYear ?? ''}
-        onChange={handleChange}
-        type="number"
-      />
-      <Form.Input
-        label="Workers' Compensation"
-        name={netWording === 'Long-term liabilities - due within one year' ? 'workersCompensationDueWithinOneYear' : 'workersCompensationDueAfterOneYear'}
-        value={netWording === 'Long-term liabilities - due within one year' ? formData.workersCompensationDueWithinOneYear ?? '' : formData.workersCompensationDueAfterOneYear ?? ''}
-        onChange={handleChange}
-        type="number"
-      />
-      <Form.Input
-        label="Accrued Management Retirement Plan"
-        name={netWording === 'Long-term liabilities - due within one year' ? 'accruedRetirementPlanDueWithinOneYear' : 'accruedRetirementPlanDueAfterOneYear'}
-        value={netWording === 'Long-term liabilities - due within one year' ? formData.accruedRetirementPlanDueWithinOneYear ?? '' : formData.accruedRetirementPlanDueAfterOneYear ?? ''}
-        onChange={handleChange}
-        type="number"
-      />
-      <Form.Input
-        label="Accrued Lease Guaranty Obligations"
-        name={netWording === 'Long-term liabilities - due within one year' ? 'accruedLeaseGuarantyDueWithinOneYear' : 'accruedLeaseGuarantyDueAfterOneYear'}
-        value={netWording === 'Long-term liabilities - due within one year' ? formData.accruedLeaseGuarantyDueWithinOneYear ?? '' : formData.accruedLeaseGuarantyDueAfterOneYear ?? ''}
-        onChange={handleChange}
-        type="number"
-      />
-    </Form.Group>
+    <Form.Input
+      label="Accrued Vacation"
+      name={netWording === 'Long-term liabilities - due within one year' ? 'accruedVacationDueWithinOneYear' : 'accruedVacationDueAfterOneYear'}
+      value={netWording === 'Long-term liabilities - due within one year' ? formData.accruedVacationDueWithinOneYear ?? '' : formData.accruedVacationDueAfterOneYear ?? ''}
+      onChange={handleChange}
+      type="number"
+    />
+    <Form.Input
+      label="Workers' Compensation"
+      name={netWording === 'Long-term liabilities - due within one year' ? 'workersCompensationDueWithinOneYear' : 'workersCompensationDueAfterOneYear'}
+      value={netWording === 'Long-term liabilities - due within one year' ? formData.workersCompensationDueWithinOneYear ?? '' : formData.workersCompensationDueAfterOneYear ?? ''}
+      onChange={handleChange}
+      type="number"
+    />
+    <Form.Input
+      label="Accrued Management Retirement Plan"
+      name={netWording === 'Long-term liabilities - due within one year' ? 'accruedRetirementPlanDueWithinOneYear' : 'accruedRetirementPlanDueAfterOneYear'}
+      value={netWording === 'Long-term liabilities - due within one year' ? formData.accruedRetirementPlanDueWithinOneYear ?? '' : formData.accruedRetirementPlanDueAfterOneYear ?? ''}
+      onChange={handleChange}
+      type="number"
+    />
+    <Form.Input
+      label="Accrued Lease Guaranty Obligations"
+      name={netWording === 'Long-term liabilities - due within one year' ? 'accruedLeaseGuarantyDueWithinOneYear' : 'accruedLeaseGuarantyDueAfterOneYear'}
+      value={netWording === 'Long-term liabilities - due within one year' ? formData.accruedLeaseGuarantyDueWithinOneYear ?? '' : formData.accruedLeaseGuarantyDueAfterOneYear ?? ''}
+      onChange={handleChange}
+      type="number"
+    />
 
-    <Form.Group widths="equal">
-      <Form.Input
-        label="Capital Lease Obligations"
-        name={netWording === 'Long-term liabilities - due within one year' ? 'capitalLeaseObligationsDueWithinOneYear' : 'capitalLeaseObligationsDueAfterOneYear'}
-        value={netWording === 'Long-term liabilities - due within one year' ? formData.capitalLeaseObligationsDueWithinOneYear ?? '' : formData.capitalLeaseObligationsDueAfterOneYear ?? ''}
-        onChange={handleChange}
-        type="number"
-      />
-      <Form.Input
-        label="Notes payable - Building A acquisition"
-        name={netWording === 'Long-term liabilities - due within one year' ? 'notesPayableBuildingADueWithinOneYear' : 'notesPayableBuildingADueAfterOneYear'}
-        value={netWording === 'Long-term liabilities - due within one year' ? formData.notesPayableBuildingADueWithinOneYear ?? '' : formData.notesPayableBuildingADueAfterOneYear ?? ''}
-        onChange={handleChange}
-        type="number"
-      />
-      <Form.Input
-        label="Net Pension Liability"
-        name={netWording === 'Long-term liabilities - due within one year' ? 'netPensionLiabilityDueWithinOneYear' : 'netPensionLiabilityDueAfterOneYear'}
-        value={netWording === 'Long-term liabilities - due within one year' ? formData.netPensionLiabilityDueWithinOneYear ?? '' : formData.netPensionLiabilityDueAfterOneYear ?? ''}
-        onChange={handleChange}
-        type="number"
-      />
-      <Form.Input
-        label="Net OPEB Liability"
-        name={netWording === 'Long-term liabilities - due within one year' ? 'netOPEBLiabilityDueWithinOneYear' : 'netOPEBLiabilityDueAfterOneYear'}
-        value={netWording === 'Long-term liabilities - due within one year' ? formData.netOPEBLiabilityDueWithinOneYear ?? '' : formData.netOPEBLiabilityDueAfterOneYear ?? ''}
-        onChange={handleChange}
-        type="number"
-      />
-    </Form.Group>
+    <Form.Input
+      label="Capital Lease Obligations"
+      name={netWording === 'Long-term liabilities - due within one year' ? 'capitalLeaseObligationsDueWithinOneYear' : 'capitalLeaseObligationsDueAfterOneYear'}
+      value={netWording === 'Long-term liabilities - due within one year' ? formData.capitalLeaseObligationsDueWithinOneYear ?? '' : formData.capitalLeaseObligationsDueAfterOneYear ?? ''}
+      onChange={handleChange}
+      type="number"
+    />
+    <Form.Input
+      label="Notes payable - Building A acquisition"
+      name={netWording === 'Long-term liabilities - due within one year' ? 'notesPayableBuildingADueWithinOneYear' : 'notesPayableBuildingADueAfterOneYear'}
+      value={netWording === 'Long-term liabilities - due within one year' ? formData.notesPayableBuildingADueWithinOneYear ?? '' : formData.notesPayableBuildingADueAfterOneYear ?? ''}
+      onChange={handleChange}
+      type="number"
+    />
+    <Form.Input
+      label="Net Pension Liability"
+      name={netWording === 'Long-term liabilities - due within one year' ? 'netPensionLiabilityDueWithinOneYear' : 'netPensionLiabilityDueAfterOneYear'}
+      value={netWording === 'Long-term liabilities - due within one year' ? formData.netPensionLiabilityDueWithinOneYear ?? '' : formData.netPensionLiabilityDueAfterOneYear ?? ''}
+      onChange={handleChange}
+      type="number"
+    />
+    <Form.Input
+      label="Net OPEB Liability"
+      name={netWording === 'Long-term liabilities - due within one year' ? 'netOPEBLiabilityDueWithinOneYear' : 'netOPEBLiabilityDueAfterOneYear'}
+      value={netWording === 'Long-term liabilities - due within one year' ? formData.netOPEBLiabilityDueWithinOneYear ?? '' : formData.netOPEBLiabilityDueAfterOneYear ?? ''}
+      onChange={handleChange}
+      type="number"
+    />
 
-    <Form.Group widths="equal">
-      <Form.Input
-        label="Line of Credit - Building A"
-        name={netWording === 'Long-term liabilities - due within one year' ? 'lineOfCreditBuildingADueWithinOneYear' : 'lineOfCreditBuildingADueAfterOneYear'}
-        value={netWording === 'Long-term liabilities - due within one year' ? formData.lineOfCreditBuildingADueWithinOneYear ?? '' : formData.lineOfCreditBuildingADueAfterOneYear ?? ''}
-        onChange={handleChange}
-        type="number"
-      />
-      <Form.Input
-        label="Line of Credit - Building B"
-        name={netWording === 'Long-term liabilities - due within one year' ? 'lineOfCreditBuildingBDueWithinOneYear' : 'lineOfCreditBuildingBDueAfterOneYear'}
-        value={netWording === 'Long-term liabilities - due within one year' ? formData.lineOfCreditBuildingBDueWithinOneYear ?? '' : formData.lineOfCreditBuildingBDueAfterOneYear ?? ''}
-        onChange={handleChange}
-        type="number"
-      />
-      <Form.Input
-        className="dotted-input"
-        label="Line of Credit"
-        name={netWording === 'Long-term liabilities - due within one year' ? 'totalLineCreditWithinOneYear' : 'totalLineCreditAfterOneYear'}
-        value={netWording === 'Long-term liabilities - due within one year' ? formData.totalLineCreditWithinOneYear ?? '' : formData.totalLineCreditAfterOneYear ?? ''}
-        onChange={handleChange}
-        readOnly
-        icon="calculator"
-        type="number"
-      />
-      <Form.Input
-        label="Debt service"
-        name={netWording === 'Long-term liabilities - due within one year' ? 'debtServiceDueWithinOneYear' : 'debtServiceDueAfterOneYear'}
-        value={netWording === 'Long-term liabilities - due within one year' ? formData.debtServiceDueWithinOneYear ?? '' : formData.debtServiceDueAfterOneYear ?? ''}
-        onChange={handleChange}
-        type="number"
-      />
-    </Form.Group>
+    <Form.Input
+      label="Line of Credit - Building A"
+      name={netWording === 'Long-term liabilities - due within one year' ? 'lineOfCreditBuildingADueWithinOneYear' : 'lineOfCreditBuildingADueAfterOneYear'}
+      value={netWording === 'Long-term liabilities - due within one year' ? formData.lineOfCreditBuildingADueWithinOneYear ?? '' : formData.lineOfCreditBuildingADueAfterOneYear ?? ''}
+      onChange={handleChange}
+      type="number"
+    />
+    <Form.Input
+      label="Line of Credit - Building B"
+      name={netWording === 'Long-term liabilities - due within one year' ? 'lineOfCreditBuildingBDueWithinOneYear' : 'lineOfCreditBuildingBDueAfterOneYear'}
+      value={netWording === 'Long-term liabilities - due within one year' ? formData.lineOfCreditBuildingBDueWithinOneYear ?? '' : formData.lineOfCreditBuildingBDueAfterOneYear ?? ''}
+      onChange={handleChange}
+      type="number"
+    />
+    <Form.Input
+      className="dotted-input"
+      label="Line of Credit"
+      name={netWording === 'Long-term liabilities - due within one year' ? 'totalLineCreditWithinOneYear' : 'totalLineCreditAfterOneYear'}
+      value={netWording === 'Long-term liabilities - due within one year' ? formData.totalLineCreditWithinOneYear ?? '' : formData.totalLineCreditAfterOneYear ?? ''}
+      onChange={handleChange}
+      readOnly
+      icon="calculator"
+      type="number"
+    />
+    <Form.Input
+      label="Debt service"
+      name={netWording === 'Long-term liabilities - due within one year' ? 'debtServiceDueWithinOneYear' : 'debtServiceDueAfterOneYear'}
+      value={netWording === 'Long-term liabilities - due within one year' ? formData.debtServiceDueWithinOneYear ?? '' : formData.debtServiceDueAfterOneYear ?? ''}
+      onChange={handleChange}
+      type="number"
+    />
 
-    <Form.Group widths={4} className="total-fields">
-      <Form.Input
-        className="dotted-input"
-        label={netWording}
-        name={netWording === 'Long-term liabilities - due within one year' ? 'netLiabilitiesDueWithinOneYear' : 'netLiabilitiesDueAfterOneYear'}
-        value={netWording === 'Long-term liabilities - due within one year' ? formData.netLiabilitiesDueWithinOneYear ?? '' : formData.netLiabilitiesDueAfterOneYear ?? ''}
-        onChange={handleChange}
-        type="number"
-        readOnly
-        icon="calculator"
-      />
-    </Form.Group>
+    <Form.Input
+      className="dotted-input"
+      label={<span style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{netWording}</span>}
+      name={netWording === 'Long-term liabilities - due within one year' ? 'netLiabilitiesDueWithinOneYear' : 'netLiabilitiesDueAfterOneYear'}
+      value={netWording === 'Long-term liabilities - due within one year' ? formData.netLiabilitiesDueWithinOneYear ?? '' : formData.netLiabilitiesDueAfterOneYear ?? ''}
+      onChange={handleChange}
+      type="number"
+      readOnly
+      icon="calculator"
+    />
   </>
 );
 

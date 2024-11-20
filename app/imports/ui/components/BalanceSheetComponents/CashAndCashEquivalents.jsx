@@ -6,78 +6,79 @@ import PropTypes from 'prop-types';
  * Component for Cash and Cash Equivalents form for Balance Input Sheet
  */
 const CashAndCashEquivalents = ({ formData, handleChange }) => (
-  <Form.Group widths="equal">
+  <Form>
     {/* Petty Cash Input with Tooltip */}
-    <Form.Input
-      label={
-        (
-          <>
-            Petty Cash{' '}
-            <Popup
-              trigger={<Icon name="info circle" />}
-              content="Cash kept on hand for small expenses, e.g., $100."
-              inverted
-            />
-          </>
-        )
-      }
-      name="pettyCash"
-      value={formData.pettyCash ?? ''}
-      onChange={handleChange}
-      type="number"
-    />
+    <Form.Field>
+      <label htmlFor="pettyCash">
+        Petty Cash{' '}
+        <Popup
+          trigger={<Icon name="info circle" />}
+          content="Cash kept on hand for small expenses, e.g., $100."
+          inverted
+        />
+      </label>
+      <Form.Input
+        id="pettyCash"
+        name="pettyCash"
+        value={formData.pettyCash ?? ''}
+        onChange={handleChange}
+        type="number"
+      />
+    </Form.Field>
 
-    <Form.Input
-      label={
-        (
-          <>
-            Cash{' '}
-            <Popup
-              trigger={<Icon name="info circle" />}
-              content="Money held in physical form, e.g., $500."
-              inverted
-            />
-          </>
-        )
-      }
-      name="cash"
-      value={formData.cash ?? ''}
-      onChange={handleChange}
-      type="number"
-    />
+    {/* Cash Input with Tooltip */}
+    <Form.Field>
+      <label htmlFor="cash">
+        Cash{' '}
+        <Popup
+          trigger={<Icon name="info circle" />}
+          content="Money held in physical form, e.g., $500."
+          inverted
+        />
+      </label>
+      <Form.Input
+        id="cash"
+        name="cash"
+        value={formData.cash ?? ''}
+        onChange={handleChange}
+        type="number"
+      />
+    </Form.Field>
 
     {/* Cash in Banks Input with Tooltip */}
-    <Form.Input
-      label={
-        (
-          <>
-            Cash in Banks{' '}
-            <Popup
-              trigger={<Icon name="info circle" />}
-              content="Cash held in bank accounts, e.g., checking or savings accounts."
-              inverted
-            />
-          </>
-        )
-      }
-      name="cashInBanks"
-      value={formData.cashInBanks ?? ''}
-      onChange={handleChange}
-      type="number"
-    />
+    <Form.Field>
+      <label htmlFor="cashInBanks">
+        Cash in Banks{' '}
+        <Popup
+          trigger={<Icon name="info circle" />}
+          content="Cash held in bank accounts, e.g., checking or savings accounts."
+          inverted
+        />
+      </label>
+      <Form.Input
+        id="cashInBanks"
+        name="cashInBanks"
+        value={formData.cashInBanks ?? ''}
+        onChange={handleChange}
+        type="number"
+      />
+    </Form.Field>
 
     {/* Read-only Total with Auto-Calculation */}
-    <Form.Input
-      className="dotted-input"
-      label="Total Cash and Cash Equivalents"
-      name="totalCashAndCashEquivalents"
-      value={formData.totalCashAndCashEquivalents ?? ''}
-      onChange={handleChange}
-      type="number"
-      readOnly
-      icon="calculator"
-    />
-  </Form.Group>
+    <Form.Field>
+      <h4>Total Cash and Cash Equivalents</h4>
+      <Form.Input
+        id="totalCashAndCashEquivalents"
+        className="dotted-input"
+        name="totalCashAndCashEquivalents"
+        value={formData.totalCashAndCashEquivalents ?? ''}
+        onChange={handleChange}
+        type="number"
+        readOnly
+        icon="calculator"
+      />
+    </Form.Field>
+  </Form>
 );
 
 CashAndCashEquivalents.propTypes = {

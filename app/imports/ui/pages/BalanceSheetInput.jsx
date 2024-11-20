@@ -363,6 +363,50 @@ class BalanceSheetInput extends React.Component {
     this.setState({ records: updatedRecords });
   };
 
+  handleDelete = () => {
+    const { selectedYear } = this.state;
+    const { profileId } = this.props;
+    const collectionName = BalanceSheetInputs.getCollectionName();
+    const owner = Meteor.user()?.username;
+
+    const balanceSheetData = BalanceSheetInputs.find({
+      owner,
+      profileId,
+      year: selectedYear,
+    }).fetch();
+
+    if (balanceSheetData.length === 0) {
+      this.handleSnackBar(true, 'No record found to delete for the selected year.', true);
+      return;
+    }
+
+    const recordId = balanceSheetData[0]._id;
+
+    swal({
+      title: 'Are you sure?',
+      text: 'This action cannot be undone.',
+      icon: 'warning',
+      buttons: ['Cancel', 'Delete'],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        // Proceed with deletion
+        removeItMethod.callPromise({ collectionName, instance: recordId })
+          .then(() => {
+            this.handleSnackBar(true, 'Record has been deleted successfully!', false);
+          })
+          .catch((error) => {
+            if (error) {
+              this.handleSnackBar(true, 'Something went wrong!', true);
+            }
+          });
+      } else {
+        // Optionally handle cancellation here
+        this.handleSnackBar(true, 'Deletion canceled.', false);
+      }
+    });
+  };
+
   handleSubmit = () => {
     const { records } = this.state;
     const { profileId } = this.props;
@@ -471,6 +515,13 @@ class BalanceSheetInput extends React.Component {
               <Button primary type="submit" onClick={this.handleSubmit}>
                 Submit All
               </Button>
+              <Button color="red" onClick={this.handleDelete}>
+                Delete
+              </Button>
+
+              <Button primary onClick={this.handleViewOverview}>
+                View Overview
+              </Button>)
             </Grid.Column>
           </Grid>
         </Form>
@@ -481,6 +532,7 @@ class BalanceSheetInput extends React.Component {
 
 BalanceSheetInput.propTypes = {
   profileId: PropTypes.string.isRequired,
+  navigate: PropTypes.string.isRequired,
 };
 
 export default BalanceSheetInput;

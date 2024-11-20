@@ -8,70 +8,61 @@ import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfiles
 import { BudgetFormInput } from '../../api/BudgetFormInput/BudgetFormInputCollection';
 import { calculateProjectionValues } from '../../api/projections/BudgetProjectionUtils';
 import { BudgetProjections } from '../../api/projections/BudgetProjectionCollection';
+// import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputCollection';
+// import { FinancialStatementInput } from '../../api/FinancialStatementInput/FinancialStatementInputCollection';
+import { StaticFinancials } from '../../api/financial/StaticFinancialsCollection';
+// import { updateMethod, defineMethod } from '../../api/base/BaseCollection.methods';
+import { defineStaticFinancialsMethod, updateStaticFinancialsMethod } from '../../api/financial/StaticFinancialsCollection.methods';
 
 const verificationCodes = new Map(); // Store codes temporarily in memory
 
 Meteor.methods({
-  // Method to send the verification code to the user's email
   sendVerificationCode(email) {
     check(email, String);
 
-    // Generate a random verification code
     const code = Random.hexString(6);
-    verificationCodes.set(email, code); // Store the code with the email key
+    verificationCodes.set(email, code);
 
-    // Send the email with the verification code
     Email.send({
       to: email,
-      from: 'no-reply@example.com', // Configure sender address
+      from: 'no-reply@example.com',
       subject: 'Your Verification Code',
       text: `Your verification code is: ${code}`,
     });
   },
 
-  // Method to verify the code
   verifyCode({ email, code }) {
     check(email, String);
     check(code, String);
 
     const storedCode = verificationCodes.get(email);
     if (storedCode === code) {
-      verificationCodes.delete(email); // Remove the code after verification
-      return true; // Success, correct code entered
+      verificationCodes.delete(email);
+      return true;
     }
 
-    // Throw an error if the code is invalid
     throw new Meteor.Error('invalid-code', 'The verification code is incorrect');
   },
 
-  // Method to remove a financial profile
   'FinancialProfiles.remove'(profileId) {
     check(profileId, String);
-
-    // Ensure the user is logged in
     if (!this.userId) {
-      throw new Meteor.Error('not-authorized', 'You must be logged in to perform this action.');
+      throw new Meteor.Error('not-authorized');
     }
 
-    // Get the profile document
     const profile = FinancialProfiles.findDoc(profileId);
     if (!profile) {
-      throw new Meteor.Error('profile-not-found', 'Profile not found.');
+      throw new Meteor.Error('profile-not-found');
     }
 
-    // Get the username of the logged-in user
-    const username = Meteor.users.findOne(this.userId).username;
-
-    // Check if the user is the owner of the profile or an admin
+    const username = Meteor.user().username;
     if (profile.owner !== username && !Roles.userIsInRole(this.userId, ROLES.ADMIN)) {
-      throw new Meteor.Error('not-authorized', 'You are not authorized to delete this profile.');
+      throw new Meteor.Error('not-authorized');
     }
 
-    // Remove the profile from the collection
     FinancialProfiles._collection.remove(profileId);
   },
 
-  // Method to invite a user to a financial profile by email
   inviteUserToProfileByEmail({ profileId, email, role }) {
     check(profileId, String);
     check(email, String);
@@ -80,7 +71,6 @@ Meteor.methods({
     FinancialProfiles.inviteUserByEmail(profileId, email, role);
   },
 
-  // Method to update a user's role in a financial profile
   updateUserRoleInProfile({ profileId, userId, newRole }) {
     check(profileId, String);
     check(userId, String);
@@ -92,8 +82,9 @@ Meteor.methods({
     }
 
     const currentUserId = Meteor.userId();
-    const isOwnerOrAdmin = profile.owner === currentUserId ||
-        profile.members.some(member => member.userId === currentUserId && member.role === 'admin');
+    const isOwnerOrAdmin =
+      profile.owner === currentUserId ||
+      profile.members.some(member => member.userId === currentUserId && member.role === 'admin');
 
     if (!isOwnerOrAdmin) {
       throw new Meteor.Error('Not authorized');
@@ -117,7 +108,6 @@ Meteor.methods({
     return 'Role updated successfully';
   },
 
-  // Method to get a financial profile by its ID
   getProfile(profileId) {
     check(profileId, String);
 
@@ -129,7 +119,6 @@ Meteor.methods({
     return profile;
   },
 
-  // Method to remove a member from a financial profile
   'FinancialProfiles.removeMember'(profileId, userId) {
     check(profileId, String);
     check(userId, String);
@@ -140,81 +129,123 @@ Meteor.methods({
 
     FinancialProfiles.removeMember(profileId, userId);
   },
-  // Method to generate budget form projections for a profile
+
   generateBudgetProjections(profileId) {
     check(profileId, String);
 
     const actualData = BudgetFormInput.find({ profileId }, { sort: { year: -1 }, limit: 3 }).fetch();
-    if (actualData.length === 0) throw new Meteor.Error('No actual data found for projections.');
+    if (actualData.length === 0) {
+      throw new Meteor.Error('No actual data found for projections.');
+    }
 
-    // Define growth rates for each field
-    // 5% is a placeholder for now
     const growthRates = {
-      fivePercent: 0.05,
       revenues: 0.05,
-      generalFund: 0.05,
-      coreOperatingBudget: 0.05,
-      personnel: 0.05,
-      program: 0.05,
-      contracts: 0.05,
-      grants: 0.05,
-      travel: 0.05,
-      equipment: 0.05,
-      overhead: 0.05,
-      debtService: 0.05,
-      other: 0.05,
-      salaryAdmin: 0.05,
-      pensionAccumulationAdmin: 0.05,
-      retireeHealthInsuranceAdmin: 0.05,
-      postEmploymentBenefitsAdmin: 0.05,
-      employeesHealthFundAdmin: 0.05,
-      socialSecurityAdmin: 0.05,
-      medicareAdmin: 0.05,
-      workersCompensationAdmin: 0.05,
-      unemploymentCompensationAdmin: 0.05,
-      pensionAdministrationAdmin: 0.05,
-      salaryManagement: 0.05,
-      pensionAccumulationManagement: 0.05,
-      retireeHealthInsuranceManagement: 0.05,
-      postEmploymentBenefitsManagement: 0.05,
-      employeesHealthFundManagement: 0.05,
-      socialSecurityManagement: 0.05,
-      medicareManagement: 0.05,
-      workersCompensationManagement: 0.05,
-      unemploymentCompensationManagement: 0.05,
-      pensionAdministrationManagement: 0.05,
-      salaryStaff: 0.05,
-      pensionAccumulationStaff: 0.05,
-      retireeHealthInsuranceStaff: 0.05,
-      postEmploymentBenefitsStaff: 0.05,
-      employeesHealthFundStaff: 0.05,
-      socialSecurityStaff: 0.05,
-      medicareStaff: 0.05,
-      workersCompensationStaff: 0.05,
-      unemploymentCompensationStaff: 0.05,
-      pensionAdministrationStaff: 0.05,
-      management: 0.05,
-      supportServices: 0.05,
-      beneficiaryAdvocacy: 0.05,
+      opex: 0.05,
+      netIncome: 0.05,
     };
 
-    actualData.forEach((data) => {
+    actualData.forEach(data => {
       const { year, ...actualValues } = data;
 
-      // Calculate projections for specified forecast years
       const projectedValues = calculateProjectionValues(actualValues, growthRates);
 
-      // Insert projection data for each forecast period (4, 8, and 12 years ahead)
       [4, 8, 12].forEach((forecastPeriod, index) => {
         BudgetProjections.define({
           financialProfileId: profileId,
           year: year + forecastPeriod,
           forecastType: 'fullProjection',
           values: Object.fromEntries(
-            Object.keys(projectedValues).map((field) => [field, projectedValues[field][index]]),
+            Object.keys(projectedValues).map(field => [field, projectedValues[field][index]]),
           ),
         });
       });
     });
+  },
+
+  'staticFinancials.updateHistoricalData'({ profileId }) {
+    check(profileId, String);
+
+    const years = [2020, 2021, 2022, 2023, 2024];
+    const errors = [];
+
+    years.forEach((year) => {
+      try {
+        // Call populateFromBudget to calculate and populate specific fields
+        Meteor.call('staticFinancials.populateFromBudget', profileId, year);
+
+        // Fetch the newly populated data
+        const populatedData = StaticFinancials.findOne({ profileId, year });
+
+        // Prepare data for remaining fields that are not calculated in populateFromBudget
+        const additionalFields = {
+          assets: 0, // Placeholder for calculated field later
+          liabilities: 0,
+          netPosition: 0,
+          cashOnHand: 0,
+          investment: 0,
+          liquidity: 0,
+          debt: 0,
+          owner: Meteor.userId(),
+        };
+
+        if (populatedData) {
+          updateStaticFinancialsMethod.call({
+            updateData: {
+              docID: populatedData._id,
+              ...additionalFields,
+            },
+          });
+        } else {
+          // If for some reason populate didn't define the year, add manually
+          defineStaticFinancialsMethod.call({
+            definitionData: {
+              profileId,
+              year,
+              ...additionalFields,
+            },
+          });
+        }
+      } catch (error) {
+        errors.push(`Error processing year ${year}: ${error.message}`);
+      }
+    });
+
+    if (errors.length > 0) {
+      throw new Meteor.Error('incomplete-data', `Errors occurred: ${errors.join('; ')}`);
+    }
+
+    return 'Historical data updated and populated successfully!';
+  },
+
+  'staticFinancials.populateFromBudget'(profileId, year) {
+    check(profileId, String);
+    check(year, Number);
+
+    const budgetData = BudgetFormInput.findOne({ profileId, year });
+    if (!budgetData) {
+      throw new Meteor.Error('NoBudgetData', 'No budget data found.');
+    }
+
+    const staticFinancialsData = {
+      profileId,
+      year,
+      revenues: budgetData.revenues || 0,
+      opex: budgetData.totalExpenses || 0,
+      netIncome: (budgetData.revenues || 0) - (budgetData.totalExpenses || 0),
+      cashFlow: {
+        inflow: budgetData.revenues || 0,
+        outflow: budgetData.totalExpenses || 0,
+        net: budgetData.revenues - budgetData.totalExpenses,
+      },
+      owner: budgetData.owner || Meteor.userId(),
+    };
+
+    const existing = StaticFinancials.findOne({ profileId, year });
+
+    if (existing) {
+      updateStaticFinancialsMethod.call({ updateData: { docID: existing._id, ...staticFinancialsData } });
+    } else {
+      defineStaticFinancialsMethod.call({ definitionData: staticFinancialsData });
+    }
   },
 });

@@ -20,6 +20,7 @@ function createOrRetrieveFinancialProfile(userEmail, title) {
   if (profile) {
     return profile._id;
   }
+
   return FinancialProfiles.define({ title, type: 'Personal', owner: userEmail });
 
 }

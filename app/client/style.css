@@ -438,3 +438,9 @@ body{
     }
   }
 }
+
+#sign-out {
+  img{
+    border-radius: 10%;
+  }
+}

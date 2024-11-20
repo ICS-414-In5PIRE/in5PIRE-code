@@ -34,7 +34,7 @@ export const createChartConfig = (labels, datasets, error, leftAxisTitle, rightA
           text: rightAxisTitle,
         },
         grid: {
-          drawOnChartArea: false, // Prevent grid overlap
+          drawOnChartArea: false,
         },
       },
     },

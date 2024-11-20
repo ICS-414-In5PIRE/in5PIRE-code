@@ -23,4 +23,7 @@ export const PAGE_IDS = {
   FAQ: 'faq',
   AUDITED_FS: 'audited-fs',
   EDIT_FINANCIAL_PROFILE: 'edit-financial-profile',
+  PROFILE_BALANCE_SHEET_OVERVIEW: 'profile-balance-sheet-overview',
+  PROFILE_BUDGET_FORM_OVERVIEW: 'profile-budget-form-overview',
+  PROFILE_FINANCIAL_STATEMENT_OVERVIEW: 'profile-financial-statement-overview',
 };

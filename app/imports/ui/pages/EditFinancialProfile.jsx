@@ -121,7 +121,7 @@ const EditFinancialProfile = () => {
             style={{ fontSize: '1.1rem' }}
           >
             <FaAngleLeft size={16} className="me-2" />
-            Back to Financial Profiles
+            Back to Scenarios
           </Button>
         </Col>
       </Row>
@@ -129,7 +129,7 @@ const EditFinancialProfile = () => {
       {/* Edit Profile Information Card */}
       <Row className="justify-content-center">
         <Col xs={5}>
-          <Col className="text-center"><h2>Edit Financial Profile</h2></Col>
+          <Col className="text-center"><h2>Edit Financial Scenario</h2></Col>
           <hr />
           {formData && (
             <AutoForm ref={ref => { fRef = ref; }} schema={bridge} model={formData} onSubmit={data => submit(data, fRef)}>
@@ -139,11 +139,11 @@ const EditFinancialProfile = () => {
                   <SelectField name="type" />
                   <LongTextField name="description" />
                   <LongTextField name="image" placeholder="Enter image URL (optional)" />
-                  <SubmitField value="Update Profile" />
+                  <SubmitField value="Update Scenario" />
                   <Row>
                     <Col className="pt-1">
                       <Button variant="danger" onClick={handleDelete}>
-                        Delete Financial Profile
+                        Delete This Scenario
                       </Button>
                     </Col>
                   </Row>

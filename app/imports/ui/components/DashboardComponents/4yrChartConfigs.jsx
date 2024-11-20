@@ -1,35 +1,44 @@
 import { createChartConfig } from './CreateChartConfig';
-import { Line } from 'react-chartjs-2';
-import 'chartjs-plugin-annotation';
 
 const netPosition4yrDatasets = [
-  [
-    {
-      dataPoints: [
-        { y: [23650, 26555] }, // Error bars for the first data point
-        { y: [16000, 19500] }, // Error bars for the second data point
-        { y: [21750, 25900] }, // Error bars for the third data point
-      ],
-    },
-  ], // Error bars for the first dataset
-  'Assets', // Left y-axis title
-  'Liabilities', // Right y-axis title
-  'Net Position (4 Years)', // Chart title
+  {
+    label: 'Assets',
+    data: [369418004, 403370308, 422605819, 432669418],
+    borderColor: 'blue',
+    backgroundColor: 'rgba(0, 0, 255, 0.2)',
+    yAxisID: 'y-axis-left',
+  },
+  {
+    label: 'Liabilities',
+    data: [72700000, 69700000, 66193142, 41686285],
+    borderColor: 'red',
+    backgroundColor: 'rgba(255, 0, 0, 0.2)',
+    yAxisID: 'y-axis-right',
+  },
+  {
+    label: 'Volatility',
+    data: [367016787, 400748401, 419858881, 429857066.8],
+    borderColor: 'green',
+    backgroundColor: 'rgba(0, 255, 0, 0.2)',
+    yAxisID: 'y-axis-left',
+  },
 ];
 
 const yearsOfSolvency4yrDatasets = [
-  [
-    {
-      dataPoints: [
-        { y: [23650, 26555] }, // Error bars for the first data point
-        { y: [16000, 19500] }, // Error bars for the second data point
-        { y: [21750, 25900] }, // Error bars for the third data point
-      ],
-    },
-  ], // Error bars for the first dataset
-  'Liquidity', // Left y-axis title
-  'Opex (excluding lands)', // Right y-axis title
-  'Years of Solvency (4 Years)', // Chart title
+  {
+    label: 'Liquidity',
+    data: [369418004, 403370308, 422605819, 432669418],
+    borderColor: 'blue',
+    backgroundColor: 'rgba(0, 0, 255, 0.2)',
+    yAxisID: 'y-axis-left',
+  },
+  {
+    label: 'Opex (exclude lands)',
+    data: [35860814.66, 34998258.59, 35603263, 36014771],
+    borderColor: 'red',
+    backgroundColor: 'rgba(255, 0, 0, 0.2)',
+    yAxisID: 'y-axis-right',
+  },
 ];
 
 const demandForCapital4yrDatasets = [

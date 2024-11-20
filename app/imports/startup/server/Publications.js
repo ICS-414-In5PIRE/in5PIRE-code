@@ -3,9 +3,10 @@ import { Roles } from 'meteor/alanning:roles';
 import { check } from 'meteor/check';
 import { MATPCollections } from '../../api/matp/MATPCollections';
 import { StaticFinancials } from '../../api/financial/StaticFinancialsCollection';
-import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputsCollection';
+import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputCollection';
 import { BudgetFormInput } from '../../api/BudgetFormInput/BudgetFormInputCollection';
 import { FinancialStatementInput } from '../../api/FinancialStatementInput/FinancialStatementInputCollection';
+import { InvestmentStaticPercentages } from '../../api/Investment/InvestmentStaticPercentagesCollection';
 // Call publish for all the collections.
 MATPCollections.collections.forEach(c => c.publish());
 
@@ -28,6 +29,15 @@ Meteor.publish('staticFinancials', function publishStaticFinancials() {
   return this.ready();
 });
 
+// Publish StaticFinancials for profile-specific data
+Meteor.publish('staticFinancialsForProfile', function publishStaticFinancialsForProfile(profileId) {
+  check(profileId, String);
+  if (this.userId) {
+    return StaticFinancials.find({ profileId });
+  }
+  return this.ready();
+});
+
 // publish emails
 Meteor.publish('userEmails', function publishUserEmails() {
   if (this.userId) {
@@ -44,7 +54,7 @@ Meteor.publish('staticFinancialsAdmin', function publishStaticFinancialsAdmin() 
   return this.ready();
 });
 
-Meteor.publish('balanceSheet', function publishBalanceSheet(profileId) {
+Meteor.publish('defaultBalanceSheetData', function publishBalanceSheet(profileId) {
   if (!this.userId) {
     return this.ready();
   }
@@ -57,7 +67,7 @@ Meteor.publish('balanceSheet', function publishBalanceSheet(profileId) {
   return BalanceSheetInputs.find({ profileId });
 });
 
-Meteor.publish('budgetform', function publishBudgetForm(profileId) {
+Meteor.publish('defaultBudgetFormInput', function publishBudgetForm(profileId) {
   if (!this.userId) {
     return this.ready();
   }
@@ -71,7 +81,7 @@ Meteor.publish('budgetform', function publishBudgetForm(profileId) {
   return BudgetFormInput.find({ profileId });
 });
 
-Meteor.publish('auditedfs', function publishBudgetForm(profileId) {
+Meteor.publish('defaultFinancialStatementData', function publishBudgetForm(profileId) {
   if (!this.userId) {
     return this.ready();
   }
@@ -83,4 +93,8 @@ Meteor.publish('auditedfs', function publishBudgetForm(profileId) {
   }
 
   return FinancialStatementInput.find({ profileId });
+});
+
+Meteor.publish('investmentStaticPercentages', function publishInvestmentStaticPercentages() {
+  return InvestmentStaticPercentages.find();
 });

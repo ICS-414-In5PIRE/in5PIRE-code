@@ -88,6 +88,16 @@ const LongTermLiabilitiesForm = ({ formData, netWording, handleChange }) => (
         type="number"
       />
       <Form.Input
+        className="dotted-input"
+        label="Line of Credit"
+        name={netWording === 'Long-term liabilities - due within one year' ? 'totalLineCreditWithinOneYear' : 'totalLineCreditAfterOneYear'}
+        value={netWording === 'Long-term liabilities - due within one year' ? formData.totalLineCreditWithinOneYear ?? '' : formData.totalLineCreditAfterOneYear ?? ''}
+        onChange={handleChange}
+        readOnly
+        icon="calculator"
+        type="number"
+      />
+      <Form.Input
         label="Debt service"
         name={netWording === 'Long-term liabilities - due within one year' ? 'debtServiceDueWithinOneYear' : 'debtServiceDueAfterOneYear'}
         value={netWording === 'Long-term liabilities - due within one year' ? formData.debtServiceDueWithinOneYear ?? '' : formData.debtServiceDueAfterOneYear ?? ''}
@@ -138,6 +148,8 @@ LongTermLiabilitiesForm.propTypes = {
     lineOfCreditBuildingBDueAfterOneYear: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     debtServiceDueAfterOneYear: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     netLiabilitiesDueAfterOneYear: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    totalLineCreditWithinOneYear: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    totalLineCreditAfterOneYear: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }),
   netWording: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,

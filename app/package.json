@@ -64,7 +64,7 @@
     "lint-fix": "eslint --quiet --fix --ext .jsx --ext .js ./imports && eslint --quiet --ext .js ./tests",
     "testcafe": "testcafe chrome tests/*.testcafe.js",
     "test-unit": "cross-env TEST_BROWSER_DRIVER=puppeteer MOCHA_TIMEOUT=150000 meteor test --exclude-archs web.browser.legacy,web.cordova --no-release-check --once --driver-package meteortesting:mocha --port 3100",
-    "test-integration": "cross-env METEOR_NO_RELEASE_CHECK=1 TEST_BROWSER_DRIVER=puppeteer meteor test --full-app --once --driver-package meteortesting:mocha --port 3100",
+    "test-integration": "cross-env METEOR_NO_RELEASE_CHECK=1 TEST_BROWSER_DRIVER=puppeteer meteor test --full-app --once --driver-package meteortesting:mocha --port 3100 --settings ../config/settings.development.json",
     "test-acceptance-development": "testcafe chrome tests/*.testcafe.js",
     "test-acceptance-development-single": "testcafe chrome tests/*.testcafe.js -t \"Test that sign up and sign out work\"",
     "test-acceptance-ci": "testcafe chrome:headless tests/*.testcafe.js -q --app \"meteor npm run start\" --page-request-timeout 10000 --retry-test-pages --app-init-delay 10000",

@@ -1,65 +1,48 @@
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
 // import { check } from 'meteor/check';
-import { _ } from 'meteor/underscore';
 import { Roles } from 'meteor/alanning:roles';
 import BaseCollection from '../base/BaseCollection';
 import { ROLE } from '../role/Role';
 
 export const staticFinancialsPublications = {
-  staticFinancials: 'StaticFinancials', // For regular users
-  staticFinancialsAdmin: 'StaticFinancialsAdmin', // For admin users
+  staticFinancials: 'StaticFinancials',
+  staticFinancialsAdmin: 'StaticFinancialsAdmin',
 };
 
 class StaticFinancialsCollection extends BaseCollection {
-  // Constructor to define the schema and collection name
   constructor() {
     super('StaticFinancials', new SimpleSchema({
-      customerName: String, // Name of customer
-      year: Number, // Fiscal year
-      assets: Number, // Total assets
-      liabilities: Number, // Total liabilities
-      netPosition: Number, // Net financial position (assets - liabilities)
-      cashOnHand: Number, // Available cash
-      investment: Number, // Investments
-      liquidity: Number, // liquidity of assets
-      debt: Number, // Total debts
-      revenues: Number, // Total revenues
-      opex: Number, // Operational expenses
-      netIncome: Number, // Income after expenses
-      cashFlow: { // Define cashFlow as an object
+      customerName: { type: String, optional: true },
+      profileId: { type: String },
+      year: { type: Number },
+      assets: { type: Number, defaultValue: 0 },
+      liabilities: { type: Number, defaultValue: 0 },
+      netPosition: { type: Number, defaultValue: 0 },
+      cashOnHand: { type: Number, defaultValue: 0 },
+      investment: { type: Number, defaultValue: 0 },
+      liquidity: { type: Number, defaultValue: 0 },
+      debt: { type: Number, defaultValue: 0 },
+      revenues: { type: Number, defaultValue: 0 },
+      opex: { type: Number, defaultValue: 0 },
+      netIncome: { type: Number, defaultValue: 0 },
+      cashFlow: {
         type: Object,
-        optional: true, // Optional if it's not always required
-      },
-      'cashFlow.inflow': { // Define inflow as a sub-field of cashFlow
-        type: Number,
+        defaultValue: { inflow: 0, outflow: 0, net: 0 },
         optional: true,
       },
-      'cashFlow.outflow': { // Define outflow as a sub-field of cashFlow
-        type: Number,
-        optional: true,
-      },
-      'cashFlow.net': { // Define net as a sub-field of cashFlow
-        type: Number,
-        optional: true,
-      },
-      incrementalFringeBenefits: { // Define incrementalFringeBenefits as an object
+      'cashFlow.inflow': { type: Number, defaultValue: 0 },
+      'cashFlow.outflow': { type: Number, defaultValue: 0 },
+      'cashFlow.net': { type: Number, defaultValue: 0 },
+      incrementalFringeBenefits: {
         type: Object,
+        defaultValue: { admin: 0, mgmtStaff: 0, mgmt: 0 },
         optional: true,
       },
-      'incrementalFringeBenefits.admin': { // Define sub-fields using dot notation
-        type: Number,
-        optional: true,
-      },
-      'incrementalFringeBenefits.mgmtStaff': {
-        type: Number,
-        optional: true,
-      },
-      'incrementalFringeBenefits.mgmt': {
-        type: Number,
-        optional: true,
-      },
-      owner: String, // Owner field to associate with user
+      'incrementalFringeBenefits.admin': { type: Number, defaultValue: 0 },
+      'incrementalFringeBenefits.mgmtStaff': { type: Number, defaultValue: 0 },
+      'incrementalFringeBenefits.mgmt': { type: Number, defaultValue: 0 },
+      owner: { type: String },
     }));
   }
 
@@ -83,40 +66,65 @@ class StaticFinancialsCollection extends BaseCollection {
    * @returns {String} - The docID of the newly inserted record.
    */
   define({
-    customerName,
+    customerName = '',
+    profileId,
     year,
     assets,
     liabilities,
     netPosition,
     cashOnHand,
     investment,
-    liquidity,
     debt,
     revenues,
     opex,
-    netIncome,
     cashFlow,
     incrementalFringeBenefits,
     owner,
   }) {
-    console.log('Defining financial data:', customerName);
-    const docID = this._collection.insert({
-      customerName,
-      year,
-      assets,
-      liabilities,
-      netPosition,
-      cashOnHand,
-      investment,
-      liquidity,
-      debt,
-      revenues,
-      opex,
-      netIncome,
-      cashFlow,
-      incrementalFringeBenefits,
-      owner,
-    });
+    // Fetch the existing record by profileId and year, if it exists
+    const existingRecord = this._collection.findOne({ profileId, year });
+
+    // Merge new data with existing data
+    const mergedData = {
+      customerName: customerName ?? existingRecord?.customerName ?? '',
+      profileId: profileId ?? existingRecord?.profileId,
+      year: year ?? existingRecord?.year,
+      assets: assets ?? existingRecord?.assets,
+      liabilities: liabilities ?? existingRecord?.liabilities,
+      netPosition: netPosition ?? existingRecord?.netPosition,
+      cashOnHand: cashOnHand ?? existingRecord?.cashOnHand ?? 0,
+      investment: investment ?? existingRecord?.investment ?? 0,
+      debt: debt ?? existingRecord?.debt,
+      revenues: revenues ?? existingRecord?.revenues ?? 0,
+      opex: opex ?? existingRecord?.opex ?? 0,
+      cashFlow: {
+        inflow: cashFlow?.inflow ?? existingRecord?.cashFlow?.inflow ?? 0,
+        outflow: cashFlow?.outflow ?? existingRecord?.cashFlow?.outflow ?? 0,
+        net: cashFlow?.net ?? existingRecord?.cashFlow?.net ?? 0,
+      },
+      incrementalFringeBenefits: {
+        admin: incrementalFringeBenefits?.admin ?? existingRecord?.incrementalFringeBenefits?.admin ?? 0,
+        mgmtStaff: incrementalFringeBenefits?.mgmtStaff ?? existingRecord?.incrementalFringeBenefits?.mgmtStaff ?? 0,
+        mgmt: incrementalFringeBenefits?.mgmt ?? existingRecord?.incrementalFringeBenefits?.mgmt ?? 0,
+        net: incrementalFringeBenefits?.net ?? existingRecord?.incrementalFringeBenefits?.net ?? 0,
+      },
+      owner: owner ?? existingRecord?.owner,
+    };
+
+    // Calculate derived fields based on the merged data
+    const liquidity = parseFloat(mergedData.cashOnHand) + parseFloat(mergedData.investment);
+    const netIncome = parseFloat(mergedData.revenues) - parseFloat(mergedData.opex);
+
+    // Add the derived fields to the merged data
+    mergedData.liquidity = liquidity;
+    mergedData.netIncome = netIncome;
+
+    // Perform the insert or update operation
+    if (existingRecord) {
+      this._collection.update({ profileId, year }, { $set: mergedData });
+      return existingRecord._id;
+    }
+    const docID = this._collection.insert(mergedData);
     return docID;
   }
 
@@ -138,39 +146,19 @@ class StaticFinancialsCollection extends BaseCollection {
    * @param cashFlow - The updated cash flow (optional).
    * @param incrementalFringeBenefits - The updated fringe benefits (optional).
    */
-  update(docID, {
-    customerName,
-    year,
-    assets,
-    liabilities,
-    netPosition,
-    cashOnHand,
-    investment,
-    liquidity,
-    debt,
-    revenues,
-    opex,
-    netIncome,
-    cashFlow,
-    incrementalFringeBenefits,
-  }) {
-    const updateData = {};
-    if (customerName) updateData.customerName = customerName;
-    if (_.isNumber(year)) updateData.year = year;
-    if (_.isNumber(assets)) updateData.assets = assets;
-    if (_.isNumber(liabilities)) updateData.liabilities = liabilities;
-    if (_.isNumber(netPosition)) updateData.netPosition = netPosition;
-    if (_.isNumber(cashOnHand)) updateData.cashOnHand = cashOnHand;
-    if (_.isNumber(investment)) updateData.investment = investment;
-    if (_.isNumber(liquidity)) updateData.liquidity = liquidity;
-    if (_.isNumber(debt)) updateData.debt = debt;
-    if (_.isNumber(revenues)) updateData.revenues = revenues;
-    if (_.isNumber(opex)) updateData.opex = opex;
-    if (_.isNumber(netIncome)) updateData.netIncome = netIncome;
-    if (cashFlow) updateData.cashFlow = cashFlow;
-    if (incrementalFringeBenefits) updateData.incrementalFringeBenefits = incrementalFringeBenefits;
+  update(docID, updateData) {
+    const cleanedUpdateData = { ...updateData };
 
-    this._collection.update(docID, { $set: updateData });
+    // Ensure nested objects have default values if missing
+    if (!cleanedUpdateData.cashFlow) {
+      cleanedUpdateData.cashFlow = { inflow: 0, outflow: 0, net: 0 };
+    }
+
+    if (!cleanedUpdateData.incrementalFringeBenefits) {
+      cleanedUpdateData.incrementalFringeBenefits = { admin: 0, mgmtStaff: 0, mgmt: 0 };
+    }
+
+    this._collection.update(docID, { $set: cleanedUpdateData });
   }
 
   /**
@@ -258,13 +246,14 @@ class StaticFinancialsCollection extends BaseCollection {
   dumpOne(docID) {
     const doc = this.findDoc(docID);
     const {
-      customerName, year, assets, liabilities, netPosition, cashOnHand,
+      customerName, profileId, year, assets, liabilities, netPosition, cashOnHand,
       investment, liquidity, debt, revenues, opex, netIncome, cashFlow, incrementalFringeBenefits,
       owner,
     } = doc;
 
     return {
       customerName,
+      profileId,
       year,
       assets,
       liabilities,

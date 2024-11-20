@@ -6,10 +6,6 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Landing from '../pages/Landing';
-import ListStuff from '../pages/ListStuff';
-import ListStuffAdmin from '../pages/ListStuffAdmin';
-import AddStuff from '../pages/AddStuff';
-import EditStuff from '../pages/EditStuff';
 import NotFound from '../pages/NotFound';
 import SignUp from '../pages/SignUp';
 import SignOut from '../pages/SignOut';
@@ -35,6 +31,8 @@ import ProfileBudgetFormOverview from '../pages/ProfileBudgetFormOverview';
 import FinancialStatementWrapper from '../components/FinancialStatementComponents/FinancialStatementWrapper';
 import ProfileFinancialStatementOverview from '../pages/ProfileFinancialStatementOverview';
 import CSVInstructionsPage from '../pages/CSVInstructionsPage';
+import ProfileDashboard from '../pages/ProfileDashboard';
+import Investments from '../pages/Investments';
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
   const { ready } = useTracker(() => {
@@ -58,23 +56,21 @@ const App = () => {
           <Route path="/About" element={<AboutUs />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/home" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
-          <Route path="/list" element={<ProtectedRoute><ListStuff /></ProtectedRoute>} />
-          <Route path="/add" element={<ProtectedRoute><AddStuff /></ProtectedRoute>} />
-          <Route path="/edit/:_id" element={<ProtectedRoute><EditStuff /></ProtectedRoute>} />
           <Route path="/financial-profiles/" element={<ProtectedRoute><FinancialProfilesPage /></ProtectedRoute>} />
           <Route path="/edit-financial-profile/:profileId" element={<ProtectedRoute><EditFinancialProfile /></ProtectedRoute>} />
           <Route path="/add-financial-profile/" element={<ProtectedRoute><AddFinancialProfile /></ProtectedRoute>} />
           <Route path="/profile-balance-sheet/:profileId" element={<ProtectedRoute><ProfileBalanceSheetOverview /></ProtectedRoute>} />
           <Route path="/profile-budget-form/:profileId" element={<ProtectedRoute><ProfileBudgetFormOverview /></ProtectedRoute>} />
+          <Route path="/Investments" element={<ProtectedRoute><Investments /></ProtectedRoute>} />
           <Route path="/profile-audited-fs/:profileId" element={<ProtectedRoute><ProfileFinancialStatementOverview /></ProtectedRoute>} />
           <Route path="/csv-instructions" element={<ProtectedRoute><CSVInstructionsPage /></ProtectedRoute>} />
-          <Route path="/admin" element={<AdminProtectedRoute ready={ready}><ListStuffAdmin /></AdminProtectedRoute>} />
           <Route path="/manage-database" element={<AdminProtectedRoute ready={ready}><ManageDatabase /></AdminProtectedRoute>} />
           <Route path="/notauthorized" element={<NotAuthorized />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/balance-sheet/:profileId" element={<ProtectedRoute><BalanceSheetInputWrapper /></ProtectedRoute>} />
           <Route path="/audited-fs/:profileId" element={<ProtectedRoute><FinancialStatementWrapper /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/profiledashboard/:profileId" element={<ProtectedRoute><ProfileDashboard /></ProtectedRoute>} />
           <Route path="/budget-form/:profileId" element={<ProtectedRoute><BudgetFormInputWrapper /></ProtectedRoute>} />
           <Route path="/upload-file" element={<ProtectedRoute><UploadFile /></ProtectedRoute>} />
         </Routes>

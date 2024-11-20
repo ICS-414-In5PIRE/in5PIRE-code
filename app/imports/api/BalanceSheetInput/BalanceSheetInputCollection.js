@@ -4,6 +4,7 @@ import { Roles } from 'meteor/alanning:roles';
 import BaseCollection from '../base/BaseCollection';
 import { ROLE } from '../role/Role';
 import { BalanceSheetInputSchema } from './BalanceSheetInputSchema';
+import { StaticFinancials } from '../financial/StaticFinancialsCollection';
 
 // Publication names
 export const balanceSheetPublications = {
@@ -11,7 +12,7 @@ export const balanceSheetPublications = {
   balanceSheetAdmin: 'BalanceSheetAdmin',
 };
 
-class BalanceSheetInputsCollection extends BaseCollection {
+class BalanceSheetInputCollection extends BaseCollection {
   constructor() {
     super('BalanceSheetInputs', BalanceSheetInputSchema);
   }
@@ -162,6 +163,10 @@ class BalanceSheetInputsCollection extends BaseCollection {
       // Auto-calculate total liabilities deferred net position
       const totalLiabilitiesDeferredNetPosition = netLiabilitiesDeferredInflows + totalNetPosition;
 
+      const totalLineCreditWithinOneYear = (parseFloat(lineOfCreditBuildingADueWithinOneYear) || 0) + (parseFloat(lineOfCreditBuildingBDueWithinOneYear) || 0);
+
+      const totalLineCreditAfterOneYear = (parseFloat(lineOfCreditBuildingADueAfterOneYear) || 0) + (parseFloat(lineOfCreditBuildingBDueAfterOneYear) || 0);
+
       // Insert a new document
       const docID = this._collection.insert({
         pettyCash, cash, cashInBanks, totalCashAndCashEquivalents, accountsReceivables, dueFromOtherFunds,
@@ -182,8 +187,15 @@ class BalanceSheetInputsCollection extends BaseCollection {
         accruedVacationDueAfterOneYear, workersCompensationDueAfterOneYear, accruedRetirementPlanDueAfterOneYear,
         accruedLeaseGuarantyDueAfterOneYear, capitalLeaseObligationsDueAfterOneYear, notesPayableBuildingADueAfterOneYear,
         netPensionLiabilityDueAfterOneYear, netOPEBLiabilityDueAfterOneYear, lineOfCreditBuildingADueAfterOneYear,
-        lineOfCreditBuildingBDueAfterOneYear, debtServiceDueAfterOneYear, netLiabilitiesDueAfterOneYear, owner, year, profileId,
+        lineOfCreditBuildingBDueAfterOneYear, debtServiceDueAfterOneYear, netLiabilitiesDueAfterOneYear, owner, year, profileId, totalLineCreditWithinOneYear, totalLineCreditAfterOneYear,
       });
+
+      const investment = (parseFloat(totalInvestments) || 0) + (parseFloat(cashByInvestmentManager) || 0);
+
+      // eslint-disable-next-line max-len
+      const debt = -1 * (parseFloat(notesPayableBuildingADueWithinOneYear || 0) + parseFloat(totalLineCreditWithinOneYear || 0) + parseFloat(debtServiceDueWithinOneYear || 0) + parseFloat(notesPayableBuildingADueAfterOneYear || 0) + parseFloat(totalLineCreditAfterOneYear || 0) + parseFloat(debtServiceDueAfterOneYear || 0));
+
+      StaticFinancials.define({ assets: netAssetsDeferredOutflows, liabilities: netLiabilitiesDeferredInflows, cashOnHand: totalCashAndCashEquivalents, investment, debt, owner, year, profileId });
 
       return {
         status: 1,
@@ -330,8 +342,14 @@ class BalanceSheetInputsCollection extends BaseCollection {
     const totalLiabilitiesDeferredNetPosition =
       netLiabilitiesDeferredInflows + totalNetPosition;
 
+    const totalLineCreditWithinOneYear = (parseFloat(updateData.lineOfCreditBuildingADueWithinOneYear) || 0) + (parseFloat(updateData.lineOfCreditBuildingBDueWithinOneYear) || 0);
+
+    const totalLineCreditAfterOneYear = (parseFloat(updateData.lineOfCreditBuildingADueAfterOneYear) || 0) + (parseFloat(updateData.lineOfCreditBuildingBDueAfterOneYear) || 0);
+
     const updatedDataWithCalculations = {
       ...updateData,
+      totalLineCreditWithinOneYear,
+      totalLineCreditAfterOneYear,
       totalCashAndCashEquivalents,
       subtotalInvestments,
       subtotalLoanFund,
@@ -351,6 +369,16 @@ class BalanceSheetInputsCollection extends BaseCollection {
       totalLiabilitiesDeferredNetPosition,
     };
 
+    const existingDocument = StaticFinancials.findOne({ owner: updateData.owner, year: updateData.year, profileId: updateData.profileId });
+
+    const investment = (parseFloat(totalInvestments) || 0) + (parseFloat(updateData.cashByInvestmentManager) || 0);
+
+    // eslint-disable-next-line max-len
+    const debt = -1 * (parseFloat(updateData.notesPayableBuildingADueWithinOneYear || 0) + parseFloat(totalLineCreditWithinOneYear || 0) + parseFloat(updateData.debtServiceDueWithinOneYear || 0) + parseFloat(updateData.notesPayableBuildingADueAfterOneYear || 0) + parseFloat(totalLineCreditAfterOneYear || 0) + parseFloat(updateData.debtServiceDueAfterOneYear || 0));
+
+    // eslint-disable-next-line max-len
+    StaticFinancials.define({ ...existingDocument, assets: netAssetsDeferredOutflows, liabilities: netLiabilitiesDeferredInflows, cashOnHand: totalCashAndCashEquivalents, investment, debt, owner: updateData.owner, year: updateData.year, profileId: updateData.profileId });
+
     this._collection.update(docID, { $set: updatedDataWithCalculations });
   }
 
@@ -363,6 +391,10 @@ class BalanceSheetInputsCollection extends BaseCollection {
     const doc = this.findDoc(docID);
     check(doc, Object);
     this._collection.remove(doc._id);
+
+    // eslint-disable-next-line max-len
+    StaticFinancials.define({ assets: 0, liabilities: 0, cashOnHand: 0, investment: 0, debt: 0, owner: doc.owner, year: doc.year, profileId: doc.profileId });
+
     return true;
   }
 
@@ -460,4 +492,4 @@ class BalanceSheetInputsCollection extends BaseCollection {
   }
 }
 
-export const BalanceSheetInputs = new BalanceSheetInputsCollection();
+export const BalanceSheetInputs = new BalanceSheetInputCollection();

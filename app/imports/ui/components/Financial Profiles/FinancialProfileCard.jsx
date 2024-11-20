@@ -40,8 +40,8 @@ const FinancialProfileCard = ({
     navigate(`/audited-fs/${profileId}`);
   };
 
-  const handleViewDashboard = () => {
-    navigate('/dashboard');
+  const handleViewProfileDashboard = () => {
+    navigate(`/profiledashboard/${profileId}`);
   };
 
   useEffect(() => {
@@ -76,8 +76,8 @@ const FinancialProfileCard = ({
         <Grid columns={1}>
           {userRole === 'admin' && (
             <Grid.Column>
-              <Button className="mb-2" fluid color="blue" onClick={handleEditProfile}>
-                <Icon name="edit" /> Edit Profile
+              <Button className="mb-2" fluid color="grey" onClick={handleEditProfile}>
+                <Icon name="edit" /> Edit Scenario
               </Button>
 
               <Button className="mb-2" fluid color="blue" onClick={handleEditBalanceSheet}>
@@ -95,8 +95,8 @@ const FinancialProfileCard = ({
 
           )}
           <Grid.Column>
-            <Button fluid color="teal" onClick={handleViewDashboard}>
-              <Icon name="dashboard" /> View Dashboard
+            <Button fluid color="teal" onClick={handleViewProfileDashboard}>
+              <Icon name="dashboard" /> View Profile Dashboard
             </Button>
           </Grid.Column>
         </Grid>
@@ -147,13 +147,8 @@ FinancialProfileCard.propTypes = {
   description: PropTypes.string,
   createdDate: PropTypes.string,
   editedDate: PropTypes.string,
-  // onDelete: PropTypes.func,
   userRole: PropTypes.string.isRequired,
   profileId: PropTypes.string.isRequired,
-  // members: PropTypes.arrayOf(PropTypes.shape({
-  //   userId: PropTypes.string.isRequired,
-  //   role: PropTypes.string.isRequired,
-  // })),
 };
 
 // Default props for optional fields
@@ -162,8 +157,6 @@ FinancialProfileCard.defaultProps = {
   description: 'No description available.',
   createdDate: 'Not available',
   editedDate: 'Not available',
-  // onDelete: null,
-  // members: [],
 };
 
 export default FinancialProfileCard;

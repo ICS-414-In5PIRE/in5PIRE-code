@@ -15,6 +15,13 @@ const netPosition4yrDatasets = [
     backgroundColor: 'rgba(255, 0, 0, 0.2)',
     yAxisID: 'y-axis-right',
   },
+  {
+    label: 'Volatility',
+    data: [367016787, 400748401, 419858881, 429857066.8],
+    borderColor: 'green',
+    backgroundColor: 'rgba(0, 255, 0, 0.2)',
+    yAxisID: 'y-axis-left',
+  },
 ];
 
 const yearsOfSolvency4yrDatasets = [

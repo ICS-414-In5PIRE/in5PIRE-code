@@ -128,7 +128,7 @@ const Landing = () => (
                 <Card.Title><h1>Customizable Models</h1></Card.Title>
                 <hr />
                 <Card.Text>
-                  Tailor your financial models to fit your specific needs.
+                  Tailor your financial models to fit your specific project needs. Our services allow you to personalize the experience and utilize built-in services to project your financial future.
                 </Card.Text>
               </Card.Body>
             </Card>
@@ -141,7 +141,7 @@ const Landing = () => (
         <Col>
           <h3>Ready to take control of your financial future?</h3>
           <p>Sign up today and start building better financial models.</p>
-          <a href="/signin" className="btn btn-brand ms-3"> Get Started</a>
+          <a href="/signin" className="btn btn-brand ms-3 "> Get Started</a>
         </Col>
       </Row>
     </Container>

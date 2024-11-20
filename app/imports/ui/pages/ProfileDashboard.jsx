@@ -50,42 +50,7 @@ const ProfileDashboard = () => {
     return <Loader text="Loading data..." />;
   }
 
-  const handleUpdateDashboardData = () => {
-    setUpdating(true);
-
-    const years = [2021, 2022, 2023, new Date().getFullYear()];
-
-    let errorOccurred = false;
-    let completedCalls = 0;
-
-    years.forEach((year) => {
-      Meteor.call('staticFinancials.populateFromBudget', profileId, year, (error) => {
-        completedCalls++;
-        if (error) {
-          console.error(`Failed to update data for year ${year}: ${error.reason}`);
-          errorOccurred = true;
-        }
-
-        if (completedCalls === years.length) {
-          setUpdating(false);
-          if (errorOccurred) {
-            alert('Some years failed to update. Check the console for more details.');
-          } else {
-            alert('Dashboard data updated successfully for all years!');
-          }
-        }
-      });
-    });
-  };
-
   const handleTabChange = (e, { name }) => setActiveTab(name);
-
-  const buttonData = [
-    { label: 'Back to Financial Scenarios', path: '/financial-profiles', color: 'grey' },
-    { label: 'Edit Balance Sheet', path: `/balance-sheet/${profileId}`, color: 'blue' },
-    { label: 'Edit Budget Form', path: `/budget-form/${profileId}`, color: 'blue' },
-    { label: 'Edit Financial Statement', path: `/audited-fs/${profileId}`, color: 'blue' },
-  ];
 
   const renderCharts = (configs) => (
     <Grid stackable columns={2}>
@@ -152,25 +117,12 @@ const ProfileDashboard = () => {
 
   return (
     <Container id={PAGE_IDS.DASHBOARD} style={{ marginTop: '2em' }}>
-      <Button color="blue" onClick={handleUpdateDashboardData} loading={updating} disabled={updating}>
-        {updating ? 'Updating...' : 'Update Dashboard Data'}
-      </Button>
-      <Button color="green" onClick={handleGenerateProjections} loading={loadingProjections} disabled={loadingProjections}>
-        Generate 12-Year Projections
-      </Button>
-      <br />
-      <br />
-      {/* Map out buttons */}
-      <div style={{ marginBottom: '1em' }}>
-        {buttonData.map(({ label, path, color }) => (
-          <Button key={label} color={color} onClick={() => navigate(path)} className="mb-2">
-            <Icon name="edit" /> {label}
-          </Button>
-        ))}
-      </div>
-
-      <br />
-      <br />
+      <Grid.Column textAlign="left">
+        <Button labelPosition="left" icon="left chevron" content="Back to Scenarios" onClick={() => navigate('/financial-profiles')} />
+        <Button color="green" onClick={handleGenerateProjections} loading={loadingProjections} disabled={loadingProjections}>
+          Generate 12-Year Projections
+        </Button>
+      </Grid.Column>
       <Grid centered>
         <Grid.Column width={16}>
           <Header as="h2" textAlign="center">

@@ -29,10 +29,7 @@ const NewNav = () => {
             )}
             { currentUser && (
               <li>
-                <NavDropdown title="Data Input" id="navbarDropdown">
-                  <NavDropdown.Item as={NavLink} to="/financial-profiles">My Financial Scenarios</NavDropdown.Item>
-                  <NavDropdown.Item as={NavLink} to="/upload-file">Upload Files</NavDropdown.Item>
-                </NavDropdown>
+                <Nav.Link as={NavLink} to="/upload-file">Upload Files</Nav.Link>
               </li>
             )}
             { currentUser && (

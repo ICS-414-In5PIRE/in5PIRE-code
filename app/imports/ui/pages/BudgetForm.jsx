@@ -84,22 +84,7 @@ class BudgetForm extends React.Component {
     navigate(`/profile-budget-form/${profileId}`);
   };
 
-  handleEditBalanceSheet = () => {
-    const { profileId, navigate } = this.props;
-    navigate(`/balance-sheet/${profileId}`);
-  };
-
-  handleEditAuditedFinancials = () => {
-    const { profileId, navigate } = this.props;
-    navigate(`/audited-fs/${profileId}`);
-  };
-
-  handleViewDashboard = () => {
-    const { profileId, navigate } = this.props;
-    navigate(`/profiledashboard/${profileId}`);
-  };
   // Handle input changes
-
   handleChange = (e, { name, value }) => {
     const { record } = this.state;
     const updatedFormData = JSON.parse(JSON.stringify(record));
@@ -226,9 +211,6 @@ class BudgetForm extends React.Component {
       <Container id={PAGE_IDS.BUDGET_FORM}>
         <Grid.Column textAlign="left">
           <Button labelPosition="left" icon="left chevron" content="Back to Scenarios" onClick={this.handleBackToScenarios} />
-          <Button color="blue" content="Edit Balance Sheet" onClick={this.handleEditBalanceSheet} />
-          <Button color="blue" content="Edit Audited Financial Statement" onClick={this.handleEditAuditedFinancials} />
-          <Button color="green" content="Dashboard" onClick={this.handleViewDashboard} />
         </Grid.Column>
         <Grid centered>
           <Grid.Column>

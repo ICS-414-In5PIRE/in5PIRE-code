@@ -52,6 +52,11 @@ class FinancialProfilesCollection extends BaseCollection {
         type: String,
         allowedValues: ['admin', 'viewer'],
       },
+      forms: {
+        type: Object,
+        optional: true,
+        blackbox: true, // Allows storing dynamic keys like 'balanceSheet', 'budgetForm', etc.
+      },
     }));
   }
 
@@ -233,6 +238,35 @@ class FinancialProfilesCollection extends BaseCollection {
   }
 
   /**
+   * Updates form data for a given financial profile.
+   * @param {String} profileId - The ID of the financial profile.
+   * @param {String} formType - The type of form being updated (e.g., 'balanceSheet').
+   * @param {Array} data - Parsed CSV data to be stored.
+   */
+  updateFormData(profileId, formType, data) {
+    const validFormTypes = ['balanceSheet', 'budgetForm', 'financialStatement'];
+
+    // Validate formType
+    if (!validFormTypes.includes(formType)) {
+      throw new Meteor.Error('invalid-form-type', 'Invalid form type.');
+    }
+
+    // Validate profile existence
+    const profile = this.findDoc(profileId);
+    if (!profile) {
+      throw new Meteor.Error('profile-not-found', 'Financial profile not found.');
+    }
+
+    // Update the profile's forms data
+    const updateField = `forms.${formType}`;
+    const updateData = { [updateField]: data };
+    console.log(data);
+
+    this._collection.update(profileId, { $set: updateData });
+
+  }
+
+  /**
    * Subscription method for profiles owned by the current user.
    */
   subscribeProfiles() {
@@ -278,3 +312,16 @@ class FinancialProfilesCollection extends BaseCollection {
  * Provides the singleton instance of the FinancialProfilesCollection to all other entities.
  */
 export const FinancialProfiles = new FinancialProfilesCollection();
+// Define Meteor methods for server-side use
+if (Meteor.isServer) {
+  Meteor.methods({
+    'FinancialProfiles.updateFormData'({ profileId, formType, data }) {
+      check(profileId, String);
+      check(formType, String);
+      check(data, Array);
+
+      // Call the instance method to update form data
+      FinancialProfiles.updateFormData(profileId, formType, data);
+    },
+  });
+}

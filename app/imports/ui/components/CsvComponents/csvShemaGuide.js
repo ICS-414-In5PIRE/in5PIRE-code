@@ -18,8 +18,8 @@ export const csvSchemaGuide = {
       title: 'Balance Sheet CSV Schema',
       fields: [
         { name: 'year', description: 'Year for the balance sheet entry', type: 'Number', required: true },
-        { name: 'owner', description: 'Owner identifier for the profile', type: 'String', required: true },
-        { name: 'profileId', description: 'Unique identifier for the financial profile', type: 'String', required: true },
+        // { name: 'owner', description: 'Owner identifier for the profile', type: 'String', required: true },
+        // { name: 'profileId', description: 'Unique identifier for the financial profile', type: 'String', required: true },
         // Cash and Cash Equivalents
         { name: 'pettyCash', description: 'Amount in petty cash', type: 'Number', required: false },
         { name: 'cash', description: 'Cash on hand', type: 'Number', required: false },

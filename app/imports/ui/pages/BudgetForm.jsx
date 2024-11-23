@@ -62,7 +62,7 @@ class BudgetForm extends React.Component {
     if (prevState.selectedYear !== selectedYear || prevProps.profileId !== profileId) {
       const username = Meteor.user()?.username;
       const budgetFormData = BudgetFormInput.find({ owner: username, year: selectedYear, profileId: profileId }).fetch();
-      this.setState({ record: budgetFormData.length > 0 ? budgetFormData : [] });
+      this.setState({ record: budgetFormData.length > 0 ? budgetFormData : [], isSubmit: budgetFormData.length === 0 });
       this.handleSnackBar(false, '', false);
     }
   }
@@ -189,7 +189,10 @@ class BudgetForm extends React.Component {
   };
 
   // Handle year change
-  handleYearChange = (e, { value }) => this.setState({ selectedYear: value });
+  handleYearChange = (e, { value }) => {
+    this.setState({ selectedYear: value });
+    this.setState({ isSubmit: true });
+  };
 
   // Handle snackbar
   handleSnackBar = (isOpen, message, isError) => {

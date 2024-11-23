@@ -25,7 +25,6 @@ const ProfileDashboard = () => {
   const { profileId } = useParams();
   const [activeTab, setActiveTab] = useState('ProfileSnapshot');
   const [loadingProjections, setLoadingProjections] = useState(false);
-  const [updating, setUpdating] = useState(false);
   const navigate = useNavigate();
 
   const { financialData, isLoading } = useTracker(() => {
@@ -33,6 +32,7 @@ const ProfileDashboard = () => {
     const budgetFormHandle = Meteor.subscribe('defaultBudgetFormInput', profileId);
     const financialStatementHandle = Meteor.subscribe('defaultFinancialStatementData', profileId);
     const staticFinancialsHandle = Meteor.subscribe('staticFinancialsForProfile', profileId);
+    const username = Meteor.user()?.username;
 
     const loading =
       !balanceSheetHandle.ready() ||
@@ -41,7 +41,7 @@ const ProfileDashboard = () => {
       !staticFinancialsHandle.ready();
 
     return {
-      financialData: StaticFinancials.find({ profileId }, { sort: { year: 1 } }).fetch(),
+      financialData: StaticFinancials.find({ owner: username, profileId }).fetch(),
       isLoading: loading,
     };
   }, [profileId]);

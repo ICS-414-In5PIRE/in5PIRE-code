@@ -33,7 +33,7 @@ const ManageMembers = ({ profileId, members }) => {
     }
 
     if (selectedMember.userId === Meteor.userId() && selectedMember.role === 'admin') {
-      swal('Error', 'You are the owner of this profile and cannot change your own role. You are destined to be an admin forever.', 'error');
+      swal('Error', 'You are the owner of this profile and cannot change your own role.', 'error');
       return;
     }
 
@@ -126,6 +126,8 @@ const ManageMembers = ({ profileId, members }) => {
                   >
                     <option value="viewer">Viewer</option>
                     <option value="admin">Admin</option>
+                    <option value="analyst">Analyst</option>
+                    <option value="accountant">Accountant</option>
                     <option value="remove">Remove Member</option>
                   </Form.Control>
                   <Button variant="primary" className="mt-3" onClick={handleRoleUpdate}>

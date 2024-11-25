@@ -229,13 +229,13 @@ Meteor.methods({
     const staticFinancialsData = {
       profileId,
       year,
-      revenues: budgetData.revenues || 0,
+      revenues: budgetData.totalRevenues || 0,
       opex: budgetData.totalExpenses || 0,
-      netIncome: (budgetData.revenues || 0) - (budgetData.totalExpenses || 0),
+      netIncome: (budgetData.totalRevenues || 0) - (budgetData.totalExpenses || 0),
       cashFlow: {
-        inflow: budgetData.revenues || 0,
+        inflow: budgetData.totalRevenues || 0,
         outflow: budgetData.totalExpenses || 0,
-        net: budgetData.revenues - budgetData.totalExpenses,
+        net: budgetData.totalRevenues - budgetData.totalExpenses,
       },
       owner: budgetData.owner || Meteor.userId(),
     };

@@ -61,7 +61,7 @@ class FinancialStatement extends React.Component {
     if (prevState.selectedYear !== selectedYear || prevProps.profileId !== profileId) {
       const username = Meteor.user()?.username;
       const financialStatementData = FinancialStatementInput.find({ owner: username, profileId, year: selectedYear }).fetch();
-      this.setState({ record: financialStatementData.length > 0 ? financialStatementData : [] });
+      this.setState({ record: financialStatementData.length > 0 ? financialStatementData : [], isSubmit: financialStatementData.length === 0 });
       this.handleSnackBar(false, '', false);
     }
   }
@@ -179,7 +179,10 @@ class FinancialStatement extends React.Component {
   };
 
   // Handle year change
-  handleYearChange = (e, { value }) => this.setState({ selectedYear: value });
+  handleYearChange = (e, { value }) => {
+    this.setState({ selectedYear: value });
+    this.setState({ isSubmit: true });
+  };
 
   // Handle snackbar
   handleSnackBar = (isOpen, message, isError) => {

@@ -66,9 +66,10 @@ class BalanceSheetInput extends React.Component {
         profileId,
         year: selectedYear,
       }).fetch();
+      console.log(balanceSheetData);
       // Check if a record exists for the selected year
       const isExistingRecord = balanceSheetData.length > 0;
-      this.setState({ record: isExistingRecord ? balanceSheetData : [] });
+      this.setState({ record: isExistingRecord ? balanceSheetData : [], isSubmit: !isExistingRecord });
       this.handleSnackBar(false, '', false);
     }
   }
@@ -203,7 +204,10 @@ class BalanceSheetInput extends React.Component {
   };
 
   // Handle year change
-  handleYearChange = (e, { value }) => this.setState({ selectedYear: value });
+  handleYearChange = (e, { value }) => {
+    this.setState({ selectedYear: value });
+    this.setState({ isSubmit: true });
+  };
 
   // Handle snackbar
   handleSnackBar = (isOpen, message, isError) => {

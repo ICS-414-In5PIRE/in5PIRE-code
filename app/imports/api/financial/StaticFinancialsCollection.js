@@ -4,6 +4,7 @@ import SimpleSchema from 'simpl-schema';
 import { Roles } from 'meteor/alanning:roles';
 import BaseCollection from '../base/BaseCollection';
 import { ROLE } from '../role/Role';
+import { FinancialProfiles } from '../FinancialProfiles/FinancialProfilesCollection';
 
 export const staticFinancialsPublications = {
   staticFinancials: 'StaticFinancials',
@@ -84,9 +85,17 @@ class StaticFinancialsCollection extends BaseCollection {
     // Fetch the existing record by profileId and year, if it exists
     const existingRecord = this._collection.findOne({ profileId, year });
 
+    let finalCustomerName = customerName;
+
+    if (!finalCustomerName && profileId) {
+      const profile = FinancialProfiles.findOne({ _id: profileId });
+      finalCustomerName = profile ? profile.title : 'Unknown';
+    } else {
+      console.log('Using provided customerName:', finalCustomerName);
+    }
     // Merge new data with existing data
     const mergedData = {
-      customerName: customerName ?? existingRecord?.customerName ?? '',
+      customerName: finalCustomerName ?? existingRecord?.customerName ?? '',
       profileId: profileId ?? existingRecord?.profileId,
       year: year ?? existingRecord?.year,
       assets: assets ?? existingRecord?.assets,

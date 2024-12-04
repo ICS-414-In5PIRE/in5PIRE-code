@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 /**
  * Component for Cash and Cash Equivalents form for Balance Input Sheet
  */
-const CashAndCashEquivalents = ({ formData, handleChange }) => (
+const CashAndCashEquivalents = ({ formData, handleChange, canEdit }) => (
   <Form.Group widths="equal">
     {/* Petty Cash Input with Tooltip */}
     <Form.Input
@@ -25,6 +25,7 @@ const CashAndCashEquivalents = ({ formData, handleChange }) => (
       value={formData.pettyCash ?? ''}
       onChange={handleChange}
       type="number"
+      readOnly={!canEdit}
     />
 
     <Form.Input
@@ -44,6 +45,7 @@ const CashAndCashEquivalents = ({ formData, handleChange }) => (
       value={formData.cash ?? ''}
       onChange={handleChange}
       type="number"
+      readOnly={!canEdit}
     />
 
     {/* Cash in Banks Input with Tooltip */}
@@ -64,6 +66,7 @@ const CashAndCashEquivalents = ({ formData, handleChange }) => (
       value={formData.cashInBanks ?? ''}
       onChange={handleChange}
       type="number"
+      readOnly={!canEdit}
     />
 
     {/* Read-only Total with Auto-Calculation */}
@@ -88,11 +91,13 @@ CashAndCashEquivalents.propTypes = {
     totalCashAndCashEquivalents: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }),
   handleChange: PropTypes.func,
+  canEdit: PropTypes.bool,
 };
 
 CashAndCashEquivalents.defaultProps = {
   formData: {},
   handleChange: () => {},
+  canEdit: true,
 };
 
 export default CashAndCashEquivalents;

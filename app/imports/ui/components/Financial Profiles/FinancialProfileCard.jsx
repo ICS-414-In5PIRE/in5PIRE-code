@@ -74,26 +74,25 @@ const FinancialProfileCard = ({
       </Card.Content>
       <Card.Content extra>
         <Grid columns={1}>
-          {userRole === 'admin' && (
-            <Grid.Column>
+          <Grid.Column>
+            {userRole === 'admin' && (
               <Button className="mb-2" fluid color="grey" onClick={handleEditProfile}>
                 <Icon name="edit" /> Edit Scenario
               </Button>
+            )}
 
-              <Button className="mb-2" fluid color="blue" onClick={handleEditBalanceSheet}>
-                <Icon name="edit" /> Edit Balance Sheet
-              </Button>
+            <Button className="mb-2" fluid color="blue" onClick={handleEditBalanceSheet}>
+              <Icon name="edit" /> Balance Sheet
+            </Button>
 
-              <Button className="mb-2" fluid color="blue" onClick={handleEditBudgetForm}>
-                <Icon name="edit" /> Edit Budget Form
-              </Button>
+            <Button className="mb-2" fluid color="blue" onClick={handleEditBudgetForm}>
+              <Icon name="edit" /> Budget Form
+            </Button>
 
-              <Button className="mb-2" fluid color="blue" onClick={handleEditFinancialStatement}>
-                <Icon name="edit" /> Edit Audited Financial Statement
-              </Button>
-            </Grid.Column>
-
-          )}
+            <Button className="mb-2" fluid color="blue" onClick={handleEditFinancialStatement}>
+              <Icon name="edit" /> Audited Financial Statement
+            </Button>
+          </Grid.Column>
           <Grid.Column>
             <Button fluid color="teal" onClick={handleViewProfileDashboard}>
               <Icon name="dashboard" /> View Profile Dashboard

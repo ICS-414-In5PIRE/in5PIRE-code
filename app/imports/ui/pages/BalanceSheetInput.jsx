@@ -14,6 +14,7 @@ import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInpu
 import { defineMethod, removeItMethod, updateMethod } from '../../api/base/BaseCollection.methods';
 import InputSheetMessage from '../components/InputSheetMessage';
 import { generateYears } from '../utilities/ComboBox';
+import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection';
 
 /**
  * BalanceSheetInput class component for entering balance sheet data using Semantic UI React Form.
@@ -33,6 +34,7 @@ class BalanceSheetInput extends React.Component {
       record: [],
       dropdownOptions: {},
       isSubmit: true,
+      canEdit: false,
     };
     this.tracker = null;
     // this.navigate = null;
@@ -44,10 +46,20 @@ class BalanceSheetInput extends React.Component {
     this.tracker = Tracker.autorun(() => {
       const { selectedYear } = this.state;
       const subscription = BalanceSheetInputs.subscribeBalanceSheet();
-      const rdy = subscription.ready();
+      const subscriptionOne = FinancialProfiles.subscribeProfiles();
+      const rdy = subscription.ready() && subscriptionOne.ready();
       const username = Meteor.user()?.username;
       const balanceSheetData = BalanceSheetInputs.find({ owner: username, profileId, year: selectedYear }).fetch();
-      this.setState({ isLoading: !rdy, record: balanceSheetData, isSubmit: balanceSheetData.length === 0 });
+      const profileData = FinancialProfiles.findOne(profileId);
+      const member = profileData?.members.find(m => m.userId === Meteor.userId());
+      const canEdit = member ? member.role === 'admin' || member.role === 'analyst' : false;
+
+      this.setState({
+        isLoading: !rdy,
+        record: balanceSheetData,
+        isSubmit: balanceSheetData.length === 0,
+        canEdit,
+      });
     });
 
     const options = {};
@@ -216,7 +228,7 @@ class BalanceSheetInput extends React.Component {
 
   // Render the component
   render() {
-    const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions, isSubmit } = this.state;
+    const { isLoading, activeItem, selectedYear, record, snackBar, dropdownOptions, isSubmit, canEdit } = this.state;
 
     if (isLoading) {
       return (
@@ -271,32 +283,34 @@ class BalanceSheetInput extends React.Component {
 
                 <Segment>
                   {activeItem === 'Cash And Equivalents' && (
-                    <CashAndCashEquivalents formData={record[0]} handleChange={this.handleChange} />
+                    <CashAndCashEquivalents formData={record[0]} handleChange={this.handleChange} canEdit={canEdit} />
                   )}
                   {activeItem === 'Other Assets' && (
-                    <OtherAssets formData={record[0]} handleChange={this.handleChange} />
+                    <OtherAssets formData={record[0]} handleChange={this.handleChange} canEdit={canEdit} />
                   )}
                   {activeItem === 'Liabilities' && (
-                    <Liabilities formData={record[0]} handleChange={this.handleChange} />
+                    <Liabilities formData={record[0]} handleChange={this.handleChange} canEdit={canEdit} />
                   )}
                   {activeItem === 'Commitments And Contingencies' && (
-                    <CommitmentsAndContingencies formData={record[0]} handleChange={this.handleChange} />
+                    <CommitmentsAndContingencies formData={record[0]} handleChange={this.handleChange} canEdit={canEdit} />
                   )}
                 </Segment>
               </div>
               <InputSheetMessage snackBar={snackBar} handleSnackBar={this.handleSnackBar} />
               <Grid className="py-3">
                 <Grid.Column textAlign="right">
-                  <Button primary type="submit" onClick={this.handleSubmit}>
-                    {record.length > 0 && !isSubmit ? 'Update' : 'Submit'}
-                  </Button>
-                  {
-                    record.length > 0 && !isSubmit && (
-                      <Button color="red" onClick={this.handleDelete}>
-                        Delete
+                  {canEdit && (
+                    <>
+                      <Button primary type="submit" onClick={this.handleSubmit}>
+                        {record.length > 0 && !isSubmit ? 'Update' : 'Submit'}
                       </Button>
-                    )
-                  }
+                      {record.length > 0 && !isSubmit && (
+                        <Button color="red" onClick={this.handleDelete}>
+                          Delete
+                        </Button>
+                      )}
+                    </>
+                  )}
                   <Button primary onClick={this.handleViewOverview}>
                     View Overview
                   </Button>

@@ -6,7 +6,7 @@ import LongTermLiabilitiesForm from './LongTermLiabilitiesForm';
 /**
  * Component for Liabilities form for Balance Input Sheet
  */
-const Liabilities = ({ formData, handleChange }) => {
+const Liabilities = ({ formData, handleChange, canEdit }) => {
   const panes = [
     {
       menuItem: 'Long-term Liabilities - due within one year',
@@ -16,6 +16,7 @@ const Liabilities = ({ formData, handleChange }) => {
             formData={formData}
             handleChange={handleChange}
             netWording="Long-term liabilities - due within one year"
+            canEdit={canEdit}
           />
         </Tab.Pane>
       ),
@@ -28,6 +29,7 @@ const Liabilities = ({ formData, handleChange }) => {
             formData={formData}
             handleChange={handleChange}
             netWording="Long-term liabilities - due after one year"
+            canEdit={canEdit}
           />
         </Tab.Pane>
       ),
@@ -43,6 +45,7 @@ const Liabilities = ({ formData, handleChange }) => {
           value={formData.accountsPayable ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           label="Due to Fund"
@@ -50,6 +53,7 @@ const Liabilities = ({ formData, handleChange }) => {
           value={formData.dueToFund ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           label="Due to Other Funds"
@@ -57,6 +61,7 @@ const Liabilities = ({ formData, handleChange }) => {
           value={formData.dueToOtherFunds ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
       </Form.Group>
 
@@ -84,6 +89,7 @@ const Liabilities = ({ formData, handleChange }) => {
           value={formData.deferredInflowsPensions ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           label="Deferred inflows of resources related to OPEB"
@@ -91,6 +97,7 @@ const Liabilities = ({ formData, handleChange }) => {
           value={formData.deferredInflowsOPEB ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           className="dotted-input"
@@ -118,11 +125,13 @@ Liabilities.propTypes = {
     netLiabilitiesDeferredInflows: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }),
   handleChange: PropTypes.func,
+  canEdit: PropTypes.bool,
 };
 
 Liabilities.defaultProps = {
   formData: {},
   handleChange: () => {},
+  canEdit: true,
 };
 
 export default Liabilities;

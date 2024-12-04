@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 /**
  * Component for Other Assets form for Balance Input Sheet
  */
-const OtherAssets = ({ formData, handleChange }) => {
+const OtherAssets = ({ formData, handleChange, canEdit }) => {
   const panes = [
     {
       menuItem: 'Investments',
@@ -18,6 +18,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.mutualFunds ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               label="Commingled Funds"
@@ -25,6 +26,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.commingledFunds ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               label="Hedge Funds"
@@ -32,6 +34,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.hedgeFunds ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               label="Private Equity"
@@ -39,6 +42,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.privateEquityFunds ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
           </Form.Group>
           <Form.Group widths="equal">
@@ -48,6 +52,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.commonTrustFunds ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               label="Common & Preferred Stocks"
@@ -55,6 +60,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.commonAndPreferredStocks ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               label="Private Debt"
@@ -62,6 +68,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.privateDebt ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               label="Other Investments"
@@ -69,6 +76,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.otherInvestments ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
           </Form.Group>
           <Form.Group widths={4} className="total-fields">
@@ -92,6 +100,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.usTreasuries ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               width={6}
@@ -100,6 +109,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.usAgencies ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               className="dotted-input"
@@ -142,6 +152,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.buildings ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               label="Leasehold Improvements"
@@ -149,6 +160,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.leaseholdImprovements ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               label="Furniture, Fixtures, Equipment"
@@ -156,6 +168,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.furnitureFixturesEquipment ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               label="Less: Accumulated Depreciation"
@@ -163,6 +176,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.accumulatedDepreciation ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
           </Form.Group>
           <Form.Group className="total-fields">
@@ -187,6 +201,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.landA ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               label="Land B"
@@ -194,6 +209,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.landB ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               label="Construction in Progress"
@@ -201,6 +217,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.constructionInProgress ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               className="dotted-input"
@@ -222,6 +239,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.llcBuildings ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               label="Leasehold Improvements"
@@ -229,6 +247,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.llcLeaseholdImprovements ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               label="Furniture, Fixtures, Equipment"
@@ -236,6 +255,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.llcFurnitureFixturesEquipment ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
           </Form.Group>
           <Form.Group>
@@ -246,6 +266,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.vehicles ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               width={6}
@@ -254,6 +275,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.llcAccumulatedDepreciation ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               className="dotted-input"
@@ -276,6 +298,7 @@ const OtherAssets = ({ formData, handleChange }) => {
               value={formData.llcLand ?? ''}
               onChange={handleChange}
               type="number"
+              readOnly={!canEdit}
             />
             <Form.Input
               width={4}
@@ -317,6 +340,7 @@ const OtherAssets = ({ formData, handleChange }) => {
           value={formData.accountsReceivables ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           label="Due From Other Funds"
@@ -324,6 +348,7 @@ const OtherAssets = ({ formData, handleChange }) => {
           value={formData.dueFromOtherFunds ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           label="Interests and Dividends Receivable"
@@ -331,6 +356,7 @@ const OtherAssets = ({ formData, handleChange }) => {
           value={formData.interestAndDividendsReceivable ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           label="Inventory, prepaid items and other assets"
@@ -338,6 +364,7 @@ const OtherAssets = ({ formData, handleChange }) => {
           value={formData.otherAssets ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
       </Form.Group>
       <Form.Group widths="equal">
@@ -347,6 +374,7 @@ const OtherAssets = ({ formData, handleChange }) => {
           value={formData.notesReceivableBeforeOneYear ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           label="Notes receivable - due after one year"
@@ -354,6 +382,7 @@ const OtherAssets = ({ formData, handleChange }) => {
           value={formData.notesReceivableAfterOneYear ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           label="Security Deposits"
@@ -361,6 +390,7 @@ const OtherAssets = ({ formData, handleChange }) => {
           value={formData.securityDeposits ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           label="Cash Held by Investment Manager"
@@ -368,6 +398,7 @@ const OtherAssets = ({ formData, handleChange }) => {
           value={formData.cashByInvestmentManager ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
       </Form.Group>
       <Tab panes={panes} />
@@ -379,6 +410,7 @@ const OtherAssets = ({ formData, handleChange }) => {
           value={formData.restrictedCash ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           className="dotted-input"
@@ -400,6 +432,7 @@ const OtherAssets = ({ formData, handleChange }) => {
           value={formData.deferredOutflowsPensions ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           width={6}
@@ -408,6 +441,7 @@ const OtherAssets = ({ formData, handleChange }) => {
           value={formData.deferredOutflowsOPEB ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           className="dotted-input"
@@ -473,11 +507,13 @@ OtherAssets.propTypes = {
     netAssetsDeferredOutflows: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }),
   handleChange: PropTypes.func,
+  canEdit: PropTypes.bool,
 };
 
 OtherAssets.defaultProps = {
   formData: {},
   handleChange: () => {},
+  canEdit: true,
 };
 
 export default OtherAssets;

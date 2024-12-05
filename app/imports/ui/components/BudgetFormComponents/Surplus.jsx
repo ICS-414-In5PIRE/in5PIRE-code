@@ -2,7 +2,7 @@ import React from 'react';
 import { Form } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
-const Surplus = ({ formData, handleChange }) => (
+const Surplus = ({ formData, handleChange, canEdit }) => (
   <>
     <Form.Group widths="equal">
       <Form.Input
@@ -11,6 +11,7 @@ const Surplus = ({ formData, handleChange }) => (
         value={formData.management ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Support Services"
@@ -18,6 +19,7 @@ const Surplus = ({ formData, handleChange }) => (
         value={formData.supportServices ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Beneficiary Advocacy"
@@ -25,6 +27,7 @@ const Surplus = ({ formData, handleChange }) => (
         value={formData.beneficiaryAdvocacy ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
     </Form.Group>
     <Form.Group className="total-fields">
@@ -49,11 +52,13 @@ Surplus.propTypes = {
     surplusDeficit: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
+  canEdit: PropTypes.bool,
 };
 
 Surplus.defaultProps = {
   formData: {},
   handleChange: () => {},
+  canEdit: true,
 };
 
 export default Surplus;

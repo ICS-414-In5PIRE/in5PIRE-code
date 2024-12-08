@@ -65,8 +65,12 @@ class StaticFinancialsCollection extends BaseCollection {
     const financialStatementData = FinancialStatementInput.findOne({ profileId, year });
 
     if (!balanceSheetData || !budgetFormData || !financialStatementData) {
-      console.warn(`Required data for financial calculation is missing for profileId ${profileId}, year ${year}.`);
-      return {
+      // only return warning for the past 4 years (relevant years)
+      const currentYear = new Date().getFullYear();
+      const relevantYears = [currentYear, currentYear - 1, currentYear - 2, currentYear - 3];
+      if (relevantYears.includes(year)) {
+        console.warn(`Required data for financial calculation is missing for profileId ${profileId}, year ${year}.`);
+      } return {
         revenues: 0,
         opex: 0,
         cashFlow: { inflow: 0, outflow: 0, net: 0 },

@@ -41,8 +41,8 @@ const ProfileDashboard = () => {
       !staticFinancialsHandle.ready();
 
     return {
-      financialData: StaticFinancials.find({ owner: Meteor.userId(), profileId }, { sort: { year: 1 } }).fetch(),
-      // financialData: StaticFinancials.find({ profileId }, { sort: { year: 1 } }).fetch(),
+      // financialData: StaticFinancials.find({ owner: Meteor.userId(), profileId }, { sort: { year: 1 } }).fetch(),
+      financialData: StaticFinancials.find({ profileId }, { sort: { year: 1 } }).fetch(),
 
       isLoading: loading,
     };

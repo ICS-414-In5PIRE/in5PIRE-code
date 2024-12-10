@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Segment, Container, Grid, Button, Menu, Dropdown } from 'semantic-ui-react';
+import { Icon, Form, Segment, Container, Grid, Button, Menu, Dropdown } from 'semantic-ui-react';
 import { Tracker } from 'meteor/tracker';
 import { Meteor } from 'meteor/meteor';
 import PropTypes from 'prop-types';
@@ -15,6 +15,7 @@ import { defineMethod, removeItMethod, updateMethod } from '../../api/base/BaseC
 import InputSheetMessage from '../components/InputSheetMessage';
 import { generateYears } from '../utilities/ComboBox';
 import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection';
+import { parseCSV } from '../components/CsvComponents/parseCsv';
 
 /**
  * BalanceSheetInput class component for entering balance sheet data using Semantic UI React Form.
@@ -93,6 +94,46 @@ class BalanceSheetInput extends React.Component {
     }
   }
 
+  handleUploadFile = (e) => {
+    const file = e.target.files[0]; // Get uploaded file
+
+    if (!file) {
+      swal('Error', 'No file selected!', 'error');
+      return;
+    }
+
+    // Parse the CSV file
+    parseCSV(file)
+      .then((parsedData) => {
+        console.log('Parsed CSV Data:', parsedData);
+
+        // Extract years from the first column
+        const dataRows = parsedData.slice(1); // Skip headers
+        const years = dataRows.map((row) => row[0]); // Get the first column (year)
+        const uniqueYears = [...new Set(years)].sort(); // Get unique years and sort
+
+        // Update the dropdown options with these years
+        const yearOptions = uniqueYears.map((year) => ({
+          key: year,
+          text: year.toString(),
+          value: year,
+        }));
+
+        this.setState({
+          dropdownOptions: { yearOptions },
+          selectedYear: uniqueYears[0], // Set the first available year as default
+        });
+
+        console.log('Available Years:', uniqueYears);
+
+        swal('Success', 'File uploaded! Select a year to continue.', 'success');
+      })
+      .catch((error) => {
+        console.error('Error parsing file:', error);
+        swal('Error', 'Failed to parse the file. Please check the format.', 'error');
+      });
+  };
+
   handleViewOverview = () => {
     const { profileId, navigate } = this.props;
     navigate(`/profile-balance-sheet/${profileId}`);
@@ -170,6 +211,21 @@ class BalanceSheetInput extends React.Component {
     }
   };
 
+  handleUploadToBalanceSheet = () => {
+    const { selectedYear, record } = this.state;
+    const { profileId } = this.props;
+
+    // Basic checks for now
+    if (!record || record.length === 0) {
+      console.error('No record available to update.');
+      swal('Error', 'No record available for the selected year!', 'error');
+      return;
+    }
+
+    console.log('Uploading data for profile:', profileId, 'Year:', selectedYear, 'Record:', record);
+    swal('Success', 'Data ready to upload!', 'success');
+  };
+
   handleDelete = () => {
     const { selectedYear } = this.state;
     const { profileId } = this.props;
@@ -225,6 +281,27 @@ class BalanceSheetInput extends React.Component {
   handleSnackBar = (isOpen, message, isError) => {
     this.setState({ snackBar: { isOpen: isOpen, message: message, isError: isError } });
   };
+
+  findRowByYear(parsedData, selectedYear) {
+    const headers = parsedData[0]; // First row contains headers
+    const dataRows = parsedData.slice(1); // Remaining rows are data
+
+    // Find the row with the matching year
+    const matchingRow = dataRows.find((row) => row[0] === selectedYear); // Use loose equality
+
+    if (!matchingRow) {
+      console.error(`No data found for year ${selectedYear}`);
+      return null;
+    }
+
+    // Map headers to row values
+    const rowData = headers.reduce((acc, header, index) => {
+      acc[header] = matchingRow[index];
+      return acc;
+    }, {});
+
+    return rowData;
+  }
 
   // Render the component
   render() {
@@ -311,6 +388,27 @@ class BalanceSheetInput extends React.Component {
                       )}
                     </>
                   )}
+                  <Form.Field>
+                    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                    <label>Upload CSV File</label>
+                    <input
+                      type="file"
+                      accept=".csv"
+                      onChange={this.handleUploadFile} // Handler to process file
+                    />
+                  </Form.Field>
+
+                  {/* Upload to Balance Sheet Button */}
+                  <Button
+                    primary
+                    icon
+                    labelPosition="left"
+                    onClick={this.handleUploadToBalanceSheet}
+                  >
+                    <Icon name="upload" />
+                    Upload to Balance Sheet
+                  </Button>
+
                   <Button primary onClick={this.handleViewOverview}>
                     View Overview
                   </Button>

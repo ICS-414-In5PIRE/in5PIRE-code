@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
  * @returns {React.JSX.Element}
  * @constructor
  */
-const LongTermLiabilitiesForm = ({ formData, netWording, handleChange }) => (
+const LongTermLiabilitiesForm = ({ formData, netWording, handleChange, canEdit }) => (
   <>
     <Form.Group widths="equal">
       <Form.Input
@@ -17,6 +17,7 @@ const LongTermLiabilitiesForm = ({ formData, netWording, handleChange }) => (
         value={netWording === 'Long-term liabilities - due within one year' ? formData.accruedVacationDueWithinOneYear ?? '' : formData.accruedVacationDueAfterOneYear ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Workers' Compensation"
@@ -24,6 +25,7 @@ const LongTermLiabilitiesForm = ({ formData, netWording, handleChange }) => (
         value={netWording === 'Long-term liabilities - due within one year' ? formData.workersCompensationDueWithinOneYear ?? '' : formData.workersCompensationDueAfterOneYear ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Accrued Management Retirement Plan"
@@ -31,6 +33,7 @@ const LongTermLiabilitiesForm = ({ formData, netWording, handleChange }) => (
         value={netWording === 'Long-term liabilities - due within one year' ? formData.accruedRetirementPlanDueWithinOneYear ?? '' : formData.accruedRetirementPlanDueAfterOneYear ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Accrued Lease Guaranty Obligations"
@@ -38,6 +41,7 @@ const LongTermLiabilitiesForm = ({ formData, netWording, handleChange }) => (
         value={netWording === 'Long-term liabilities - due within one year' ? formData.accruedLeaseGuarantyDueWithinOneYear ?? '' : formData.accruedLeaseGuarantyDueAfterOneYear ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
     </Form.Group>
 
@@ -48,6 +52,7 @@ const LongTermLiabilitiesForm = ({ formData, netWording, handleChange }) => (
         value={netWording === 'Long-term liabilities - due within one year' ? formData.capitalLeaseObligationsDueWithinOneYear ?? '' : formData.capitalLeaseObligationsDueAfterOneYear ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Notes payable - Building A acquisition"
@@ -55,6 +60,7 @@ const LongTermLiabilitiesForm = ({ formData, netWording, handleChange }) => (
         value={netWording === 'Long-term liabilities - due within one year' ? formData.notesPayableBuildingADueWithinOneYear ?? '' : formData.notesPayableBuildingADueAfterOneYear ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Net Pension Liability"
@@ -62,6 +68,7 @@ const LongTermLiabilitiesForm = ({ formData, netWording, handleChange }) => (
         value={netWording === 'Long-term liabilities - due within one year' ? formData.netPensionLiabilityDueWithinOneYear ?? '' : formData.netPensionLiabilityDueAfterOneYear ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Net OPEB Liability"
@@ -69,6 +76,7 @@ const LongTermLiabilitiesForm = ({ formData, netWording, handleChange }) => (
         value={netWording === 'Long-term liabilities - due within one year' ? formData.netOPEBLiabilityDueWithinOneYear ?? '' : formData.netOPEBLiabilityDueAfterOneYear ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
     </Form.Group>
 
@@ -79,6 +87,7 @@ const LongTermLiabilitiesForm = ({ formData, netWording, handleChange }) => (
         value={netWording === 'Long-term liabilities - due within one year' ? formData.lineOfCreditBuildingADueWithinOneYear ?? '' : formData.lineOfCreditBuildingADueAfterOneYear ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Line of Credit - Building B"
@@ -86,6 +95,7 @@ const LongTermLiabilitiesForm = ({ formData, netWording, handleChange }) => (
         value={netWording === 'Long-term liabilities - due within one year' ? formData.lineOfCreditBuildingBDueWithinOneYear ?? '' : formData.lineOfCreditBuildingBDueAfterOneYear ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         className="dotted-input"
@@ -103,6 +113,7 @@ const LongTermLiabilitiesForm = ({ formData, netWording, handleChange }) => (
         value={netWording === 'Long-term liabilities - due within one year' ? formData.debtServiceDueWithinOneYear ?? '' : formData.debtServiceDueAfterOneYear ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
     </Form.Group>
 
@@ -153,6 +164,7 @@ LongTermLiabilitiesForm.propTypes = {
   }),
   netWording: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
+  canEdit: PropTypes.bool.isRequired,
 };
 
 LongTermLiabilitiesForm.defaultProps = {

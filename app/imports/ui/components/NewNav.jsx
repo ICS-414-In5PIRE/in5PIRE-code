@@ -24,17 +24,12 @@ const NewNav = () => {
             <li><Nav.Link as={NavLink} to="/">Home</Nav.Link></li>
             { currentUser && (
               <li>
-                <Nav.Link as={NavLink} to="/financial-profiles">My Financial Scenarios</Nav.Link>
+                <Nav.Link as={NavLink} to="/financial-profiles">Financial Scenarios</Nav.Link>
               </li>
             )}
             { currentUser && (
               <li>
                 <Nav.Link as={NavLink} to="/upload-file">Upload Files</Nav.Link>
-              </li>
-            )}
-            { currentUser && (
-              <li>
-                <Nav.Link as={NavLink} to="/dashboard">Dashboard</Nav.Link>
               </li>
             )}
             <NavDropdown title="Support" id="navbarDropdown">

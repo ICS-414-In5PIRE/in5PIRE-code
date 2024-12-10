@@ -4,6 +4,7 @@ import { Roles } from 'meteor/alanning:roles';
 import BaseCollection from '../base/BaseCollection';
 import { ROLE } from '../role/Role';
 import { BalanceSheetInputSchema } from './BalanceSheetInputSchema';
+// eslint-disable-next-line import/no-cycle
 import { StaticFinancials } from '../financial/StaticFinancialsCollection';
 
 // Publication names

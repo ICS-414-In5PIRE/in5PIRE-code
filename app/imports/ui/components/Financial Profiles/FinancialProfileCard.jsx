@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import PropTypes from 'prop-types';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
-import { Card, Image, Button, Header, Grid, Icon, Dropdown } from 'semantic-ui-react';
+import { Card, Image, Button, Header, Grid, Icon } from 'semantic-ui-react';
 import { FinancialProfiles } from '../../../api/FinancialProfiles/FinancialProfilesCollection';
 import MemberListDropdown from './ListMembers';
-import { parseCSV } from '../CsvComponents/parseCsv';
 
 const FinancialProfileCard = ({
   title,
@@ -20,46 +19,22 @@ const FinancialProfileCard = ({
   profileId,
 }) => {
   const navigate = useNavigate();
-  const [selectedForm, setSelectedForm] = useState('');
-  const uploadOptions = [
-    { key: 'balanceSheet', text: 'Balance Sheet', value: 'balanceSheet' },
-    { key: 'budgetForm', text: 'Budget Form', value: 'budgetForm' },
-    { key: 'financialStatement', text: 'Financial Statements', value: 'financialStatement' },
-  ];
-
   const { members } = useTracker(() => {
     const profile = FinancialProfiles.findOne(profileId);
     return { members: profile ? profile.members : [] };
   });
 
-  const onFileUpload = async (event, currentProfileId, currentForm) => {
-    const file = event.target.files[0];
-
-    if (!file) {
-      swal('Error', 'No file selected.', 'error');
-      return;
-    }
-
-    try {
-      // Parse the uploaded file
-      const parsedData = await parseCSV(file, currentForm);
-
-      // Insert parsed data into the database, linked to the profileId
-      Meteor.call(
-        'FinancialProfiles.updateFormData',
-        { profileId: currentProfileId, formType: currentForm, data: parsedData },
-        (error) => {
-          if (error) {
-            swal('Error', error.message, 'error');
-          } else {
-            swal('Success', `Successfully uploaded ${currentForm} data.`, 'success');
-          }
-        },
-      );
-    } catch (error) {
-      swal('Error', `Failed to parse file: ${error}`, 'error');
-    }
+  // This modularizes visibility of the buttons to make this easier to alter
+  // Current possible roles are admin, analyst, accountant, viewer
+  const buttonPermissions = {
+    editScenario: ['admin'],
+    editBalanceSheet: ['admin', 'accountant'],
+    editBudgetForm: ['admin', 'accountant'],
+    editFinancialStatement: ['admin', 'analyst'],
+    viewDashboard: ['admin', 'analyst', 'accountant', 'viewer'],
   };
+
+  const canViewButton = (buttonKey, role) => buttonPermissions[buttonKey]?.includes(role);
 
   const handleEditProfile = () => {
     navigate(`/edit-financial-profile/${profileId}`);
@@ -111,57 +86,37 @@ const FinancialProfileCard = ({
       </Card.Content>
       <Card.Content extra>
         <Grid columns={1}>
-          {userRole === 'admin' && (
-            <Grid.Column>
+          <Grid.Column>
+            {canViewButton('editScenario', userRole) && (
               <Button className="mb-2" fluid color="grey" onClick={handleEditProfile}>
                 <Icon name="edit" /> Edit Scenario
               </Button>
+            )}
 
+            {canViewButton('editBalanceSheet', userRole) && (
               <Button className="mb-2" fluid color="blue" onClick={handleEditBalanceSheet}>
-                <Icon name="edit" /> Edit Balance Sheet
+                <Icon name="edit" /> Balance Sheet
               </Button>
+            )}
 
+            {canViewButton('editBudgetForm', userRole) && (
               <Button className="mb-2" fluid color="blue" onClick={handleEditBudgetForm}>
-                <Icon name="edit" /> Edit Budget Form
+                <Icon name="edit" /> Budget Form
               </Button>
+            )}
 
+            {canViewButton('editFinancialStatement', userRole) && (
               <Button className="mb-2" fluid color="blue" onClick={handleEditFinancialStatement}>
-                <Icon name="edit" /> Edit Audited Financial Statement
+                <Icon name="edit" /> Audited Financial Statement
               </Button>
-
-              <>
-                <Dropdown
-                  placeholder="Select Form to Upload"
-                  fluid
-                  selection
-                  options={uploadOptions}
-                  onChange={(e, { value }) => setSelectedForm(value)}
-                  value={selectedForm}
-                />
-                <Button
-                  color="blue"
-                  fluid
-                  disabled={!selectedForm}
-                  onClick={() => document.getElementById(`file-upload-${profileId}`).click()}
-                >
-                  Upload {selectedForm && uploadOptions.find((opt) => opt.value === selectedForm)?.text}
-                </Button>
-                <input
-                  type="file"
-                  id={`file-upload-${profileId}`}
-                  hidden
-                  accept=".csv"
-                  onChange={(e) => onFileUpload(e, profileId, selectedForm)}
-                />
-
-              </>
-            </Grid.Column>
-
-          )}
+            )}
+          </Grid.Column>
           <Grid.Column>
-            <Button fluid color="teal" onClick={handleViewProfileDashboard}>
-              <Icon name="dashboard" /> View Profile Dashboard
-            </Button>
+            {canViewButton('viewDashboard', userRole) && (
+              <Button fluid color="teal" onClick={handleViewProfileDashboard}>
+                <Icon name="dashboard" /> View Profile Dashboard
+              </Button>
+            )}
           </Grid.Column>
         </Grid>
       </Card.Content>

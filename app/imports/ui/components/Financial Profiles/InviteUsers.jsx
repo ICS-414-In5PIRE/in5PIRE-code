@@ -77,6 +77,8 @@ const InviteUsers = ({ profileId }) => {
                 onChange={(e) => setInviteRole(e.target.value)}
               >
                 <option value="viewer">Viewer</option>
+                <option value="analyst">Analyst</option>
+                <option value="accountant">Accountant</option>
                 <option value="admin">Admin</option>
               </Form.Control>
             </Form.Group>

@@ -51,6 +51,7 @@ const Dashboard = () => {
 
   // Helper function to format financial data for Snapshot
   const formatFinancialData = (financial) => [
+
     { name: 'Customer Name', value: financial.customerName },
     { name: 'Year', value: financial.year.toString() },
     { name: 'Assets', value: `$${financial.assets.toLocaleString()}` },

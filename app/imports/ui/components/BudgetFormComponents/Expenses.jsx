@@ -8,13 +8,13 @@ import PersonnelAndFringeAdminStaff from './PersonnelAndFringeAdminStaff';
 /**
  * Component for Expenses form for Budget Form
  */
-const Expenses = ({ formData, handleChange }) => {
+const Expenses = ({ formData, handleChange, canEdit }) => {
   const panes = [
     {
       menuItem: 'Personnel & Fringe - Admin',
       render: () => (
         <Tab.Pane>
-          <PersonnelAndFringeAdmin formData={formData} handleChange={handleChange} />
+          <PersonnelAndFringeAdmin formData={formData} handleChange={handleChange} canEdit={canEdit} />
         </Tab.Pane>
       ),
     },
@@ -22,7 +22,7 @@ const Expenses = ({ formData, handleChange }) => {
       menuItem: 'Personnel & Fringe - Management',
       render: () => (
         <Tab.Pane>
-          <PersonnelAndFringeManagement formData={formData} handleChange={handleChange} />
+          <PersonnelAndFringeManagement formData={formData} handleChange={handleChange} canEdit={canEdit} />
         </Tab.Pane>
       ),
     },
@@ -30,7 +30,7 @@ const Expenses = ({ formData, handleChange }) => {
       menuItem: 'Personnel & Fringe - Admin Staff',
       render: () => (
         <Tab.Pane>
-          <PersonnelAndFringeAdminStaff formData={formData} handleChange={handleChange} />
+          <PersonnelAndFringeAdminStaff formData={formData} handleChange={handleChange} canEdit={canEdit} />
         </Tab.Pane>
       ),
     },
@@ -45,6 +45,7 @@ const Expenses = ({ formData, handleChange }) => {
         value={formData.personnel ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Tab panes={panes} />
       <Divider />
@@ -55,6 +56,7 @@ const Expenses = ({ formData, handleChange }) => {
           value={formData.program ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           label="Contracts"
@@ -62,6 +64,7 @@ const Expenses = ({ formData, handleChange }) => {
           value={formData.contracts ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           label="Grants"
@@ -69,6 +72,7 @@ const Expenses = ({ formData, handleChange }) => {
           value={formData.grants ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           label="Travel"
@@ -76,6 +80,7 @@ const Expenses = ({ formData, handleChange }) => {
           value={formData.travel ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
       </Form.Group>
       <Form.Group widths="equal">
@@ -85,6 +90,7 @@ const Expenses = ({ formData, handleChange }) => {
           value={formData.equipment ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           label="Overhead"
@@ -92,6 +98,7 @@ const Expenses = ({ formData, handleChange }) => {
           value={formData.overhead ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           label="Debt Service"
@@ -99,6 +106,7 @@ const Expenses = ({ formData, handleChange }) => {
           value={formData.debtService ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
         <Form.Input
           label="Other"
@@ -106,6 +114,7 @@ const Expenses = ({ formData, handleChange }) => {
           value={formData.other ?? ''}
           onChange={handleChange}
           type="number"
+          readOnly={!canEdit}
         />
       </Form.Group>
       <Form.Group className="total-fields">
@@ -138,11 +147,13 @@ Expenses.propTypes = {
     totalExpenses: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
+  canEdit: PropTypes.bool,
 };
 
 Expenses.defaultProps = {
   formData: {},
   handleChange: () => {},
+  canEdit: true,
 };
 
 export default Expenses;

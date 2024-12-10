@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Segment, Container, Grid, Menu, Header, Card, Loader, Button, Icon } from 'semantic-ui-react';
+import { Segment, Container, Grid, Menu, Header, Card, Loader, Button } from 'semantic-ui-react';
 import { Line } from 'react-chartjs-2';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
@@ -32,7 +32,7 @@ const ProfileDashboard = () => {
     const budgetFormHandle = Meteor.subscribe('defaultBudgetFormInput', profileId);
     const financialStatementHandle = Meteor.subscribe('defaultFinancialStatementData', profileId);
     const staticFinancialsHandle = Meteor.subscribe('staticFinancialsForProfile', profileId);
-    const username = Meteor.user()?.username;
+    // const username = Meteor.user()?.username;
 
     const loading =
       !balanceSheetHandle.ready() ||
@@ -41,7 +41,9 @@ const ProfileDashboard = () => {
       !staticFinancialsHandle.ready();
 
     return {
-      financialData: StaticFinancials.find({ owner: username, profileId }).fetch(),
+      // financialData: StaticFinancials.find({ owner: Meteor.userId(), profileId }, { sort: { year: 1 } }).fetch(),
+      financialData: StaticFinancials.find({ profileId }, { sort: { year: 1 } }).fetch(),
+
       isLoading: loading,
     };
   }, [profileId]);

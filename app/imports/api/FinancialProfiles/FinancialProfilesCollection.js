@@ -50,7 +50,7 @@ class FinancialProfilesCollection extends BaseCollection {
       'members.$.userId': String,
       'members.$.role': {
         type: String,
-        allowedValues: ['admin', 'viewer'],
+        allowedValues: ['admin', 'viewer', 'analyst', 'accountant'],
       },
       forms: {
         type: Object,

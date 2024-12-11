@@ -390,12 +390,11 @@ class BalanceSheetInput extends React.Component {
                   {canEdit && (
                     <>
                       <Form.Field>
-                        <label htmlFor="csv-upload">Upload CSV</label>
                         <input
-                          id="csv-upload" // Matches the htmlFor attribute in the label
                           type="file"
                           accept=".csv"
                           onChange={this.handleFileUpload}
+                          aria-label="Upload CSV"
                         />
                       </Form.Field>
 

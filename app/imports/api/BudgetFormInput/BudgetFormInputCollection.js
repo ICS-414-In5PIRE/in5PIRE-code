@@ -4,6 +4,7 @@ import { Roles } from 'meteor/alanning:roles';
 import BaseCollection from '../base/BaseCollection';
 import { ROLE } from '../role/Role';
 import { BudgetFormInputSchema } from './BudgetFormInputSchema';
+import { StaticFinancials } from '../financial/StaticFinancialsCollection';
 
 export const budgetFormPublications = {
   budgetForm: 'BudgetForm',
@@ -132,6 +133,25 @@ class BudgetFormInputCollection extends BaseCollection {
         management, supportServices, beneficiaryAdvocacy, surplusDeficit,
       });
 
+      const cashInflow = parseFloat(totalRevenue || 0) + parseFloat(totalExpenses || 0);
+
+      const cashFlow = { inflow: cashInflow, outflow: 152000, net: cashInflow - 152000 };
+
+      const twoYearsAgo = year - 2;
+      const existingDocumentTwoYearsAgo = this._collection.findOne({ owner, year: twoYearsAgo, profileId });
+
+      const fringeBenefitsAdminTwoYearsAgo = existingDocumentTwoYearsAgo ? existingDocumentTwoYearsAgo.fringeBenefitsAdmin : 0;
+      const fringeBenefitsManagementStaffTwoYearsAgo = existingDocumentTwoYearsAgo ? existingDocumentTwoYearsAgo.fringeBenefitsStaff : 0;
+      const fringeBenefitsManagementTwoYearsAgo = existingDocumentTwoYearsAgo ? existingDocumentTwoYearsAgo.fringeBenefitsManagement : 0;
+
+      const admin = -(fringeBenefitsAdmin + fringeBenefitsAdminTwoYearsAgo);
+      const mgmtStaff = -(fringeBenefitsStaff + fringeBenefitsManagementStaffTwoYearsAgo);
+      const mgmt = -(fringeBenefitsManagement + fringeBenefitsManagementTwoYearsAgo);
+
+      const incrementalFringeBenefits = { admin, mgmtStaff, mgmt, net: admin + mgmtStaff + mgmt };
+
+      StaticFinancials.define({ revenues: totalRevenue, opex: totalExpenses, cashFlow, incrementalFringeBenefits, owner, year, profileId });
+
       return {
         status: 1,
         errorMessage: '',
@@ -188,7 +208,7 @@ class BudgetFormInputCollection extends BaseCollection {
     // Auto-calculate personnel and fringe management
     const personnelAndFringeManagement =
       (parseFloat(updateData.salaryManagement) || 0) +
-      (parseFloat(fringeBenefitsManagement) || 0);
+      (parseFloat(updateData.fringeBenefitsManagement) || 0);
 
     // Auto-calculate staff fringe benefits
     const fringeBenefitsStaff =
@@ -204,8 +224,8 @@ class BudgetFormInputCollection extends BaseCollection {
 
     // Auto-calculate personnel and fringe staff
     const personnelAndFringeStaff =
-      (parseFloat(updateData.salaryStaff) || 0) +
-      (parseFloat(fringeBenefitsStaff) || 0);
+      (parseFloat(updateData.management) || 0) -
+      (parseFloat(updateData.personnelAndFringeManagement) || 0);
 
     // Auto-calculate admin fringe benefits
     const fringeBenefitsAdmin =
@@ -221,13 +241,14 @@ class BudgetFormInputCollection extends BaseCollection {
 
     // Auto-calculate personnel and fringe admin
     const personnelAndFringeAdmin =
-      (parseFloat(updateData.salaryAdmin) || 0) +
-      (parseFloat(fringeBenefitsAdmin) || 0);
+      (parseFloat(updateData.personnel) || 0) -
+      ((parseFloat(updateData.personnelAndFringeStaff) || 0) +
+        (parseFloat(updateData.personnelAndFringeManagement) || 0));
 
     // Auto-calculate surplus deficit
     const surplusDeficit =
-      (parseFloat(totalRevenue) || 0) -
-      (parseFloat(totalExpenses) || 0);
+      (parseFloat(updateData.totalRevenue) || 0) -
+      (parseFloat(updateData.totalExpenses) || 0);
 
     const updatedDataWithCalculations = {
       ...updateData,
@@ -242,6 +263,27 @@ class BudgetFormInputCollection extends BaseCollection {
       surplusDeficit,
     };
 
+    const existingDocument = StaticFinancials.findOne({ owner: updateData.owner, year: updateData.year, profileId: updateData.profileId });
+
+    const cashInflow = parseFloat(totalRevenue || 0) + parseFloat(totalExpenses || 0);
+
+    const cashFlow = { inflow: cashInflow, outflow: 152000, net: cashInflow - 152000 };
+
+    const twoYearsAgo = updateData.year - 2;
+    const existingDocumentTwoYearsAgo = this._collection.findOne({ owner: updateData.owner, year: twoYearsAgo, profileId: updateData.profileId });
+
+    const fringeBenefitsAdminTwoYearsAgo = existingDocumentTwoYearsAgo ? existingDocumentTwoYearsAgo.fringeBenefitsAdmin : 0;
+    const fringeBenefitsManagementStaffTwoYearsAgo = existingDocumentTwoYearsAgo ? existingDocumentTwoYearsAgo.fringeBenefitsStaff : 0;
+    const fringeBenefitsManagementTwoYearsAgo = existingDocumentTwoYearsAgo ? existingDocumentTwoYearsAgo.fringeBenefitsManagement : 0;
+
+    const admin = -(fringeBenefitsAdmin + fringeBenefitsAdminTwoYearsAgo);
+    const mgmtStaff = -(fringeBenefitsStaff + fringeBenefitsManagementStaffTwoYearsAgo);
+    const mgmt = -(fringeBenefitsManagement + fringeBenefitsManagementTwoYearsAgo);
+
+    const incrementalFringeBenefits = { admin, mgmtStaff, mgmt, net: admin + mgmtStaff + mgmt };
+
+    StaticFinancials.define({ ...existingDocument, revenues: totalRevenue, opex: totalExpenses, cashFlow, incrementalFringeBenefits, owner: updateData.owner, year: updateData.year, profileId: updateData.profileId });
+
     this._collection.update(docID, { $set: updatedDataWithCalculations });
   }
 
@@ -254,6 +296,9 @@ class BudgetFormInputCollection extends BaseCollection {
     const doc = this.findDoc(docID);
     check(doc, Object);
     this._collection.remove(doc._id);
+
+    StaticFinancials.define({ revenues: 0, opex: 0, cashFlow: { inflow: 0, outflow: 0, net: 0 }, incrementalFringeBenefits: { admin: 0, mgmtStaff: 0, mgmt: 0, net: 0 }, owner: doc.owner, year: doc.year, profileId: doc.profileId });
+
     return true;
   }
 

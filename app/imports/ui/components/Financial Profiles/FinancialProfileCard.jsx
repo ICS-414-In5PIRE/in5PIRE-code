@@ -24,6 +24,18 @@ const FinancialProfileCard = ({
     return { members: profile ? profile.members : [] };
   });
 
+  // This modularizes visibility of the buttons to make this easier to alter
+  // Current possible roles are admin, analyst, accountant, viewer
+  const buttonPermissions = {
+    editScenario: ['admin'],
+    editBalanceSheet: ['admin', 'accountant', 'analyst'],
+    editBudgetForm: ['admin', 'accountant', 'analyst'],
+    editFinancialStatement: ['admin', 'accountant', 'analyst'],
+    viewDashboard: ['admin', 'analyst', 'accountant', 'viewer'],
+  };
+
+  const canViewButton = (buttonKey, role) => buttonPermissions[buttonKey]?.includes(role);
+
   const handleEditProfile = () => {
     navigate(`/edit-financial-profile/${profileId}`);
   };
@@ -74,30 +86,37 @@ const FinancialProfileCard = ({
       </Card.Content>
       <Card.Content extra>
         <Grid columns={1}>
-          {userRole === 'admin' && (
-            <Grid.Column>
+          <Grid.Column>
+            {canViewButton('editScenario', userRole) && (
               <Button className="mb-2" fluid color="grey" onClick={handleEditProfile}>
                 <Icon name="edit" /> Edit Scenario
               </Button>
+            )}
 
+            {canViewButton('editBalanceSheet', userRole) && (
               <Button className="mb-2" fluid color="blue" onClick={handleEditBalanceSheet}>
-                <Icon name="edit" /> Edit Balance Sheet
+                <Icon name="edit" /> Balance Sheet
               </Button>
+            )}
 
+            {canViewButton('editBudgetForm', userRole) && (
               <Button className="mb-2" fluid color="blue" onClick={handleEditBudgetForm}>
-                <Icon name="edit" /> Edit Budget Form
+                <Icon name="edit" /> Budget Form
               </Button>
+            )}
 
+            {canViewButton('editFinancialStatement', userRole) && (
               <Button className="mb-2" fluid color="blue" onClick={handleEditFinancialStatement}>
-                <Icon name="edit" /> Edit Audited Financial Statement
+                <Icon name="edit" /> Audited Financial Statement
               </Button>
-            </Grid.Column>
-
-          )}
+            )}
+          </Grid.Column>
           <Grid.Column>
-            <Button fluid color="teal" onClick={handleViewProfileDashboard}>
-              <Icon name="dashboard" /> View Profile Dashboard
-            </Button>
+            {canViewButton('viewDashboard', userRole) && (
+              <Button fluid color="teal" onClick={handleViewProfileDashboard}>
+                <Icon name="dashboard" /> View Profile Dashboard
+              </Button>
+            )}
           </Grid.Column>
         </Grid>
       </Card.Content>

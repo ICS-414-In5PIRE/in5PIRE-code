@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 /**
  * Component for Commitments and Contingencies form for Balance Input Sheet
  */
-const CommitmentsAndContingencies = ({ formData, handleChange }) => (
+const CommitmentsAndContingencies = ({ formData, handleChange, canEdit }) => (
   <>
     <Form.Group widths="equal">
       <Form.Input
@@ -14,6 +14,7 @@ const CommitmentsAndContingencies = ({ formData, handleChange }) => (
         value={formData.investedInCapitalAssets ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Restricted - federal funds"
@@ -21,6 +22,7 @@ const CommitmentsAndContingencies = ({ formData, handleChange }) => (
         value={formData.restrictedFederalFunds ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Unrestricted"
@@ -28,6 +30,7 @@ const CommitmentsAndContingencies = ({ formData, handleChange }) => (
         value={formData.unrestricted ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
     </Form.Group>
     <Form.Group widths="equal">
@@ -64,11 +67,13 @@ CommitmentsAndContingencies.propTypes = {
     totalLiabilitiesDeferredNetPosition: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }),
   handleChange: PropTypes.func,
+  canEdit: PropTypes.bool,
 };
 
 CommitmentsAndContingencies.defaultProps = {
   formData: {},
   handleChange: () => {},
+  canEdit: true,
 };
 
 export default CommitmentsAndContingencies;

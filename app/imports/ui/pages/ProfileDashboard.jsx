@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Segment, Container, Grid, Menu, Header, Card, Loader, Button } from 'semantic-ui-react';
+import { Segment, Container, Grid, Menu, Header, Card, Loader, Button, Input } from 'semantic-ui-react';
 import { Line } from 'react-chartjs-2';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
@@ -25,6 +25,7 @@ const ProfileDashboard = () => {
   const { profileId } = useParams();
   const [activeTab, setActiveTab] = useState('ProfileSnapshot');
   const [loadingProjections, setLoadingProjections] = useState(false);
+  const [percentIncrease, setPercentIncrease] = useState('');
   const navigate = useNavigate();
 
   const { financialData, isLoading } = useTracker(() => {
@@ -41,8 +42,8 @@ const ProfileDashboard = () => {
       !staticFinancialsHandle.ready();
 
     return {
-      financialData: StaticFinancials.find({ owner: Meteor.userId(), profileId }, { sort: { year: 1 } }).fetch(),
-      // financialData: StaticFinancials.find({ profileId }, { sort: { year: 1 } }).fetch(),
+      // financialData: StaticFinancials.find({ owner: Meteor.userId(), profileId }, { sort: { year: 1 } }).fetch(),
+      financialData: StaticFinancials.find({ profileId }, { sort: { year: 1 } }).fetch(),
 
       isLoading: loading,
     };
@@ -102,7 +103,7 @@ const ProfileDashboard = () => {
   const handleGenerateProjections = async () => {
     setLoadingProjections(true);
     try {
-      await generateDashboardProjections(profileId);
+      await generateDashboardProjections(profileId, percentIncrease);
       alert('12-year projections generated successfully!');
     } catch (error) {
       console.error(error);
@@ -119,12 +120,32 @@ const ProfileDashboard = () => {
 
   return (
     <Container id={PAGE_IDS.DASHBOARD} style={{ marginTop: '2em' }}>
-      <Grid.Column textAlign="left">
-        <Button labelPosition="left" icon="left chevron" content="Back to Scenarios" onClick={() => navigate('/financial-profiles')} />
-        <Button color="green" onClick={handleGenerateProjections} loading={loadingProjections} disabled={loadingProjections}>
-          Generate 12-Year Projections
-        </Button>
-      </Grid.Column>
+      <Grid>
+        <Grid.Row columns={2}>
+          <Grid.Column textAlign="left">
+            <Button labelPosition="left" icon="left chevron" content="Back to Scenarios" onClick={() => navigate('/financial-profiles')} />
+          </Grid.Column>
+          <Grid.Column textAlign="right">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              <Input
+                type="number"
+                value={percentIncrease}
+                onChange={(e) => setPercentIncrease(parseFloat(e.target.value))}
+                placeholder="Enter percent increase"
+                width={20}
+              />
+              <Button
+                color="green"
+                onClick={handleGenerateProjections}
+                loading={loadingProjections}
+                disabled={loadingProjections || !percentIncrease}
+              >
+                Generate 12-Year Projections
+              </Button>
+            </div>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
       <Grid centered>
         <Grid.Column width={16}>
           <Header as="h2" textAlign="center">

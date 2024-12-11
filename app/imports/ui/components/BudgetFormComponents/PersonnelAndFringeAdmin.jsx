@@ -2,7 +2,7 @@ import React from 'react';
 import { Form } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
-const PersonnelAndFringeAdmin = ({ formData, handleChange }) => (
+const PersonnelAndFringeAdmin = ({ formData, handleChange, canEdit }) => (
   <>
     <Form.Input
       width={4}
@@ -11,6 +11,7 @@ const PersonnelAndFringeAdmin = ({ formData, handleChange }) => (
       value={formData.salaryAdmin ?? ''}
       onChange={handleChange}
       type="number"
+      readOnly={!canEdit}
     />
     <h3>Fringe Benefits</h3>
     <Form.Group widths="equal">
@@ -20,6 +21,7 @@ const PersonnelAndFringeAdmin = ({ formData, handleChange }) => (
         value={formData.pensionAccumulationAdmin ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Retiree Health Insurance"
@@ -27,6 +29,7 @@ const PersonnelAndFringeAdmin = ({ formData, handleChange }) => (
         value={formData.retireeHealthInsuranceAdmin ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Other Post-Employment Benefits"
@@ -34,6 +37,7 @@ const PersonnelAndFringeAdmin = ({ formData, handleChange }) => (
         value={formData.postEmploymentBenefitsAdmin ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Employees Health Fund"
@@ -41,6 +45,7 @@ const PersonnelAndFringeAdmin = ({ formData, handleChange }) => (
         value={formData.employeesHealthFundAdmin ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
     </Form.Group>
     <Form.Group widths="equal">
@@ -50,6 +55,7 @@ const PersonnelAndFringeAdmin = ({ formData, handleChange }) => (
         value={formData.socialSecurityAdmin ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Medicare"
@@ -57,6 +63,7 @@ const PersonnelAndFringeAdmin = ({ formData, handleChange }) => (
         value={formData.medicareAdmin ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Workers Compensation"
@@ -64,6 +71,7 @@ const PersonnelAndFringeAdmin = ({ formData, handleChange }) => (
         value={formData.workersCompensationAdmin ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Unemployment Compensation"
@@ -71,6 +79,7 @@ const PersonnelAndFringeAdmin = ({ formData, handleChange }) => (
         value={formData.unemploymentCompensationAdmin ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
       <Form.Input
         label="Pension Administration"
@@ -78,6 +87,7 @@ const PersonnelAndFringeAdmin = ({ formData, handleChange }) => (
         value={formData.pensionAdministrationAdmin ?? ''}
         onChange={handleChange}
         type="number"
+        readOnly={!canEdit}
       />
     </Form.Group>
     <Form.Group className="total-fields">
@@ -119,11 +129,13 @@ PersonnelAndFringeAdmin.propTypes = {
     personnelAndFringeAdmin: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
   handleChange: PropTypes.func,
+  canEdit: PropTypes.bool,
 };
 
 PersonnelAndFringeAdmin.defaultProps = {
   formData: {},
   handleChange: () => {},
+  canEdit: true,
 };
 
 export default PersonnelAndFringeAdmin;

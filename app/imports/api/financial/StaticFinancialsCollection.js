@@ -5,10 +5,6 @@ import { Roles } from 'meteor/alanning:roles';
 import BaseCollection from '../base/BaseCollection';
 import { ROLE } from '../role/Role';
 import { FinancialProfiles } from '../FinancialProfiles/FinancialProfilesCollection';
-// eslint-disable-next-line import/no-cycle
-import { BalanceSheetInputs } from '../BalanceSheetInput/BalanceSheetInputCollection';
-import { BudgetFormInput } from '../BudgetFormInput/BudgetFormInputCollection';
-import { FinancialStatementInput } from '../FinancialStatementInput/FinancialStatementInputCollection';
 
 export const staticFinancialsPublications = {
   staticFinancials: 'StaticFinancials',
@@ -41,170 +37,51 @@ class StaticFinancialsCollection extends BaseCollection {
       'cashFlow.net': { type: Number, defaultValue: 0 },
       incrementalFringeBenefits: {
         type: Object,
-        defaultValue: { admin: 0, mgmtStaff: 0, mgmt: 0, net: 0 },
+        defaultValue: { admin: 0, mgmtStaff: 0, mgmt: 0 },
         optional: true,
       },
       'incrementalFringeBenefits.admin': { type: Number, defaultValue: 0 },
       'incrementalFringeBenefits.mgmtStaff': { type: Number, defaultValue: 0 },
       'incrementalFringeBenefits.mgmt': { type: Number, defaultValue: 0 },
-      'incrementalFringeBenefits.net': { type: Number, defaultValue: 0 },
       owner: { type: String },
     }));
   }
 
   /**
-   * Computes the revenues field using data from other collections.
-   * @param {String} profileId - The profile ID.
-   * @param {Number} year - The fiscal year.
-   * @returns {Object} An object containing computed fields: revenues, opex, cashFlow, incrementalFringeBenefits
-   */
-  computeFinancials(profileId, year) {
-
-    const balanceSheetData = BalanceSheetInputs.findOne({ profileId, year });
-    const budgetFormData = BudgetFormInput.findOne({ profileId, year });
-    const financialStatementData = FinancialStatementInput.findOne({ profileId, year });
-
-    if (!balanceSheetData || !budgetFormData || !financialStatementData) {
-      // only return warning for the past 4 years (relevant years)
-      const currentYear = new Date().getFullYear();
-      const relevantYears = [currentYear, currentYear - 1, currentYear - 2, currentYear - 3];
-      if (relevantYears.includes(year)) {
-        console.warn(`Required data for financial calculation is missing for profileId ${profileId}, year ${year}.`);
-      } return {
-        revenues: 0,
-        opex: 0,
-        cashFlow: { inflow: 0, outflow: 0, net: 0 },
-        incrementalFringeBenefits: { admin: 0, mgmtStaff: 0, mgmt: 0, net: 0 },
-      };
-    }
-
-    // Compute revenues
-    const revenues = this.computeRevenues(profileId, year, balanceSheetData, budgetFormData, financialStatementData);
-
-    // Compute opex from BudgetFormInput
-    const opex = budgetFormData.totalExpenses || 0;
-
-    // Compute cashFlow
-    const cashFlowInflow = revenues; // Assuming cash inflow equals revenues
-    const cashFlowOutflow = opex; // Assuming cash outflow equals opex
-    const cashFlowNet = cashFlowInflow - cashFlowOutflow;
-    const cashFlow = { inflow: cashFlowInflow, outflow: cashFlowOutflow, net: cashFlowNet };
-
-    // Compute incremental fringe benefits
-    const currentYearFringeBenefitsAdmin = budgetFormData.fringeBenefitsAdmin || 0;
-    const currentYearFringeBenefitsManagement = budgetFormData.fringeBenefitsManagement || 0;
-    const currentYearFringeBenefitsStaff = budgetFormData.fringeBenefitsStaff || 0;
-
-    // Fetch data from two years ago
-    const twoYearsAgo = year - 2;
-    const budgetDataTwoYearsAgo = BudgetFormInput.findOne({ profileId, year: twoYearsAgo });
-
-    const fringeBenefitsAdminTwoYearsAgo = budgetDataTwoYearsAgo ? budgetDataTwoYearsAgo.fringeBenefitsAdmin || 0 : 0;
-    const fringeBenefitsManagementTwoYearsAgo = budgetDataTwoYearsAgo ? budgetDataTwoYearsAgo.fringeBenefitsManagement || 0 : 0;
-    const fringeBenefitsStaffTwoYearsAgo = budgetDataTwoYearsAgo ? budgetDataTwoYearsAgo.fringeBenefitsStaff || 0 : 0;
-
-    const admin = -(currentYearFringeBenefitsAdmin + fringeBenefitsAdminTwoYearsAgo);
-    const mgmtStaff = -(currentYearFringeBenefitsStaff + fringeBenefitsStaffTwoYearsAgo);
-    const mgmt = -(currentYearFringeBenefitsManagement + fringeBenefitsManagementTwoYearsAgo);
-    const net = admin + mgmtStaff + mgmt;
-
-    const incrementalFringeBenefits = { admin, mgmtStaff, mgmt, net };
-
-    return {
-      revenues,
-      opex,
-      cashFlow,
-      incrementalFringeBenefits,
-    };
-  }
-
-  computeRevenues(profileId, year, balanceSheetData, budgetFormData, financialStatementData) {
-    // Compute 5% of the Investment Portfolio
-    const investmentPortfolioValue = balanceSheetData.totalInvestments || 0;
-    const fivePercentInvestmentPortfolio = 0.05 * investmentPortfolioValue;
-
-    // Lands / Trust
-    const landsTrust = (balanceSheetData.landA || 0) + (balanceSheetData.landB || 0);
-
-    // General Fund
-    const generalFund = budgetFormData.generalFund || 0;
-
-    // Total Core Budget Revenues
-    const totalCoreBudgetRevenues = fivePercentInvestmentPortfolio + landsTrust + generalFund;
-
-    // Total Program Revenues
-    const chargesForServices = financialStatementData.chargesForService || 0;
-    const operatingGrants = financialStatementData.operatingGrants || 0;
-    const interestAndInvestmentEarningsProgram = financialStatementData.interestAndInvestmentEarnings || 0;
-
-    const totalProgramRevenues = chargesForServices + operatingGrants + interestAndInvestmentEarningsProgram;
-
-    // Total Other Revenues
-    const interestAndInvestmentLosses = financialStatementData.interestAndInvestmentLosses || 0;
-    const reparations = financialStatementData.reparations || 0;
-    const newspaperAds = financialStatementData.newspaperAds || 0;
-    const donationsAndOther = financialStatementData.donationsAndOther || 0;
-    const llcBRevenues = financialStatementData.llcBRevenues || 0;
-    const nonImposedFringeBenefits = financialStatementData.nonImposedFringeBenefits || 0;
-
-    const totalOtherRevenues = interestAndInvestmentLosses + reparations + newspaperAds + donationsAndOther + llcBRevenues + nonImposedFringeBenefits;
-
-    // Total Revenues
-    const totalRevenues = totalCoreBudgetRevenues + totalProgramRevenues + totalOtherRevenues;
-
-    return totalRevenues;
-  }
-
-  recomputeAllFinancials() {
-    const staticFinancialsRecords = this._collection.find().fetch();
-
-    staticFinancialsRecords.forEach((staticFinancial) => {
-      const { _id, profileId, year } = staticFinancial;
-
-      // Compute financials
-      const financials = this.computeFinancials(profileId, year);
-
-      // Calculate derived fields based on the merged data
-      const liquidity = parseFloat(staticFinancial.cashOnHand || 0) + parseFloat(staticFinancial.investment || 0);
-      const netIncome = parseFloat(financials.revenues) - parseFloat(financials.opex);
-
-      // Update the StaticFinancials document
-      this._collection.update(_id, {
-        $set: {
-          revenues: financials.revenues,
-          opex: financials.opex,
-          cashFlow: financials.cashFlow,
-          incrementalFringeBenefits: financials.incrementalFringeBenefits,
-          liquidity,
-          netIncome,
-        },
-      });
-    });
-  }
-
-  /**
    * Defines a new static financial record.
-   * @param {Object} definitionData - The data to define the record.
-   * @returns {String} - The docID of the newly inserted or updated record.
+   * @param customerName - Name of the customer.
+   * @param year - Fiscal year.
+   * @param assets - Total assets.
+   * @param liabilities - Total liabilities.
+   * @param netPosition - Net financial position.
+   * @param cashOnHand - Available cash.
+   * @param investment - Investments made.
+   * @param liquidity - Liquidity of assets.
+   * @param debt - Total debt.
+   * @param revenues - Total revenues.
+   * @param opex - Operational expenses.
+   * @param netIncome - Net income.
+   * @param cashFlow - Cash flow breakdown.
+   * @param incrementalFringeBenefits - Breakdown of fringe benefits.
+   * @param owner - Owner of the record.
+   * @returns {String} - The docID of the newly inserted record.
    */
-  define(definitionData) {
-    const {
-      customerName = '',
-      profileId,
-      year,
-      assets,
-      liabilities,
-      netPosition,
-      cashOnHand,
-      investment,
-      debt,
-      owner,
-      revenues = 0,
-      opex = 0,
-      cashFlow = { inflow: 0, outflow: 0, net: 0 },
-      incrementalFringeBenefits = { admin: 0, mgmtStaff: 0, mgmt: 0, net: 0 },
-    } = definitionData;
-
+  define({
+    customerName = '',
+    profileId,
+    year,
+    assets,
+    liabilities,
+    netPosition,
+    cashOnHand,
+    investment,
+    debt,
+    revenues,
+    opex,
+    cashFlow,
+    incrementalFringeBenefits,
+    owner,
+  }) {
     // Fetch the existing record by profileId and year, if it exists
     const existingRecord = this._collection.findOne({ profileId, year });
 
@@ -214,9 +91,8 @@ class StaticFinancialsCollection extends BaseCollection {
       const profile = FinancialProfiles.findOne({ _id: profileId });
       finalCustomerName = profile ? profile.title : 'Unknown';
     } else {
-      Meteor._debug(`Using provided customerName: ${finalCustomerName}`);
+      console.log('Using provided customerName:', finalCustomerName);
     }
-
     // Merge new data with existing data
     const mergedData = {
       customerName: finalCustomerName ?? existingRecord?.customerName ?? '',
@@ -228,11 +104,20 @@ class StaticFinancialsCollection extends BaseCollection {
       cashOnHand: cashOnHand ?? existingRecord?.cashOnHand ?? 0,
       investment: investment ?? existingRecord?.investment ?? 0,
       debt: debt ?? existingRecord?.debt,
-      owner: owner ?? existingRecord?.owner,
       revenues: revenues ?? existingRecord?.revenues ?? 0,
       opex: opex ?? existingRecord?.opex ?? 0,
-      cashFlow: cashFlow ?? existingRecord?.cashFlow ?? { inflow: 0, outflow: 0, net: 0 },
-      incrementalFringeBenefits: incrementalFringeBenefits ?? existingRecord?.incrementalFringeBenefits ?? { admin: 0, mgmtStaff: 0, mgmt: 0, net: 0 },
+      cashFlow: {
+        inflow: cashFlow?.inflow ?? existingRecord?.cashFlow?.inflow ?? 0,
+        outflow: cashFlow?.outflow ?? existingRecord?.cashFlow?.outflow ?? 0,
+        net: cashFlow?.net ?? existingRecord?.cashFlow?.net ?? 0,
+      },
+      incrementalFringeBenefits: {
+        admin: incrementalFringeBenefits?.admin ?? existingRecord?.incrementalFringeBenefits?.admin ?? 0,
+        mgmtStaff: incrementalFringeBenefits?.mgmtStaff ?? existingRecord?.incrementalFringeBenefits?.mgmtStaff ?? 0,
+        mgmt: incrementalFringeBenefits?.mgmt ?? existingRecord?.incrementalFringeBenefits?.mgmt ?? 0,
+        net: incrementalFringeBenefits?.net ?? existingRecord?.incrementalFringeBenefits?.net ?? 0,
+      },
+      owner: owner ?? existingRecord?.owner,
     };
 
     // Calculate derived fields based on the merged data
@@ -254,33 +139,33 @@ class StaticFinancialsCollection extends BaseCollection {
 
   /**
    * Updates an existing static financial record.
-   * @param {String} docID - The ID of the document to update.
-   * @param {Object} updateData - The updated fields.
+   * @param docID - The ID of the document to update.
+   * @param customerName - The updated customer name (optional).
+   * @param year - The updated year (optional).
+   * @param assets - The updated assets (optional).
+   * @param liabilities - The updated liabilities (optional).
+   * @param netPosition - The updated net position (optional).
+   * @param cashOnHand - The updated cash on hand (optional).
+   * @param investment - The updated investments (optional).
+   * @param liquidity - The updated liquidity (optional).
+   * @param debt - The updated debt (optional).
+   * @param revenues - The updated revenues (optional).
+   * @param opex - The updated operational expenses (optional).
+   * @param netIncome - The updated net income (optional).
+   * @param cashFlow - The updated cash flow (optional).
+   * @param incrementalFringeBenefits - The updated fringe benefits (optional).
    */
   update(docID, updateData) {
-    const doc = this.findDoc(docID);
-    const profileId = doc.profileId;
-    const year = doc.year;
+    const cleanedUpdateData = { ...updateData };
 
-    // Compute financials
-    const financials = this.computeFinancials(profileId, year);
+    // Ensure nested objects have default values if missing
+    if (!cleanedUpdateData.cashFlow) {
+      cleanedUpdateData.cashFlow = { inflow: 0, outflow: 0, net: 0 };
+    }
 
-    // Include computed financials in the updateData
-    const cleanedUpdateData = {
-      ...updateData,
-      revenues: financials.revenues,
-      opex: financials.opex,
-      cashFlow: financials.cashFlow,
-      incrementalFringeBenefits: financials.incrementalFringeBenefits,
-    };
-
-    // Calculate derived fields based on the updated data
-    const liquidity = parseFloat(cleanedUpdateData.cashOnHand || doc.cashOnHand) + parseFloat(cleanedUpdateData.investment || doc.investment);
-    const netIncome = parseFloat(cleanedUpdateData.revenues) - parseFloat(cleanedUpdateData.opex);
-
-    // Add the derived fields to the cleanedUpdateData
-    cleanedUpdateData.liquidity = liquidity;
-    cleanedUpdateData.netIncome = netIncome;
+    if (!cleanedUpdateData.incrementalFringeBenefits) {
+      cleanedUpdateData.incrementalFringeBenefits = { admin: 0, mgmtStaff: 0, mgmt: 0 };
+    }
 
     this._collection.update(docID, { $set: cleanedUpdateData });
   }

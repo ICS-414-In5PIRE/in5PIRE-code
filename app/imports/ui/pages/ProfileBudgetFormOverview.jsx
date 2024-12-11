@@ -6,6 +6,7 @@ import { Tracker } from 'meteor/tracker';
 import Loader from '../components/Loader';
 import { BudgetFormInput } from '../../api/BudgetFormInput/BudgetFormInputCollection';
 import { PAGE_IDS } from '../utilities/PageIDs';
+import { exportToExcel } from '../utilities/ExportData';
 
 const ProfileBudgetFormOverview = () => {
   const navigate = useNavigate();
@@ -16,6 +17,10 @@ const ProfileBudgetFormOverview = () => {
 
   const backToDataInput = () => {
     navigate(`/budget-form/${profileId}`);
+  };
+
+  const handleExportToExcel = () => {
+    exportToExcel(fields, years, data, "BudgetFormOverview");
   };
 
   useEffect(() => {
@@ -97,6 +102,7 @@ const ProfileBudgetFormOverview = () => {
     <Container id={PAGE_IDS.PROFILE_BUDGET_FORM_OVERVIEW}>
       <Grid.Column className="pt-3" textAlign="left">
         <Button labelPosition="left" icon="left chevron" content="Back to Data Input" onClick={backToDataInput} />
+        <Button labelPosition="right" className="ui right floated green" icon="download" content="Export to Excel" onClick={handleExportToExcel} />
       </Grid.Column>
       <Header as="h2">Budget Form Overview</Header>
       <hr />

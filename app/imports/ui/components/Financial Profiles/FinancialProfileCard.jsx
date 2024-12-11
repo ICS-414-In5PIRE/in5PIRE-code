@@ -32,6 +32,7 @@ const FinancialProfileCard = ({
     editBudgetForm: ['admin', 'accountant', 'analyst'],
     editFinancialStatement: ['admin', 'accountant', 'analyst'],
     viewDashboard: ['admin', 'analyst', 'accountant', 'viewer'],
+    exportData: ['admin', 'analyst', 'accountant']
   };
 
   const canViewButton = (buttonKey, role) => buttonPermissions[buttonKey]?.includes(role);
@@ -110,6 +111,7 @@ const FinancialProfileCard = ({
                 <Icon name="edit" /> Audited Financial Statement
               </Button>
             )}
+
           </Grid.Column>
           <Grid.Column>
             {canViewButton('viewDashboard', userRole) && (

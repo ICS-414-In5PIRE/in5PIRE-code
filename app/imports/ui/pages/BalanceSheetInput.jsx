@@ -310,7 +310,6 @@ class BalanceSheetInput extends React.Component {
           isSubmit: true,
         }, () => {
           const { record } = this.state; // Destructuring state assignment
-          console.log('Updated record state:', record);
         });
       }
     }

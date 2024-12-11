@@ -32,6 +32,7 @@ const FinancialProfileCard = ({
     editBudgetForm: ['admin', 'accountant', 'analyst'],
     editFinancialStatement: ['admin', 'accountant', 'analyst'],
     viewDashboard: ['admin', 'analyst', 'accountant', 'viewer'],
+    exportData: ['admin', 'analyst', 'accountant']
   };
 
   const canViewButton = (buttonKey, role) => buttonPermissions[buttonKey]?.includes(role);
@@ -55,6 +56,10 @@ const FinancialProfileCard = ({
   const handleViewProfileDashboard = () => {
     navigate(`/profiledashboard/${profileId}`);
   };
+
+  const handleExportData = () => {
+
+  }
 
   useEffect(() => {
     // Subscribe to userEmails to get access to users' emails
@@ -110,6 +115,13 @@ const FinancialProfileCard = ({
                 <Icon name="edit" /> Audited Financial Statement
               </Button>
             )}
+
+            {canViewButton('exportData', userRole) && (
+              <Button className="mb-2" fluid color="red" onClick={handleExportData}>
+                <Icon name="edit" /> Export Data
+              </Button>
+            )}
+
           </Grid.Column>
           <Grid.Column>
             {canViewButton('viewDashboard', userRole) && (

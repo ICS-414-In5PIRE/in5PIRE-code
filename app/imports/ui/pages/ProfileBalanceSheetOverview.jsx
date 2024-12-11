@@ -6,6 +6,7 @@ import { Tracker } from 'meteor/tracker';
 import { BalanceSheetInputs } from '../../api/BalanceSheetInput/BalanceSheetInputCollection';
 import Loader from '../components/Loader';
 import { PAGE_IDS } from '../utilities/PageIDs';
+import { exportToExcel } from '../utilities/ExportData';
 
 const ProfileBalanceSheetOverview = () => {
   const navigate = useNavigate();
@@ -15,6 +16,11 @@ const ProfileBalanceSheetOverview = () => {
 
   const backToDataInput = () => {
     navigate(`/balance-sheet/${profileId}`);
+  };
+
+  // Function to handle exporting the table to Excel
+  const handleExportToExcel = () => {
+    exportToExcel(fields, years, data, "BalanceSheetOverview");
   };
 
   useEffect(() => {
@@ -64,6 +70,7 @@ const ProfileBalanceSheetOverview = () => {
       <br />
       <Grid.Column className="pt-3" textAlign="left">
         <Button labelPosition="left" icon="left chevron" content="Back to Data Input" onClick={backToDataInput} />
+        <Button labelPosition="right" className="ui right floated green" icon="download" content="Export to Excel" onClick={handleExportToExcel} />
       </Grid.Column>
       <Header as="h2">Balance Sheet Overview</Header>
       <hr />

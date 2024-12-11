@@ -6,6 +6,7 @@ import { Tracker } from 'meteor/tracker';
 import Loader from '../components/Loader';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { FinancialStatementInput } from '../../api/FinancialStatementInput/FinancialStatementInputCollection';
+import { exportToExcel } from '../utilities/ExportData';
 
 const ProfileFinancialStatementOverview = () => {
   const navigate = useNavigate();
@@ -17,6 +18,9 @@ const ProfileFinancialStatementOverview = () => {
     navigate(`/audited-fs/${profileId}`);
   };
 
+  const handleExportToExcel = () => {
+    exportToExcel(fields, years, data, "AuditedFSOverview");
+  };
   useEffect(() => {
     const subscription = Meteor.subscribe('auditedfs', profileId);
 
@@ -57,6 +61,7 @@ const ProfileFinancialStatementOverview = () => {
     <Container id={PAGE_IDS.PROFILE_FINANCIAL_STATEMENT_OVERVIEW}>
       <Grid.Column className="pt-3" textAlign="left">
         <Button labelPosition="left" icon="left chevron" content="Back to Data Input" onClick={backToDataInput} />
+        <Button labelPosition="right" className="ui right floated green" icon="download" content="Export to Excel" onClick={handleExportToExcel} />
       </Grid.Column>
       <Header as="h2">Audited Financial Statements Overview</Header>
       <hr />

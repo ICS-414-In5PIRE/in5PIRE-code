@@ -25,7 +25,7 @@ import { defineMethod, updateMethod } from '../../../api/base/BaseCollection.met
 // The formulas can be found in dashboardProjectionFormulas.js and they are placeholder formulas until we can parse the real ones
 // This file is implemented as a button on ProfileDashboard.jsx in the pages directory
 
-export const generateDashboardProjections = async (profileId) => {
+export const generateDashboardProjections = async (profileId, percentIncrease) => {
   // Get the current year
   const latestYear = new Date().getFullYear();
   const latestYearData = StaticFinancials.findOne({ profileId, year: latestYear });
@@ -48,22 +48,22 @@ export const generateDashboardProjections = async (profileId) => {
     const projectionYear = 2024 + i;
 
     // Apply projection formulas
-    const projectedAssets = calculateAssetsProjection(assets);
-    const projectedLiabilities = calculateLiabilitiesProjection(liabilities);
-    const projectedNetPosition = calculateNetPositionProjection(projectedAssets, projectedLiabilities);
-    const projectedCashOnHand = calculateCashOnHandProjection([cashOnHand, projectedAssets, projectedLiabilities]);
-    const projectedInvestment = calculateInvestmentProjection(investment);
-    const projectedLiquidity = calculateLiquidityProjection(liquidity);
-    const projectedDebt = calculateDebtProjection(debt);
-    const projectedRevenues = calculateRevenuesProjection(revenues);
-    const projectedOpex = calculateOpexProjection(opex);
+    const projectedAssets = calculateAssetsProjection(assets, percentIncrease);
+    const projectedLiabilities = calculateLiabilitiesProjection(liabilities, percentIncrease);
+    const projectedNetPosition = calculateNetPositionProjection(projectedAssets, projectedLiabilities, percentIncrease);
+    const projectedCashOnHand = calculateCashOnHandProjection(cashOnHand, percentIncrease);
+    const projectedInvestment = calculateInvestmentProjection(investment, percentIncrease);
+    const projectedLiquidity = calculateLiquidityProjection(liquidity, percentIncrease);
+    const projectedDebt = calculateDebtProjection(debt, percentIncrease);
+    const projectedRevenues = calculateRevenuesProjection(revenues, percentIncrease);
+    const projectedOpex = calculateOpexProjection(opex, percentIncrease);
     const projectedNetIncome = calculateNetIncomeProjection(projectedRevenues, projectedOpex);
-    const projectedCashFlowInflow = calculateCashFlowInflowProjection(cashFlow.inflow);
-    const projectedCashFlowOutflow = calculateCashFlowOutflowProjection(cashFlow.outflow);
+    const projectedCashFlowInflow = calculateCashFlowInflowProjection(cashFlow.inflow, percentIncrease);
+    const projectedCashFlowOutflow = calculateCashFlowOutflowProjection(cashFlow.outflow, percentIncrease);
     const projectedCashFlowNet = calculateCashFlowNetProjection(projectedCashFlowInflow, projectedCashFlowOutflow);
-    const projectedFringeBenefitsAdmin = calculateFringeBenefitsAdminProjection(incrementalFringeBenefits.admin);
-    const projectedFringeBenefitsMgmtStaff = calculateFringeBenefitsMgmtStaffProjection(incrementalFringeBenefits.mgmtStaff);
-    const projectedFringeBenefitsMgmt = calculateFringeBenefitsMgmtProjection(incrementalFringeBenefits.mgmt);
+    const projectedFringeBenefitsAdmin = calculateFringeBenefitsAdminProjection(incrementalFringeBenefits.admin, percentIncrease);
+    const projectedFringeBenefitsMgmtStaff = calculateFringeBenefitsMgmtStaffProjection(incrementalFringeBenefits.mgmtStaff, percentIncrease);
+    const projectedFringeBenefitsMgmt = calculateFringeBenefitsMgmtProjection(incrementalFringeBenefits.mgmt, percentIncrease);
 
     const projectedData = {
       profileId,

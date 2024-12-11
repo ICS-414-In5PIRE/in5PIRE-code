@@ -15,6 +15,7 @@ import { defineMethod, removeItMethod, updateMethod } from '../../api/base/BaseC
 import InputSheetMessage from '../components/InputSheetMessage';
 import { generateYears } from '../utilities/ComboBox';
 import { FinancialProfiles } from '../../api/FinancialProfiles/FinancialProfilesCollection';
+import { parseCSV } from '../components/CsvComponents/parseCsv';
 
 /**
  * BalanceSheetInput class component for entering balance sheet data using Semantic UI React Form.
@@ -35,6 +36,7 @@ class BalanceSheetInput extends React.Component {
       dropdownOptions: {},
       isSubmit: true,
       canEdit: false,
+      csvData: null,
     };
     this.tracker = null;
     // this.navigate = null;
@@ -69,19 +71,33 @@ class BalanceSheetInput extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { selectedYear } = this.state;
+    const { selectedYear, csvData } = this.state;
     const { profileId } = this.props;
+
     if (prevState.selectedYear !== selectedYear || prevProps.profileId !== profileId) {
+      // First check if we have CSV data for this year
+      if (csvData) {
+        const yearData = csvData.find(row => Number(row.year) === Number(selectedYear));
+        if (yearData) {
+          // Don't fetch from database if we have CSV data
+          return;
+        }
+      }
+
+      // Only fetch from database if we don't have CSV data
       const username = Meteor.user()?.username;
       const balanceSheetData = BalanceSheetInputs.find({
         owner: username,
         profileId,
         year: selectedYear,
       }).fetch();
-      console.log(balanceSheetData);
+
       // Check if a record exists for the selected year
       const isExistingRecord = balanceSheetData.length > 0;
-      this.setState({ record: isExistingRecord ? balanceSheetData : [], isSubmit: !isExistingRecord });
+      this.setState({
+        record: isExistingRecord ? balanceSheetData : [],
+        isSubmit: !isExistingRecord,
+      });
       this.handleSnackBar(false, '', false);
     }
   }
@@ -215,15 +231,87 @@ class BalanceSheetInput extends React.Component {
     });
   };
 
-  // Handle year change
-  handleYearChange = (e, { value }) => {
-    this.setState({ selectedYear: value });
-    this.setState({ isSubmit: true });
-  };
-
   // Handle snackbar
   handleSnackBar = (isOpen, message, isError) => {
     this.setState({ snackBar: { isOpen: isOpen, message: message, isError: isError } });
+  };
+
+  handleFileUpload = async (e) => {
+    const { profileId } = this.props;
+    const file = e.target.files[0];
+    const owner = Meteor.user()?.username;
+
+    try {
+      const validatedData = await parseCSV(file, 'balanceSheet');
+      const headers = validatedData[0];
+      const dataRows = validatedData.slice(1);
+
+      const formattedData = dataRows
+        .map(row => {
+          const rowData = {
+            profileId,
+            owner,
+          };
+          headers.forEach((header, index) => {
+            let value = row[index];
+            // Clean up numeric values
+            if (typeof value === 'string') {
+              // Remove spaces, commas and handle parentheses for negative numbers
+              value = value.trim();
+              if (value === '-') {
+                value = 0;
+              } else if (value.includes('(') && value.includes(')')) {
+                // Handle negative numbers in parentheses
+                value = -Number(value.replace(/[(),\s]/g, ''));
+              } else {
+                value = Number(value.replace(/[,\s]/g, '')) || 0;
+              }
+            }
+            rowData[header] = value;
+          });
+          return rowData;
+        })
+        .filter(row => row.year > 0);
+
+      this.setState({
+        csvData: formattedData,
+      }, () => {
+        this.handleSnackBar(true, 'CSV data loaded. Select a year to view data.', false);
+      });
+
+    } catch (error) {
+      this.handleSnackBar(true, `Error parsing CSV: ${error}`, true);
+    }
+  };
+
+  handleYearChange = (e, { value }) => {
+    const { csvData } = this.state;
+    const { profileId } = this.props;
+    const owner = Meteor.user()?.username;
+
+    this.setState({
+      selectedYear: value,
+      isSubmit: true,
+    });
+
+    if (csvData && csvData.length > 0) {
+      const yearData = csvData.find(row => Number(row.year) === Number(value));
+
+      if (yearData) {
+        // Make sure we keep the current profileId and owner
+        const recordData = {
+          ...yearData,
+          profileId: profileId, // Use current profileId
+          owner: owner, // Use current owner
+        };
+
+        this.setState({
+          record: [recordData],
+          isSubmit: true,
+        }, () => {
+        });
+      }
+    }
   };
 
   // Render the component
@@ -301,6 +389,15 @@ class BalanceSheetInput extends React.Component {
                 <Grid.Column textAlign="right">
                   {canEdit && (
                     <>
+                      <Form.Field>
+                        <input
+                          type="file"
+                          accept=".csv"
+                          onChange={this.handleFileUpload}
+                          aria-label="Upload CSV"
+                        />
+                      </Form.Field>
+
                       <Button primary type="submit" onClick={this.handleSubmit}>
                         {record.length > 0 && !isSubmit ? 'Update' : 'Submit'}
                       </Button>

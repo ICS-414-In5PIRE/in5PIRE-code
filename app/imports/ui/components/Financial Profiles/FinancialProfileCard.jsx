@@ -28,9 +28,9 @@ const FinancialProfileCard = ({
   // Current possible roles are admin, analyst, accountant, viewer
   const buttonPermissions = {
     editScenario: ['admin'],
-    editBalanceSheet: ['admin', 'accountant'],
-    editBudgetForm: ['admin', 'accountant'],
-    editFinancialStatement: ['admin', 'analyst'],
+    editBalanceSheet: ['admin', 'accountant', 'analyst'],
+    editBudgetForm: ['admin', 'accountant', 'analyst'],
+    editFinancialStatement: ['admin', 'accountant', 'analyst'],
     viewDashboard: ['admin', 'analyst', 'accountant', 'viewer'],
   };
 

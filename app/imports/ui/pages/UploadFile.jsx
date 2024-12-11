@@ -185,16 +185,7 @@ const UploadFile = ({ schemaType }) => {
           </GridColumn>
           <GridColumn>
             <h2>Upload the File</h2>
-            <h4>Upload and import your data from your excel spreadsheets or CSV files by uploading them here. The data will show on a table below.</h4>
-          </GridColumn>
-        </GridRow>
-        <Divider />
-        <GridRow columns={2}>
-          <GridColumn>
-            <Image src="/images/Upload5.png" fluid rounded />
-          </GridColumn>
-          <GridColumn>
-            <h2>Uploaded File Will be Added to Forms</h2>
+            <p>Upload and import your data from your excel spreadsheets or CSV files by uploading them here. The data will show on a table below.</p>
           </GridColumn>
         </GridRow>
         <Divider />
@@ -203,7 +194,8 @@ const UploadFile = ({ schemaType }) => {
             <Image src="/images/Upload4.png" fluid rounded />
           </GridColumn>
           <GridColumn>
-            <h2>Values Will be Shown and Can Be Manually Changed Before Submitting</h2>
+            <h2>Confirmation</h2>
+            <p>You will be able to edit the values before the data get uploaded to a scenario profile just for you.</p>
           </GridColumn>
         </GridRow>
         <Divider />

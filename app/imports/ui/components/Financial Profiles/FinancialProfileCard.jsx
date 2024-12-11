@@ -57,10 +57,6 @@ const FinancialProfileCard = ({
     navigate(`/profiledashboard/${profileId}`);
   };
 
-  const handleExportData = () => {
-
-  }
-
   useEffect(() => {
     // Subscribe to userEmails to get access to users' emails
     const userEmailSubscription = Meteor.subscribe('userEmails');
@@ -113,12 +109,6 @@ const FinancialProfileCard = ({
             {canViewButton('editFinancialStatement', userRole) && (
               <Button className="mb-2" fluid color="blue" onClick={handleEditFinancialStatement}>
                 <Icon name="edit" /> Audited Financial Statement
-              </Button>
-            )}
-
-            {canViewButton('exportData', userRole) && (
-              <Button className="mb-2" fluid color="red" onClick={handleExportData}>
-                <Icon name="edit" /> Export Data
               </Button>
             )}
 
